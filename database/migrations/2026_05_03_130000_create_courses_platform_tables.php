@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->decimal('price', 10, 2)->default(0);
             $table->foreignId('teacher_id')->index()->constrained('users')->cascadeOnDelete();
             $table->string('enrollment_code', 24)->unique();
             $table->timestamps();
@@ -35,14 +36,45 @@ return new class extends Migration
             $table->foreignId('course_id')->index()->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->unsignedInteger('position');
-            $table->enum('content_type', ['text', 'video', 'file'])->default('text');
-            $table->longText('content')->nullable();
-            $table->string('video_url', 2048)->nullable();
-            $table->string('file_path')->nullable();
-            $table->string('file_name')->nullable();
+            $table->string('file_path');
+            $table->string('file_name');
+            $table->unsignedBigInteger('file_size')->nullable();
             $table->timestamps();
 
             $table->unique(['course_id', 'position']);
+        });
+
+        Schema::create('course_purchases', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_id')->index()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('course_id')->index()->constrained()->cascadeOnDelete();
+            $table->decimal('amount', 10, 2);
+            $table->enum('status', ['beta_paid'])->default('beta_paid')->index();
+            $table->string('reference')->unique();
+            $table->timestamp('purchased_at');
+            $table->timestamps();
+
+            $table->unique(['student_id', 'course_id']);
+        });
+
+        Schema::create('wishlists', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_id')->index()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('course_id')->index()->constrained()->cascadeOnDelete();
+            $table->timestamps();
+
+            $table->unique(['student_id', 'course_id']);
+        });
+
+        Schema::create('course_ratings', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_id')->index()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('course_id')->index()->constrained()->cascadeOnDelete();
+            $table->unsignedTinyInteger('rating');
+            $table->text('review')->nullable();
+            $table->timestamps();
+
+            $table->unique(['student_id', 'course_id']);
         });
 
         Schema::create('notifications', function (Blueprint $table) {
@@ -64,6 +96,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('notifications');
+        Schema::dropIfExists('course_ratings');
+        Schema::dropIfExists('wishlists');
+        Schema::dropIfExists('course_purchases');
         Schema::dropIfExists('chapters');
         Schema::dropIfExists('enrollments');
         Schema::dropIfExists('courses');

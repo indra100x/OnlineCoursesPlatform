@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\CoursePurchase;
 use App\Models\Enrollment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,6 +20,17 @@ class EnrollmentController extends Controller
         $course = Course::query()
             ->where('enrollment_code', $validated['enrollment_code'])
             ->firstOrFail();
+
+        $hasPurchased = CoursePurchase::query()
+            ->where('student_id', $request->user()->id)
+            ->where('course_id', $course->id)
+            ->exists();
+
+        if (! $hasPurchased) {
+            return response()->json([
+                'message' => 'You must complete the beta purchase before using this enrollment code.',
+            ], 403);
+        }
 
         $enrollment = Enrollment::firstOrCreate([
             'student_id' => $request->user()->id,

@@ -3,6 +3,8 @@ CREATE TABLE users (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     role ENUM('admin', 'teacher', 'student') NOT NULL DEFAULT 'student',
+    avatar_path VARCHAR(255) NULL,
+    bio TEXT NULL,
     email_verified_at TIMESTAMP NULL,
     password VARCHAR(255) NOT NULL,
     remember_token VARCHAR(100) NULL,
@@ -15,6 +17,7 @@ CREATE TABLE courses (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL DEFAULT 0,
     teacher_id BIGINT UNSIGNED NOT NULL,
     enrollment_code VARCHAR(24) NOT NULL UNIQUE,
     created_at TIMESTAMP NULL,
@@ -42,16 +45,62 @@ CREATE TABLE chapters (
     course_id BIGINT UNSIGNED NOT NULL,
     title VARCHAR(255) NOT NULL,
     position INT UNSIGNED NOT NULL,
-    content_type ENUM('text', 'video', 'file') NOT NULL DEFAULT 'text',
-    content LONGTEXT NULL,
+    content_type ENUM('pdf', 'video') NOT NULL DEFAULT 'pdf',
     video_url VARCHAR(2048) NULL,
     file_path VARCHAR(255) NULL,
     file_name VARCHAR(255) NULL,
+    file_size BIGINT UNSIGNED NULL,
     created_at TIMESTAMP NULL,
     updated_at TIMESTAMP NULL,
     CONSTRAINT fk_chapters_course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
     CONSTRAINT uq_chapters_course_position UNIQUE (course_id, position),
     INDEX idx_chapters_course_id (course_id)
+);
+
+CREATE TABLE course_purchases (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    student_id BIGINT UNSIGNED NOT NULL,
+    course_id BIGINT UNSIGNED NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    status ENUM('beta_paid') NOT NULL DEFAULT 'beta_paid',
+    reference VARCHAR(255) NOT NULL UNIQUE,
+    purchased_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    CONSTRAINT fk_course_purchases_student FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_course_purchases_course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+    CONSTRAINT uq_course_purchases_student_course UNIQUE (student_id, course_id),
+    INDEX idx_course_purchases_student_id (student_id),
+    INDEX idx_course_purchases_course_id (course_id),
+    INDEX idx_course_purchases_status (status)
+);
+
+CREATE TABLE wishlists (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    student_id BIGINT UNSIGNED NOT NULL,
+    course_id BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    CONSTRAINT fk_wishlists_student FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_wishlists_course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+    CONSTRAINT uq_wishlists_student_course UNIQUE (student_id, course_id),
+    INDEX idx_wishlists_student_id (student_id),
+    INDEX idx_wishlists_course_id (course_id)
+);
+
+CREATE TABLE course_ratings (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    student_id BIGINT UNSIGNED NOT NULL,
+    course_id BIGINT UNSIGNED NOT NULL,
+    rating TINYINT UNSIGNED NOT NULL,
+    review TEXT NULL,
+    created_at TIMESTAMP NULL,
+    updated_at TIMESTAMP NULL,
+    CONSTRAINT fk_course_ratings_student FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_course_ratings_course FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
+    CONSTRAINT uq_course_ratings_student_course UNIQUE (student_id, course_id),
+    INDEX idx_course_ratings_student_id (student_id),
+    INDEX idx_course_ratings_course_id (course_id)
 );
 
 CREATE TABLE notifications (

@@ -13,7 +13,8 @@ class CourseController extends Controller
     {
         $courses = Course::query()
             ->where('teacher_id', $request->user()->id)
-            ->withCount(['chapters', 'enrollments'])
+            ->withCount(['chapters', 'enrollments', 'ratings'])
+            ->withAvg('ratings', 'rating')
             ->latest()
             ->get();
 
@@ -27,6 +28,7 @@ class CourseController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
+            'price' => ['required', 'numeric', 'min:0'],
         ]);
 
         $course = Course::create([
@@ -36,7 +38,7 @@ class CourseController extends Controller
 
         return response()->json([
             'message' => 'Course created successfully.',
-            'course' => $course->loadCount(['chapters', 'enrollments']),
+            'course' => $course->loadCount(['chapters', 'enrollments', 'ratings'])->loadAvg('ratings', 'rating'),
         ], 201);
     }
 
@@ -47,13 +49,14 @@ class CourseController extends Controller
         $validated = $request->validate([
             'title' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['sometimes', 'required', 'string'],
+            'price' => ['sometimes', 'required', 'numeric', 'min:0'],
         ]);
 
         $course->update($validated);
 
         return response()->json([
             'message' => 'Course updated successfully.',
-            'course' => $course->fresh()->loadCount(['chapters', 'enrollments']),
+            'course' => $course->fresh()->loadCount(['chapters', 'enrollments', 'ratings'])->loadAvg('ratings', 'rating'),
         ]);
     }
 

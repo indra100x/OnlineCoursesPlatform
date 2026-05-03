@@ -9,9 +9,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
-#[Fillable(['title', 'description', 'teacher_id', 'enrollment_code'])]
+#[Fillable(['title', 'description', 'price', 'teacher_id', 'enrollment_code'])]
 class Course extends Model
 {
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+        ];
+    }
+
     protected static function booted(): void
     {
         static::creating(function (Course $course): void {
@@ -44,5 +51,20 @@ class Course extends Model
     {
         return $this->belongsToMany(User::class, 'enrollments', 'course_id', 'student_id')
             ->withTimestamps();
+    }
+
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(CoursePurchase::class);
+    }
+
+    public function wishlistItems(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function ratings(): HasMany
+    {
+        return $this->hasMany(CourseRating::class);
     }
 }

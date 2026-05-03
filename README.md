@@ -1,16 +1,30 @@
 # Online Courses Platform
 
-Admin-managed online learning platform built with Laravel, React, React Router, Axios, and MySQL.
+Production-oriented Laravel + React course platform with admin-managed access, teacher-owned course publishing, student beta purchasing, PDF and video chapter delivery, ratings, wishlists, and profile management.
 
-## Overview
+## What this app does
 
-This project is a role-based course platform with three user types:
+This platform has three roles:
 
-- `Admin`: creates and manages teacher and student accounts
-- `Teacher`: creates courses, adds chapters, and views enrolled students
-- `Student`: logs in, enrolls with a course code, reads chapters, and receives notifications
+- `Admin`
+  - Creates teacher and student accounts
+  - Updates or removes users
+- `Teacher`
+  - Creates paid courses
+  - Uploads PDF or video chapters
+  - Views enrolled students
+  - Receives rating insight through course metrics
+- `Student`
+  - Updates profile and password
+  - Browses a course catalog
+  - Adds courses to a wishlist
+  - Uses a beta purchase flow to unlock enrollment codes
+  - Enrolls after purchase
+  - Reads PDF and video chapters
+  - Rates enrolled courses
+  - Receives notifications for new chapter releases
 
-Public sign-up is disabled. Only the admin can create user accounts.
+Public registration is disabled. Only the admin can create users.
 
 ## Tech stack
 
@@ -20,40 +34,61 @@ Public sign-up is disabled. Only the admin can create user accounts.
 | Auth | Laravel Fortify session authentication |
 | Frontend | React 19 |
 | Routing | React Router |
-| HTTP client | Axios |
+| API client | Axios |
 | Styling | Tailwind CSS |
 | Database | MySQL |
 
 ## Feature summary
 
-### Authentication
+### Authentication and access control
 
-- Login only
+- Login-only flow
 - No public registration
-- Role-based access control
-- Password hashing with Laravel's hashed password cast
+- Role-based route protection
+- Hashed passwords
+- Session-based authentication
 
-### Admin
+### Admin features
 
-- Create teacher and student accounts
+- Create teacher or student users
 - View all users
 - Update users
 - Delete users
 
-### Teacher
+### Teacher features
 
-- Create and manage courses
+- Create paid courses with descriptions and prices
 - Auto-generate enrollment codes
-- Add ordered chapters
+- Upload ordered PDF or video chapters
 - View enrolled students
-- Trigger notifications when a new chapter is published
+- See course rating signals in dashboard stats
 
-### Student
+### Student features
 
-- Enroll with an enrollment code
-- View enrolled courses
-- Open course chapters
-- Read and mark notifications
+- View a catalog of available courses
+- Add or remove courses from a wishlist
+- Complete a beta purchase to unlock a course code
+- Enroll after purchase using the unlocked code
+- Open PDF and video chapters
+- Rate enrolled courses
+- View and mark notifications as read
+
+### Profile features
+
+- Update display name
+- Update bio
+- Upload profile photo
+- Change password
+
+## Frontend experience
+
+The dashboard UI was upgraded from the starter feel into a more polished glass-and-gradient interface:
+
+- Stronger color atmosphere and layered gradients
+- Better visual separation between role workspaces
+- Profile-aware shell with avatar support
+- More premium student catalog and purchase flow
+- Cleaner teacher course management and mixed chapter publishing workflow
 
 ## Project structure
 
@@ -65,6 +100,7 @@ app/
       Student/
       Teacher/
       NotificationController.php
+      ProfileController.php
     Middleware/
       EnsureUserHasRole.php
   Models/
@@ -73,6 +109,9 @@ app/
     Enrollment.php
     Chapter.php
     Notification.php
+    CoursePurchase.php
+    CourseRating.php
+    Wishlist.php
 
 database/
   migrations/
@@ -92,6 +131,7 @@ resources/
         teacher-dashboard.tsx
         student-dashboard.tsx
         course-details-page.tsx
+        profile-page.tsx
 
 routes/
   web.php
@@ -99,48 +139,58 @@ routes/
 
 ## Database design
 
-The live schema is implemented with Laravel migrations.
+The live schema is defined by Laravel migrations.
 
-Plain SQL reference:
+Reference SQL:
 - [database/schema/online_courses_platform.sql](/C:/Users/computer%20house%2041/Desktop/web-project/database/schema/online_courses_platform.sql)
 
 ### Core tables
 
 | Table | Purpose |
 | --- | --- |
-| `users` | Stores admin, teacher, and student accounts |
-| `courses` | Stores courses owned by teachers |
-| `enrollments` | Stores student-to-course membership |
-| `chapters` | Stores ordered learning content within a course |
-| `notifications` | Stores user notifications when new chapters are added |
+| `users` | Stores role-based users plus avatar and bio |
+| `courses` | Stores teacher-owned paid courses |
+| `enrollments` | Stores students enrolled in courses |
+| `chapters` | Stores ordered PDF files or video lesson links |
+| `course_purchases` | Stores beta purchases that unlock enrollment codes |
+| `wishlists` | Stores student-saved courses |
+| `course_ratings` | Stores student course ratings and reviews |
+| `notifications` | Stores chapter release notifications |
 
-### Schema improvements applied
+### Important schema decisions
 
-- `users.role` is now constrained with `ENUM('admin', 'teacher', 'student')`
-- `chapters.position` controls explicit chapter ordering
-- `notifications.type` supports structured notification categories
-- `notifications.data` stores JSON payload for future-friendly rendering
-- `enrollments.enrolled_at` records the enrollment moment explicitly
-- Indexes were added for common lookup columns
+- `users.role` uses an enum constraint
+- `courses.price` enables beta purchase behavior
+- `chapters.position` keeps chapter order explicit
+- chapter content supports either `pdf` or `video`
+- `course_purchases` prevents duplicate purchases per student/course
+- `course_ratings` prevents duplicate ratings per student/course
+- `notifications.type` and `notifications.data` support future notification expansion
 
-## API design
+## API overview
 
 ### Auth
 
 - `POST /login`
 - `POST /logout`
 
+### Profile
+
+- `GET /profile`
+- `POST /profile`
+- `POST /profile/password`
+
 ### Admin
 
-- `POST /users`
 - `GET /users`
+- `POST /users`
 - `PUT /users/{id}`
 - `DELETE /users/{id}`
 
 ### Teacher
 
-- `POST /courses`
 - `GET /courses`
+- `POST /courses`
 - `PUT /courses/{id}`
 - `DELETE /courses/{id}`
 - `POST /courses/{id}/chapters`
@@ -148,6 +198,12 @@ Plain SQL reference:
 
 ### Student
 
+- `GET /catalog`
+- `GET /wishlist`
+- `POST /wishlist`
+- `DELETE /wishlist/{course}`
+- `POST /courses/{course}/purchase`
+- `POST /courses/{course}/ratings`
 - `POST /enroll`
 - `GET /my-courses`
 - `GET /courses/{id}/chapters`
@@ -156,48 +212,6 @@ Plain SQL reference:
 
 - `GET /notifications`
 - `PUT /notifications/{id}/read`
-
-## Backend implementation
-
-### 1. Authentication and authorization
-
-- Fortify handles login and session auth
-- Registration is disabled
-- `EnsureUserHasRole` middleware protects role-specific endpoints
-
-### 2. Domain models
-
-- `User` contains role helpers for admin, teacher, and student checks
-- `Course` auto-generates enrollment codes
-- `Enrollment` records student membership and `enrolled_at`
-- `Chapter` stores ordered content with `position`
-- `Notification` stores message text plus structured metadata
-
-### 3. Business flows
-
-- Admin creates teacher and student accounts
-- Teachers create courses and publish chapters
-- Publishing a chapter creates one database notification per enrolled student
-- Students enroll using a course code and can read ordered chapter content
-
-## Frontend implementation
-
-### 1. App shell
-
-- The default starter dashboard was replaced with a role-aware React Router shell
-- Axios is used for authenticated backend calls
-
-### 2. Dashboards
-
-- Admin dashboard: user management
-- Teacher dashboard: course management, chapter publishing, enrolled students
-- Student dashboard: course enrollment, course list, notifications
-
-### 3. Course details
-
-- Students open a dedicated course details page
-- Chapters are shown in `position` order
-- Text, video links, and uploaded files are supported
 
 ## Local setup
 
@@ -208,27 +222,27 @@ Plain SQL reference:
 - Node.js + npm
 - MySQL
 
-### Installation
+### Install
 
-1. Create your environment file if needed:
+1. Create `.env` if needed:
 
 ```bash
 copy .env.example .env
 ```
 
-2. Configure MySQL credentials in `.env`
+2. Set your MySQL credentials in `.env`
 
-3. Run the project setup:
+3. Install dependencies and prepare the database:
 
 ```bash
 composer install
 npm install
 php artisan key:generate
-php artisan migrate --seed
+php artisan migrate:fresh --seed
 php artisan storage:link
 ```
 
-4. Start development services:
+4. Start the app:
 
 ```bash
 composer run dev
@@ -237,8 +251,10 @@ composer run dev
 5. Open:
 
 ```text
-http://127.0.0.1:8000/login
+http://127.0.0.1:8000
 ```
+
+The root route redirects directly to `/login`.
 
 ## Default admin account
 
@@ -247,11 +263,11 @@ http://127.0.0.1:8000/login
 | Email | `admin@courses.test` |
 | Password | `AdminPass123!` |
 
-Change this password immediately in any real deployment.
+Change this password immediately in a real deployment.
 
 ## Verification
 
-The following checks pass:
+These checks pass:
 
 - `php artisan test`
 - `npm run types:check`

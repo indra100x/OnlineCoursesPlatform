@@ -18,45 +18,22 @@ class CourseChapterController extends Controller
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'content_type' => ['required', 'in:text,video,file'],
-            'content' => ['nullable', 'string'],
-            'video_url' => ['nullable', 'url', 'max:2048'],
-            'file' => ['nullable', 'file', 'max:10240'],
+            'file' => ['required', 'file', 'mimes:pdf', 'max:20480'],
         ]);
-
-        if ($validated['content_type'] === 'text') {
-            $request->validate(['content' => ['required', 'string']]);
-        }
-
-        if ($validated['content_type'] === 'video') {
-            $request->validate(['video_url' => ['required', 'url', 'max:2048']]);
-        }
-
-        if ($validated['content_type'] === 'file') {
-            $request->validate(['file' => ['required', 'file', 'max:10240']]);
-        }
 
         $chapter = DB::transaction(function () use ($request, $course, $validated) {
             $nextPosition = (int) $course->chapters()->max('position') + 1;
 
-            $chapterData = [
+            $storedFile = $request->file('file')->store('chapters', 'public');
+
+            $chapter = Chapter::create([
                 'course_id' => $course->id,
                 'title' => $validated['title'],
                 'position' => $nextPosition,
-                'content_type' => $validated['content_type'],
-                'content' => $validated['content_type'] === 'text' ? $validated['content'] : null,
-                'video_url' => $validated['content_type'] === 'video' ? $validated['video_url'] : null,
-                'file_path' => null,
-                'file_name' => null,
-            ];
-
-            if ($validated['content_type'] === 'file' && $request->file('file')) {
-                $storedFile = $request->file('file')->store('chapters', 'public');
-                $chapterData['file_path'] = $storedFile;
-                $chapterData['file_name'] = $request->file('file')->getClientOriginalName();
-            }
-
-            $chapter = Chapter::create($chapterData);
+                'file_path' => $storedFile,
+                'file_name' => $request->file('file')->getClientOriginalName(),
+                'file_size' => $request->file('file')->getSize(),
+            ]);
 
             $students = $course->students()->select('users.id')->get();
 

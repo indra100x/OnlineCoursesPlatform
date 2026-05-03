@@ -108,7 +108,7 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
             name: user.name,
             email: user.email,
             password: '',
-            role: user.role === 'admin' ? 'teacher' : user.role,
+            role: user.role === 'student' ? 'student' : 'teacher',
         });
     }
 

@@ -13,8 +13,9 @@ class StudentCourseController extends Controller
     {
         $courses = Course::query()
             ->whereHas('enrollments', fn ($query) => $query->where('student_id', $request->user()->id))
-            ->with(['teacher:id,name,email'])
-            ->withCount('chapters')
+            ->with(['teacher:id,name,email,avatar_path,bio'])
+            ->withCount(['chapters', 'ratings'])
+            ->withAvg('ratings', 'rating')
             ->latest()
             ->get();
 
@@ -33,9 +34,10 @@ class StudentCourseController extends Controller
 
         return response()->json([
             'course' => $course->load([
-                'teacher:id,name,email',
+                'teacher:id,name,email,avatar_path,bio',
                 'chapters' => fn ($query) => $query->orderBy('position'),
-            ]),
+                'ratings.student:id,name,avatar_path',
+            ])->loadCount('ratings')->loadAvg('ratings', 'rating'),
         ]);
     }
 }

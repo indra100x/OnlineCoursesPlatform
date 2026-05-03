@@ -1,15 +1,16 @@
 import { Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import api from '@/lib/api';
+import { BrowserRouter, MemoryRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from '@/components/platform/app-shell';
 import AdminDashboard from '@/pages/platform/admin-dashboard';
 import CourseDetailsPage from '@/pages/platform/course-details-page';
+import ProfilePage from '@/pages/platform/profile-page';
 import StudentDashboard from '@/pages/platform/student-dashboard';
 import TeacherDashboard from '@/pages/platform/teacher-dashboard';
 import type { User } from '@/types';
 
 type SharedProps = {
+    csrf_token: string;
     auth: {
         user: User & {
             role: 'admin' | 'teacher' | 'student';
@@ -30,65 +31,81 @@ function RoleRedirect({ role }: { role: SharedProps['auth']['user']['role'] }) {
 }
 
 export default function Dashboard() {
-    const { auth } = usePage<SharedProps>().props;
+    const { auth, csrf_token } = usePage<SharedProps>().props;
+    const [currentUser, setCurrentUser] = useState(auth.user);
     const [unreadCount, setUnreadCount] = useState(0);
-
-    async function handleLogout() {
-        await api.post('/logout');
-        window.location.href = '/login';
-    }
+    const Router = typeof window === 'undefined' ? MemoryRouter : BrowserRouter;
+    const initialEntry =
+        typeof window === 'undefined'
+            ? '/dashboard'
+            : `${window.location.pathname}${window.location.search}`;
 
     return (
         <>
             <Head title="Courses Platform" />
-            <BrowserRouter>
-                <AppShell user={auth.user} unreadCount={unreadCount} onLogout={handleLogout}>
+            <Router {...(Router === MemoryRouter ? { initialEntries: [initialEntry] } : {})}>
+                <AppShell user={currentUser} unreadCount={unreadCount} csrfToken={csrf_token}>
                     <Routes>
-                        <Route path="/dashboard" element={<RoleRedirect role={auth.user.role} />} />
+                        <Route path="/dashboard" element={<RoleRedirect role={currentUser.role} />} />
                         <Route
                             path="/dashboard/admin"
                             element={
-                                auth.user.role === 'admin' ? (
-                                    <AdminDashboard currentUserId={auth.user.id} />
+                                currentUser.role === 'admin' ? (
+                                    <AdminDashboard currentUserId={currentUser.id} />
                                 ) : (
-                                    <RoleRedirect role={auth.user.role} />
+                                    <RoleRedirect role={currentUser.role} />
                                 )
                             }
                         />
                         <Route
                             path="/dashboard/teacher"
                             element={
-                                auth.user.role === 'teacher' ? (
+                                currentUser.role === 'teacher' ? (
                                     <TeacherDashboard />
                                 ) : (
-                                    <RoleRedirect role={auth.user.role} />
+                                    <RoleRedirect role={currentUser.role} />
                                 )
                             }
                         />
                         <Route
                             path="/dashboard/student"
                             element={
-                                auth.user.role === 'student' ? (
+                                currentUser.role === 'student' ? (
                                     <StudentDashboard onUnreadCountChange={setUnreadCount} />
                                 ) : (
-                                    <RoleRedirect role={auth.user.role} />
+                                    <RoleRedirect role={currentUser.role} />
                                 )
                             }
                         />
                         <Route
                             path="/dashboard/courses/:courseId"
                             element={
-                                auth.user.role === 'student' ? (
+                                currentUser.role === 'student' ? (
                                     <CourseDetailsPage />
                                 ) : (
-                                    <RoleRedirect role={auth.user.role} />
+                                    <RoleRedirect role={currentUser.role} />
                                 )
                             }
                         />
-                        <Route path="*" element={<RoleRedirect role={auth.user.role} />} />
+                        <Route
+                            path="/dashboard/profile"
+                            element={
+                                <ProfilePage
+                                    onProfileRefresh={(profile) =>
+                                        setCurrentUser((current) => ({
+                                            ...current,
+                                            name: profile.name,
+                                            bio: profile.bio,
+                                            avatar_path: profile.avatar_path,
+                                        }))
+                                    }
+                                />
+                            }
+                        />
+                        <Route path="*" element={<RoleRedirect role={currentUser.role} />} />
                     </Routes>
                 </AppShell>
-            </BrowserRouter>
+            </Router>
         </>
     );
 }
