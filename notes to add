@@ -1,0 +1,6 @@
+-add video courses
+-make when launching server always the first page is login not the previous user(maybe need token authentication if not included)
+-make student able to see any catalog course's teacher profile (name,description, courses)
+-make teacher able to see enrolled students profile
+-use a new template as a design and add a logo
+-dockerize the project after performance optimisation
