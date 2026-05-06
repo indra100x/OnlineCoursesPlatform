@@ -1,5 +1,5 @@
 import { type FormEvent, startTransition, useEffect, useEffectEvent, useState } from 'react';
-import { BookOpen, FileText, Plus, Star, Users } from 'lucide-react';
+import { BookOpen, FileText, Plus, Star, Users, Video, Link as LinkIcon } from 'lucide-react';
 import api from '@/lib/api';
 import { EmptyState } from '@/components/platform/empty-state';
 import { StatsCard } from '@/components/platform/stats-card';
@@ -8,9 +8,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { Course, PlatformUser } from '@/types/platform';
 
+type ChapterType = 'pdf' | 'video' | 'link';
+
 const initialChapterForm = {
     title: '',
+    type: 'pdf' as ChapterType,
     file: null as File | null,
+    videoFile: null as File | null,
+    url: '',
 };
 
 export default function TeacherDashboard() {
@@ -103,25 +108,57 @@ export default function TeacherDashboard() {
     async function handleAddChapter(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        if (!selectedCourse || !chapterForm.file) {
+        if (!selectedCourse) {
             return;
         }
 
-        const payload = new FormData();
-        payload.append('title', chapterForm.title);
-        payload.append('file', chapterForm.file);
+        if (chapterForm.type === 'pdf' && !chapterForm.file) {
+            return;
+        }
+
+        if (chapterForm.type === 'video' && !chapterForm.videoFile) {
+            return;
+        }
+
+        if (chapterForm.type === 'link' && !chapterForm.url) {
+            return;
+        }
 
         try {
-            await api.post(`/courses/${selectedCourse.id}/chapters`, payload, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            if (chapterForm.type === 'pdf') {
+                const payload = new FormData();
+                payload.append('title', chapterForm.title);
+                payload.append('file', chapterForm.file!);
+
+                await api.post(`/courses/${selectedCourse.id}/chapters`, payload, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            } else if (chapterForm.type === 'video') {
+                const payload = new FormData();
+                payload.append('title', chapterForm.title);
+                payload.append('type', 'video');
+                payload.append('video_file', chapterForm.videoFile!);
+
+                await api.post(`/courses/${selectedCourse.id}/chapters`, payload, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            } else {
+                await api.post(`/courses/${selectedCourse.id}/chapters`, {
+                    title: chapterForm.title,
+                    type: chapterForm.type,
+                    url: chapterForm.url,
+                });
+            }
+
             setChapterForm(initialChapterForm);
             await loadCourses();
             await loadStudents(selectedCourse.id);
         } catch (submitError: any) {
-            setError(submitError?.response?.data?.message ?? 'Unable to add the PDF chapter.');
+            setError(submitError?.response?.data?.message ?? 'Unable to add the chapter.');
         }
     }
 
@@ -263,66 +300,170 @@ export default function TeacherDashboard() {
                                 </div>
                             </div>
 
-                            <div className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
-                                <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                    <h3 className="text-xl font-semibold text-slate-950">Publish chapter PDF</h3>
-                                    <p className="mt-1 text-sm text-slate-600">Each chapter is now delivered as a PDF asset and triggers student notifications.</p>
-
-                                    <form className="mt-6 space-y-4" onSubmit={handleAddChapter}>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="chapter-title">Chapter title</Label>
-                                            <Input
-                                                id="chapter-title"
-                                                value={chapterForm.title}
-                                                onChange={(event) => setChapterForm((current) => ({ ...current, title: event.target.value }))}
-                                                required
-                                            />
+                            <div className="space-y-6">
+                                <div className="grid gap-6 lg:grid-cols-3">
+                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-lg font-semibold text-slate-950">PDF Chapter</h3>
+                                            <FileText className="size-5 text-cyan-700" />
                                         </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="chapter-file">PDF file</Label>
-                                            <Input
-                                                id="chapter-file"
-                                                type="file"
-                                                accept="application/pdf"
-                                                onChange={(event) =>
-                                                    setChapterForm((current) => ({
-                                                        ...current,
-                                                        file: event.target.files?.[0] ?? null,
-                                                    }))
-                                                }
-                                                required
-                                            />
-                                        </div>
-
-                                        {error ? <p className="text-sm text-red-600">{error}</p> : null}
-
-                                        <Button type="submit" className="rounded-2xl bg-cyan-600 text-white hover:bg-cyan-700">
-                                            <FileText className="size-4" />
-                                            Upload chapter
-                                        </Button>
-                                    </form>
-                                </div>
-
-                                <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                    <div className="flex items-center gap-3">
-                                        <Users className="size-5 text-cyan-700" />
-                                        <div>
-                                            <h3 className="text-xl font-semibold text-slate-950">Enrolled students</h3>
-                                            <p className="text-sm text-slate-600">Students currently learning inside this course.</p>
-                                        </div>
+                                        <p className="mt-2 text-sm text-slate-600">Upload a PDF file as a chapter.</p>
+                                        <button
+                                            type="button"
+                                            onClick={() => setChapterForm((current) => ({ ...current, type: 'pdf' }))}
+                                            className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                                                chapterForm.type === 'pdf'
+                                                    ? 'border-cyan-700 bg-cyan-100 text-cyan-900'
+                                                    : 'border-slate-200 bg-slate-50/80 text-slate-900 hover:bg-slate-100'
+                                            }`}
+                                        >
+                                            {chapterForm.type === 'pdf' ? 'Selected' : 'Select'}
+                                        </button>
                                     </div>
 
-                                    <div className="mt-6 space-y-3">
-                                        {students.length === 0 ? (
-                                            <EmptyState title="No students enrolled yet" description="Beta buyers can unlock the code, then enroll here once they use it." />
-                                        ) : (
-                                            students.map((student) => (
-                                                <div key={student.id} className="rounded-3xl border border-slate-200 bg-slate-50/80 p-4">
-                                                    <p className="font-semibold text-slate-900">{student.name}</p>
-                                                    <p className="text-sm text-slate-600">{student.email}</p>
+                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-lg font-semibold text-slate-950">Video Chapter</h3>
+                                            <Video className="size-5 text-cyan-700" />
+                                        </div>
+                                        <p className="mt-2 text-sm text-slate-600">Upload a video file as a chapter.</p>
+                                        <button
+                                            type="button"
+                                            onClick={() => setChapterForm((current) => ({ ...current, type: 'video' }))}
+                                            className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                                                chapterForm.type === 'video'
+                                                    ? 'border-cyan-700 bg-cyan-100 text-cyan-900'
+                                                    : 'border-slate-200 bg-slate-50/80 text-slate-900 hover:bg-slate-100'
+                                            }`}
+                                        >
+                                            {chapterForm.type === 'video' ? 'Selected' : 'Select'}
+                                        </button>
+                                    </div>
+
+                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                                        <div className="flex items-center justify-between">
+                                            <h3 className="text-lg font-semibold text-slate-950">Link Chapter</h3>
+                                            <LinkIcon className="size-5 text-cyan-700" />
+                                        </div>
+                                        <p className="mt-2 text-sm text-slate-600">Add a link to external content.</p>
+                                        <button
+                                            type="button"
+                                            onClick={() => setChapterForm((current) => ({ ...current, type: 'link' }))}
+                                            className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
+                                                chapterForm.type === 'link'
+                                                    ? 'border-cyan-700 bg-cyan-100 text-cyan-900'
+                                                    : 'border-slate-200 bg-slate-50/80 text-slate-900 hover:bg-slate-100'
+                                            }`}
+                                        >
+                                            {chapterForm.type === 'link' ? 'Selected' : 'Select'}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
+                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                                        <h3 className="text-xl font-semibold text-slate-950">
+                                            Create {chapterForm.type === 'pdf' ? 'PDF' : chapterForm.type === 'video' ? 'Video' : 'Link'} Chapter
+                                        </h3>
+                                        <p className="mt-1 text-sm text-slate-600">
+                                            {chapterForm.type === 'pdf'
+                                                ? 'Upload a PDF chapter and trigger student notifications.'
+                                                : chapterForm.type === 'video'
+                                                  ? 'Upload a video file for your students to watch.'
+                                                  : 'Add a link to external learning resources.'}
+                                        </p>
+
+                                        <form className="mt-6 space-y-4" onSubmit={handleAddChapter}>
+                                            <div className="space-y-2">
+                                                <Label htmlFor="chapter-title">Chapter title</Label>
+                                                <Input
+                                                    id="chapter-title"
+                                                    value={chapterForm.title}
+                                                    onChange={(event) =>
+                                                        setChapterForm((current) => ({ ...current, title: event.target.value }))
+                                                    }
+                                                    required
+                                                />
+                                            </div>
+
+                                            {chapterForm.type === 'pdf' ? (
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="chapter-file">PDF file</Label>
+                                                    <Input
+                                                        id="chapter-file"
+                                                        type="file"
+                                                        accept="application/pdf"
+                                                        onChange={(event) =>
+                                                            setChapterForm((current) => ({
+                                                                ...current,
+                                                                file: event.target.files?.[0] ?? null,
+                                                            }))
+                                                        }
+                                                        required
+                                                    />
                                                 </div>
-                                            ))
-                                        )}
+                                            ) : chapterForm.type === 'video' ? (
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="chapter-video">Video file</Label>
+                                                    <Input
+                                                        id="chapter-video"
+                                                        type="file"
+                                                        accept="video/*"
+                                                        onChange={(event) =>
+                                                            setChapterForm((current) => ({
+                                                                ...current,
+                                                                videoFile: event.target.files?.[0] ?? null,
+                                                            }))
+                                                        }
+                                                        required
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="chapter-url">Link URL</Label>
+                                                    <Input
+                                                        id="chapter-url"
+                                                        type="url"
+                                                        value={chapterForm.url}
+                                                        onChange={(event) =>
+                                                            setChapterForm((current) => ({ ...current, url: event.target.value }))
+                                                        }
+                                                        placeholder="https://..."
+                                                        required
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {error ? <p className="text-sm text-red-600">{error}</p> : null}
+
+                                            <Button type="submit" className="rounded-2xl bg-cyan-600 text-white hover:bg-cyan-700">
+                                                <Plus className="size-4" />
+                                                Create chapter
+                                            </Button>
+                                        </form>
+                                    </div>
+
+                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                                        <div className="flex items-center gap-3">
+                                            <Users className="size-5 text-cyan-700" />
+                                            <div>
+                                                <h3 className="text-xl font-semibold text-slate-950">Enrolled students</h3>
+                                                <p className="text-sm text-slate-600">Students currently learning inside this course.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-6 space-y-3">
+                                            {students.length === 0 ? (
+                                                <EmptyState title="No students enrolled yet" description="Beta buyers can unlock the code, then enroll here once they use it." />
+                                            ) : (
+                                                students.map((student) => (
+                                                    <div key={student.id} className="rounded-3xl border border-slate-200 bg-slate-50/80 p-4">
+                                                        <p className="font-semibold text-slate-900">{student.name}</p>
+                                                        <p className="text-sm text-slate-600">{student.email}</p>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
