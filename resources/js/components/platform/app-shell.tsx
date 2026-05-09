@@ -38,17 +38,17 @@ export function AppShell({ children, user, unreadCount, csrfToken }: AppShellPro
     const avatarUrl = user.avatar_path ? `/storage/${user.avatar_path}` : null;
 
     return (
-        <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,#fde68a_0%,rgba(253,230,138,0.15)_18%,transparent_38%),radial-gradient(circle_at_top_right,#a7f3d0_0%,rgba(167,243,208,0.22)_16%,transparent_34%),linear-gradient(160deg,#0f172a_0%,#164e63_38%,#f8fafc_100%)] text-slate-900">
+        <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 text-white">
             <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6 lg:px-8">
-                <header className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-white/10 p-4 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.75)] backdrop-blur-xl">
-                    <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(90deg,rgba(250,204,21,0.22),rgba(45,212,191,0.18),rgba(251,146,60,0.18))]" />
+                <header className="relative overflow-hidden rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-4 backdrop-blur-sm">
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(90deg,rgba(168,85,247,0.1),rgba(99,102,241,0.1),rgba(168,85,247,0.1))]" />
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="flex size-12 items-center justify-center rounded-2xl bg-white text-slate-950 shadow-lg">
+                            <div className="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 text-white shadow-lg">
                                 <LayoutDashboard className="size-5" />
                             </div>
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-amber-200">
+                                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-purple-300">
                                     Online Courses Platform
                                 </p>
                                 <h1 className="text-2xl font-semibold text-white">
@@ -58,17 +58,17 @@ export function AppShell({ children, user, unreadCount, csrfToken }: AppShellPro
                         </div>
 
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                            <div className="flex items-center gap-3 rounded-2xl bg-white/14 px-4 py-3 text-white ring-1 ring-white/15">
+                            <div className="flex items-center gap-3 rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 px-4 py-3 text-white backdrop-blur-sm">
                                 {avatarUrl ? (
                                     <img src={avatarUrl} alt={user.name} className="size-11 rounded-2xl object-cover" />
                                 ) : (
-                                    <div className="flex size-11 items-center justify-center rounded-2xl bg-white/20 text-sm font-semibold">
+                                    <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 text-sm font-semibold">
                                         {user.name.slice(0, 1).toUpperCase()}
                                     </div>
                                 )}
                                 <div>
                                     <p className="text-sm font-medium">{user.name}</p>
-                                    <p className="text-xs text-slate-200">{user.email}</p>
+                                    <p className="text-xs text-gray-300">{user.email}</p>
                                 </div>
                             </div>
                             <form method="POST" action="/logout">
@@ -76,7 +76,7 @@ export function AppShell({ children, user, unreadCount, csrfToken }: AppShellPro
                                 <Button
                                     type="submit"
                                     variant="outline"
-                                    className="rounded-2xl border-white/30 bg-white/10 text-white hover:bg-white/20"
+                                    className="rounded-2xl border-purple-500/30 bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
                                 >
                                     <LogOut className="size-4" />
                                     Sign out
@@ -99,14 +99,14 @@ export function AppShell({ children, user, unreadCount, csrfToken }: AppShellPro
                                     to={item.to}
                                     className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
                                         isActive
-                                            ? 'bg-white text-slate-950 shadow-lg'
-                                            : 'bg-white/10 text-white hover:bg-white/20'
+                                            ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/30'
+                                            : 'border border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-blue-500/5 text-white hover:border-purple-500/40'
                                     }`}
                                 >
                                     <item.icon className="size-4" />
                                     {item.label}
                                     {item.label === 'Notifications' && unreadCount > 0 ? (
-                                        <span className="rounded-full bg-amber-300 px-2 py-0.5 text-xs font-semibold text-slate-900">
+                                        <span className="rounded-full bg-amber-500/80 px-2 py-0.5 text-xs font-semibold text-amber-950">
                                             {unreadCount}
                                         </span>
                                     ) : null}

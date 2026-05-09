@@ -57,31 +57,36 @@ export default function CourseDetailsPage() {
 
     return (
         <div className="space-y-6">
-            <Link to="/dashboard/student" className="inline-flex items-center gap-2 text-sm font-medium text-white">
+            <Link to="/dashboard/student" className="inline-flex items-center gap-2 text-sm font-semibold text-purple-300 transition-colors hover:text-purple-200">
                 <ArrowLeft className="size-4" />
                 Back to student dashboard
             </Link>
 
             {loading ? (
-                <p className="text-sm text-white">Loading course chapters...</p>
+                <p className="text-sm text-gray-300">Loading course chapters...</p>
             ) : error ? (
-                <div className="rounded-3xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">{error}</div>
+                <div className="rounded-2xl border border-red-500/50 bg-red-500/10 p-6 text-sm text-red-300 backdrop-blur-sm">{error}</div>
             ) : !course ? (
                 <EmptyState title="Course not found" description="This course is unavailable or you no longer have access." />
             ) : (
                 <>
-                    <section className="rounded-[2rem] border border-white/20 bg-white/10 p-6 text-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.85)] backdrop-blur-xl">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
-                            Enrollment code {course.enrollment_code}
+                    <section className="rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-500/20 to-blue-500/10 p-8 text-white shadow-xl shadow-purple-500/10 backdrop-blur-xl">
+                        <p className="text-xs font-bold uppercase tracking-widest text-purple-300">
+                            Enrollment code: <span className="font-mono text-purple-200">{course.enrollment_code}</span>
                         </p>
-                        <h1 className="mt-2 text-3xl font-semibold">{course.title}</h1>
-                        <p className="mt-3 max-w-3xl text-sm text-slate-100">{course.description}</p>
-                        <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
-                            <span>Teacher: {course.teacher.name}</span>
-                            <span className="inline-flex items-center gap-1">
-                                <Star className="size-4 text-amber-300" />
-                                {course.ratings_avg_rating ? Number(course.ratings_avg_rating).toFixed(1) : 'No ratings yet'}
-                            </span>
+                        <h1 className="mt-4 text-4xl font-bold leading-tight">{course.title}</h1>
+                        <p className="mt-4 max-w-3xl text-base text-gray-200">{course.description}</p>
+                        <div className="mt-6 flex flex-wrap items-center gap-6 text-sm">
+                            <div className="flex items-center gap-2">
+                                <span className="text-gray-400">Teacher:</span>
+                                <span className="font-semibold text-white">{course.teacher.name}</span>
+                            </div>
+                            <div className="inline-flex items-center gap-2 rounded-full bg-amber-500/20 px-4 py-2">
+                                <Star className="size-4 fill-amber-400 text-amber-400" />
+                                <span className="font-semibold text-amber-300">
+                                    {course.ratings_avg_rating ? Number(course.ratings_avg_rating).toFixed(1) : 'Not rated'} out of 5
+                                </span>
+                            </div>
                         </div>
                     </section>
 
@@ -93,28 +98,28 @@ export default function CourseDetailsPage() {
                                 course.chapters.map((chapter) => (
                                     <article
                                         key={chapter.id}
-                                        className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]"
+                                        className="rounded-xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 transition-all hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20 backdrop-blur-sm"
                                     >
-                                        <div className="flex items-start gap-3">
-                                            <div className="flex size-12 items-center justify-center rounded-2xl bg-rose-600 text-white">
-                                                <FileText className="size-5" />
+                                        <div className="flex items-start gap-4">
+                                            <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 text-white shadow-lg">
+                                                <FileText className="size-6" />
                                             </div>
-                                            <div>
-                                                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-700">
+                                            <div className="min-w-0 flex-1">
+                                                <p className="text-xs font-bold uppercase tracking-wider text-purple-300">
                                                     Chapter {chapter.position}
                                                 </p>
-                                                <h2 className="mt-1 text-xl font-semibold text-slate-950">{chapter.title}</h2>
+                                                <h2 className="mt-2 text-xl font-bold text-white">{chapter.title}</h2>
                                             </div>
                                         </div>
 
-                                        <div className="mt-5 rounded-3xl bg-slate-50 p-5 text-sm text-slate-700">
+                                        <div className="mt-6 rounded-lg border border-purple-500/20 bg-purple-500/5 p-4 text-sm text-gray-300">
                                             <a
                                                 href={`/storage/${chapter.file_path}`}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="font-medium text-rose-700 underline underline-offset-4"
+                                                className="inline-flex items-center gap-2 font-semibold text-purple-300 transition-colors hover:text-purple-200"
                                             >
-                                                Open PDF: {chapter.file_name}
+                                                📄 Open: {chapter.file_name}
                                             </a>
                                         </div>
                                     </article>
@@ -123,13 +128,13 @@ export default function CourseDetailsPage() {
                         </div>
 
                         <div className="space-y-6">
-                            <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                <h2 className="text-xl font-semibold text-slate-950">Rate this course</h2>
-                                <p className="mt-1 text-sm text-slate-600">Share a quick rating so the catalog feels more trustworthy and alive.</p>
+                            <div className="rounded-xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                                <h2 className="text-xl font-bold text-white">Rate this course</h2>
+                                <p className="mt-2 text-sm text-gray-300">Share your experience to help other learners make their decision.</p>
 
                                 <form className="mt-6 space-y-4" onSubmit={handleRatingSubmit}>
                                     <div className="space-y-2">
-                                        <Label htmlFor="course-rating">Rating</Label>
+                                        <Label htmlFor="course-rating" className="text-gray-200">Rating (1-5)</Label>
                                         <Input
                                             id="course-rating"
                                             type="number"
@@ -137,47 +142,48 @@ export default function CourseDetailsPage() {
                                             max="5"
                                             value={ratingForm.rating}
                                             onChange={(event) => setRatingForm((current) => ({ ...current, rating: event.target.value }))}
+                                            className="border-purple-500/30 bg-purple-500/10 text-white"
                                             required
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="course-review">Review</Label>
+                                        <Label htmlFor="course-review" className="text-gray-200">Review</Label>
                                         <textarea
                                             id="course-review"
-                                            className="min-h-32 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                                            className="min-h-32 w-full rounded-md border border-purple-500/30 bg-purple-500/10 px-3 py-2 text-sm text-white placeholder-gray-400"
                                             value={ratingForm.review}
                                             onChange={(event) => setRatingForm((current) => ({ ...current, review: event.target.value }))}
                                             placeholder="What was strong? What could be better?"
                                         />
                                     </div>
-                                    <Button type="submit" className="rounded-2xl bg-rose-600 text-white hover:bg-rose-700">
+                                    <Button type="submit" className="w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:shadow-lg hover:shadow-purple-500/50">
                                         Save rating
                                     </Button>
                                 </form>
                             </div>
 
-                            <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                <h2 className="text-xl font-semibold text-slate-950">Student feedback</h2>
-                                <div className="mt-5 space-y-4">
+                            <div className="rounded-xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                                <h2 className="text-xl font-bold text-white">Student feedback</h2>
+                                <div className="mt-6 space-y-3">
                                     {!course.ratings || course.ratings.length === 0 ? (
                                         <EmptyState title="No reviews yet" description="Be the first student to leave feedback for this course." />
                                     ) : (
                                         course.ratings.map((rating: CourseRating) => (
-                                            <div key={rating.id} className="rounded-3xl border border-slate-200 bg-slate-50/80 p-4">
-                                                <div className="flex items-center justify-between gap-3">
-                                                    <p className="font-semibold text-slate-900">{rating.student?.name ?? 'Student'}</p>
-                                                    <span className="inline-flex items-center gap-1 text-sm text-amber-600">
-                                                        <Star className="size-4 fill-current" />
+                                            <div key={rating.id} className="rounded-lg border border-purple-500/20 bg-purple-500/5 p-4 transition-all hover:border-purple-500/40">
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <p className="font-semibold text-white">{rating.student?.name ?? 'Student'}</p>
+                                                    <div className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-3 py-1 text-sm text-amber-300">
+                                                        <Star className="size-3 fill-current" />
                                                         {rating.rating}/5
-                                                    </span>
+                                                    </div>
                                                 </div>
-                                                {rating.review ? <p className="mt-2 text-sm text-slate-600">{rating.review}</p> : null}
+                                                {rating.review ? <p className="mt-2 text-sm text-gray-300">{rating.review}</p> : null}
                                             </div>
                                         ))
                                     )}
                                 </div>
                             </div>
-                        </div>
+                         </div>
                     </section>
                 </>
             )}

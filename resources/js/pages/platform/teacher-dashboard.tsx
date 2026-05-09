@@ -185,9 +185,9 @@ export default function TeacherDashboard() {
 
             <section className="grid gap-6 xl:grid-cols-[380px,1fr]">
                 <div className="space-y-6">
-                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                        <h2 className="text-xl font-semibold text-slate-950">Launch a course</h2>
-                        <p className="mt-1 text-sm text-slate-600">Add a price, make it look premium, and unlock beta buying for students.</p>
+                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                        <h2 className="text-xl font-semibold text-white">Launch a course</h2>
+                        <p className="mt-1 text-sm text-gray-300">Add a price, make it look premium, and unlock beta buying for students.</p>
 
                         <form className="mt-6 space-y-4" onSubmit={handleCreateCourse}>
                             <div className="space-y-2">
@@ -215,7 +215,7 @@ export default function TeacherDashboard() {
                                 <Label htmlFor="course-description">Description</Label>
                                 <textarea
                                     id="course-description"
-                                    className="min-h-32 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                                    className="min-h-32 w-full rounded-md border border-purple-500/50 bg-transparent px-3 py-2 text-sm text-white placeholder:text-gray-400"
                                     value={courseForm.description}
                                     onChange={(event) => setCourseForm((current) => ({ ...current, description: event.target.value }))}
                                     required
@@ -228,11 +228,11 @@ export default function TeacherDashboard() {
                         </form>
                     </div>
 
-                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                        <h2 className="text-xl font-semibold text-slate-950">Your premium lineup</h2>
+                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                        <h2 className="text-xl font-semibold text-white">Your premium lineup</h2>
                         <div className="mt-4 space-y-3">
                             {loading ? (
-                                <p className="text-sm text-slate-500">Loading courses...</p>
+                                <p className="text-sm text-gray-400">Loading courses...</p>
                             ) : courses.length === 0 ? (
                                 <EmptyState title="No courses yet" description="Create your first course to start selling beta access and publishing PDF chapters." />
                             ) : (
@@ -271,20 +271,20 @@ export default function TeacherDashboard() {
                 <div className="space-y-6">
                     {selectedCourse ? (
                         <>
-                            <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                            <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                                     <div>
-                                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">
+                                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-purple-300">
                                             Enrollment code {selectedCourse.enrollment_code}
                                         </p>
-                                        <h2 className="mt-2 text-2xl font-semibold text-slate-950">{selectedCourse.title}</h2>
-                                        <p className="mt-2 max-w-2xl text-sm text-slate-600">{selectedCourse.description}</p>
-                                        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-slate-600">
-                                            <span className="rounded-full bg-amber-100 px-3 py-1 font-medium text-amber-900">
+                                        <h2 className="mt-2 text-2xl font-semibold text-white">{selectedCourse.title}</h2>
+                                        <p className="mt-2 max-w-2xl text-sm text-gray-300">{selectedCourse.description}</p>
+                                        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-300">
+                                            <span className="rounded-full bg-amber-500/20 px-3 py-1 font-medium text-amber-300">
                                                 ${Number(selectedCourse.price).toFixed(2)}
                                             </span>
                                             <span className="inline-flex items-center gap-1">
-                                                <Star className="size-4 text-amber-500" />
+                                                <Star className="size-4 fill-amber-400 text-amber-400" />
                                                 {selectedCourse.ratings_avg_rating ? Number(selectedCourse.ratings_avg_rating).toFixed(1) : 'No rating yet'}
                                             </span>
                                         </div>
@@ -302,57 +302,57 @@ export default function TeacherDashboard() {
 
                             <div className="space-y-6">
                                 <div className="grid gap-6 lg:grid-cols-3">
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                                         <div className="flex items-center justify-between">
-                                            <h3 className="text-lg font-semibold text-slate-950">PDF Chapter</h3>
-                                            <FileText className="size-5 text-cyan-700" />
+                                            <h3 className="text-lg font-semibold text-white">PDF Chapter</h3>
+                                            <FileText className="size-5 text-purple-400" />
                                         </div>
-                                        <p className="mt-2 text-sm text-slate-600">Upload a PDF file as a chapter.</p>
+                                        <p className="mt-2 text-sm text-gray-300">Upload a PDF file as a chapter.</p>
                                         <button
                                             type="button"
                                             onClick={() => setChapterForm((current) => ({ ...current, type: 'pdf' }))}
                                             className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
                                                 chapterForm.type === 'pdf'
-                                                    ? 'border-cyan-700 bg-cyan-100 text-cyan-900'
-                                                    : 'border-slate-200 bg-slate-50/80 text-slate-900 hover:bg-slate-100'
+                                                    ? 'border-purple-600 bg-gradient-to-r from-purple-600 to-blue-600 text-white'
+                                                    : 'border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 text-gray-300 hover:border-purple-500/50'
                                             }`}
                                         >
                                             {chapterForm.type === 'pdf' ? 'Selected' : 'Select'}
                                         </button>
                                     </div>
 
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                                         <div className="flex items-center justify-between">
-                                            <h3 className="text-lg font-semibold text-slate-950">Video Chapter</h3>
-                                            <Video className="size-5 text-cyan-700" />
+                                            <h3 className="text-lg font-semibold text-white">Video Chapter</h3>
+                                            <Video className="size-5 text-purple-400" />
                                         </div>
-                                        <p className="mt-2 text-sm text-slate-600">Upload a video file as a chapter.</p>
+                                        <p className="mt-2 text-sm text-gray-300">Upload a video file as a chapter.</p>
                                         <button
                                             type="button"
                                             onClick={() => setChapterForm((current) => ({ ...current, type: 'video' }))}
                                             className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
                                                 chapterForm.type === 'video'
-                                                    ? 'border-cyan-700 bg-cyan-100 text-cyan-900'
-                                                    : 'border-slate-200 bg-slate-50/80 text-slate-900 hover:bg-slate-100'
+                                                    ? 'border-purple-600 bg-gradient-to-r from-purple-600 to-blue-600 text-white'
+                                                    : 'border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 text-gray-300 hover:border-purple-500/50'
                                             }`}
                                         >
                                             {chapterForm.type === 'video' ? 'Selected' : 'Select'}
                                         </button>
                                     </div>
 
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                                         <div className="flex items-center justify-between">
-                                            <h3 className="text-lg font-semibold text-slate-950">Link Chapter</h3>
-                                            <LinkIcon className="size-5 text-cyan-700" />
+                                            <h3 className="text-lg font-semibold text-white">Link Chapter</h3>
+                                            <LinkIcon className="size-5 text-purple-400" />
                                         </div>
-                                        <p className="mt-2 text-sm text-slate-600">Add a link to external content.</p>
+                                        <p className="mt-2 text-sm text-gray-300">Add a link to external content.</p>
                                         <button
                                             type="button"
                                             onClick={() => setChapterForm((current) => ({ ...current, type: 'link' }))}
                                             className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
                                                 chapterForm.type === 'link'
-                                                    ? 'border-cyan-700 bg-cyan-100 text-cyan-900'
-                                                    : 'border-slate-200 bg-slate-50/80 text-slate-900 hover:bg-slate-100'
+                                                    ? 'border-purple-600 bg-gradient-to-r from-purple-600 to-blue-600 text-white'
+                                                    : 'border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 text-gray-300 hover:border-purple-500/50'
                                             }`}
                                         >
                                             {chapterForm.type === 'link' ? 'Selected' : 'Select'}
@@ -361,11 +361,11 @@ export default function TeacherDashboard() {
                                 </div>
 
                                 <div className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                        <h3 className="text-xl font-semibold text-slate-950">
+                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                                        <h3 className="text-xl font-semibold text-white">
                                             Create {chapterForm.type === 'pdf' ? 'PDF' : chapterForm.type === 'video' ? 'Video' : 'Link'} Chapter
                                         </h3>
-                                        <p className="mt-1 text-sm text-slate-600">
+                                        <p className="mt-1 text-sm text-gray-300">
                                             {chapterForm.type === 'pdf'
                                                 ? 'Upload a PDF chapter and trigger student notifications.'
                                                 : chapterForm.type === 'video'
@@ -436,19 +436,19 @@ export default function TeacherDashboard() {
 
                                             {error ? <p className="text-sm text-red-600">{error}</p> : null}
 
-                                            <Button type="submit" className="rounded-2xl bg-cyan-600 text-white hover:bg-cyan-700">
+                                            <Button type="submit" className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700">
                                                 <Plus className="size-4" />
                                                 Create chapter
                                             </Button>
                                         </form>
                                     </div>
 
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                                         <div className="flex items-center gap-3">
-                                            <Users className="size-5 text-cyan-700" />
+                                            <Users className="size-5 text-purple-400" />
                                             <div>
-                                                <h3 className="text-xl font-semibold text-slate-950">Enrolled students</h3>
-                                                <p className="text-sm text-slate-600">Students currently learning inside this course.</p>
+                                                <h3 className="text-xl font-semibold text-white">Enrolled students</h3>
+                                                <p className="text-sm text-gray-300">Students currently learning inside this course.</p>
                                             </div>
                                         </div>
 
@@ -457,9 +457,9 @@ export default function TeacherDashboard() {
                                                 <EmptyState title="No students enrolled yet" description="Beta buyers can unlock the code, then enroll here once they use it." />
                                             ) : (
                                                 students.map((student) => (
-                                                    <div key={student.id} className="rounded-3xl border border-slate-200 bg-slate-50/80 p-4">
-                                                        <p className="font-semibold text-slate-900">{student.name}</p>
-                                                        <p className="text-sm text-slate-600">{student.email}</p>
+                                                    <div key={student.id} className="rounded-3xl border border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-4">
+                                                        <p className="font-semibold text-white">{student.name}</p>
+                                                        <p className="text-sm text-gray-400">{student.email}</p>
                                                     </div>
                                                 ))
                                             )}

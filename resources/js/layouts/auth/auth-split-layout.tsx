@@ -11,15 +11,17 @@ export default function AuthSplitLayout({
     const { name } = usePage().props;
 
     return (
-        <div className="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
-            <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-                <div className="absolute inset-0 bg-zinc-900" />
+        <div className="relative grid h-dvh flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
+            <div className="relative hidden h-full flex-col bg-gradient-to-br from-slate-950 to-purple-950 p-10 text-white lg:flex dark:border-r">
+                <div className="absolute inset-0 bg-gradient-to-br from-slate-950 to-purple-950" />
                 <Link
                     href={home()}
-                    className="relative z-20 flex items-center text-lg font-medium"
+                    className="relative z-20 flex items-center gap-2 text-lg font-medium"
                 >
-                    <AppLogoIcon className="mr-2 size-8 fill-current text-white" />
-                    {name}
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
+                        <AppLogoIcon className="size-6 fill-white text-white" />
+                    </div>
+                    <span className="bg-gradient-to-r from-purple-300 to-blue-300 bg-clip-text text-transparent">{name}</span>
                 </Link>
             </div>
             <div className="w-full lg:p-8">

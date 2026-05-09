@@ -15,7 +15,9 @@ use App\Http\Controllers\Teacher\CourseStudentController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/login')->name('home');
+Route::get('/', function () {
+    return Inertia::render('welcome');
+})->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{any?}', fn () => Inertia::render('dashboard'))

@@ -121,14 +121,14 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
             </section>
 
             <section className="grid gap-6 xl:grid-cols-[360px,1fr]">
-                <div className="rounded-[2rem] border border-white/60 bg-white/90 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                     <div className="flex items-center gap-3">
-                        <UserCog className="size-5 text-sky-700" />
+                        <UserCog className="size-5 text-purple-400" />
                         <div>
-                            <h2 className="text-xl font-semibold text-slate-950">
+                            <h2 className="text-xl font-semibold text-white">
                                 {editingUser ? 'Update user' : 'Create user'}
                             </h2>
-                            <p className="text-sm text-slate-600">
+                            <p className="text-sm text-gray-300">
                                 Only teachers and students can be created here.
                             </p>
                         </div>
@@ -169,7 +169,7 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                             <Label htmlFor="role">Role</Label>
                             <select
                                 id="role"
-                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+                                className="flex h-9 w-full rounded-md border border-purple-400/50 bg-purple-900/40 px-3 py-1 text-sm text-white"
                                 value={form.role}
                                 onChange={(event) =>
                                     setForm((current) => ({
@@ -183,7 +183,7 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                             </select>
                         </div>
 
-                        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+                        {error ? <p className="text-sm text-red-500/90">{error}</p> : null}
 
                         <div className="flex gap-3">
                             <Button type="submit" className="rounded-2xl" disabled={submitting}>
@@ -206,11 +206,11 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                     </form>
                 </div>
 
-                <div className="rounded-[2rem] border border-white/60 bg-white/90 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h2 className="text-xl font-semibold text-slate-950">User directory</h2>
-                            <p className="text-sm text-slate-600">Search, update, and retire access from one place.</p>
+                            <h2 className="text-xl font-semibold text-white">User directory</h2>
+                            <p className="text-sm text-gray-300">Search, update, and retire access from one place.</p>
                         </div>
                         <div className="w-full sm:w-72">
                             <Input
@@ -223,7 +223,7 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
 
                     <div className="mt-6">
                         {loading ? (
-                            <p className="text-sm text-slate-500">Loading users...</p>
+                            <p className="text-sm text-gray-400">Loading users...</p>
                         ) : filteredUsers.length === 0 ? (
                             <EmptyState title="No users yet" description="Create the first teacher or student account to get started." />
                         ) : (
@@ -231,22 +231,22 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                                 {filteredUsers.map((user) => (
                                     <div
                                         key={user.id}
-                                        className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-slate-50/80 p-4 lg:flex-row lg:items-center lg:justify-between"
+                                        className="flex flex-col gap-4 rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-4 lg:flex-row lg:items-center lg:justify-between"
                                     >
                                         <div className="flex items-start gap-3">
-                                            <div className="flex size-11 items-center justify-center rounded-2xl bg-slate-900 text-white">
+                                            <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 text-white">
                                                 <Users className="size-5" />
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-slate-900">{user.name}</p>
-                                                <p className="text-sm text-slate-600">{user.email}</p>
-                                                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">
+                                                <p className="font-semibold text-white">{user.name}</p>
+                                                <p className="text-sm text-gray-400">{user.email}</p>
+                                                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-purple-300">
                                                     {user.role}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="flex gap-3">
-                                            <Button type="button" variant="outline" className="rounded-2xl" onClick={() => startEdit(user)}>
+                                            <Button type="button" variant="outline" className="rounded-2xl text-black" onClick={() => startEdit(user)}>
                                                 Edit
                                             </Button>
                                             <Button

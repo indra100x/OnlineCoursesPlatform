@@ -143,12 +143,12 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
 
             <section className="grid gap-6 xl:grid-cols-[360px,1fr]">
                 <div className="space-y-6">
-                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                         <div className="flex items-center gap-3">
-                            <GraduationCap className="size-5 text-fuchsia-700" />
+                            <GraduationCap className="size-5 text-purple-400" />
                             <div>
-                                <h2 className="text-xl font-semibold text-slate-950">Join with unlocked code</h2>
-                                <p className="text-sm text-slate-600">Beta purchase first, then use the revealed code to activate the course.</p>
+                                <h2 className="text-xl font-semibold text-white">Join with unlocked code</h2>
+                                <p className="text-sm text-gray-300">Beta purchase first, then use the revealed code to activate the course.</p>
                             </div>
                         </div>
 
@@ -163,14 +163,14 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                     required
                                 />
                             </div>
-                            {error ? <p className="text-sm text-red-600">{error}</p> : null}
-                            <Button type="submit" className="rounded-2xl bg-fuchsia-600 text-white hover:bg-fuchsia-700">
+                            {error ? <p className="text-sm text-red-500/90">{error}</p> : null}
+                            <Button type="submit" className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700">
                                 Enroll now
                             </Button>
                         </form>
                     </div>
 
-                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                         <div className="flex flex-wrap gap-3">
                             {[
                                 ['courses', 'My Courses'],
@@ -182,7 +182,7 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                     key={value}
                                     to={`/dashboard/student?tab=${value}`}
                                     className={`rounded-full px-4 py-2 text-sm font-medium ${
-                                        activeTab === value ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-700'
+                                        activeTab === value ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white' : 'border border-purple-500/20 bg-purple-500/10 text-gray-300 hover:border-purple-500/30'
                                     }`}
                                 >
                                     {label}
@@ -192,12 +192,12 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                     </div>
                 </div>
 
-                <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                     {activeTab === 'courses' ? (
                         <>
                             <div>
-                                <h2 className="text-xl font-semibold text-slate-950">My learning space</h2>
-                                <p className="text-sm text-slate-600">Open any enrolled course to read PDF chapters and leave a rating.</p>
+                                <h2 className="text-xl font-semibold text-white">My learning space</h2>
+                                <p className="text-sm text-gray-300">Open any enrolled course to read PDF chapters and leave a rating.</p>
                             </div>
                             <div className="mt-6 space-y-4">
                                 {courses.length === 0 ? (
@@ -207,17 +207,17 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                         <Link
                                             key={course.id}
                                             to={`/dashboard/courses/${course.id}`}
-                                            className="block rounded-3xl border border-slate-200 bg-slate-50/80 p-5 transition hover:bg-slate-100"
+                                            className="block rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-5 transition hover:border-purple-500/50 hover:shadow-lg hover:shadow-purple-500/20"
                                         >
                                             <div className="flex items-start justify-between gap-4">
                                                 <div>
-                                                    <p className="font-semibold text-slate-900">{course.title}</p>
-                                                    <p className="mt-1 text-sm text-slate-600">{course.description}</p>
+                                                    <p className="font-semibold text-white">{course.title}</p>
+                                                    <p className="mt-1 text-sm text-gray-300">{course.description}</p>
                                                     <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-700">
                                                         Teacher {course.teacher.name}
                                                     </p>
                                                 </div>
-                                                <BookOpen className="size-5 text-slate-700" />
+                                                <BookOpen className="size-5 text-purple-400" />
                                             </div>
                                         </Link>
                                     ))
@@ -229,8 +229,8 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                     {activeTab === 'catalog' ? (
                         <>
                             <div>
-                                <h2 className="text-xl font-semibold text-slate-950">Course catalog</h2>
-                                <p className="text-sm text-slate-600">Save favorites, beta-buy courses, and unlock enrollment codes.</p>
+                                <h2 className="text-xl font-semibold text-white">Course catalog</h2>
+                                <p className="text-sm text-gray-300">Save favorites, beta-buy courses, and unlock enrollment codes.</p>
                             </div>
                             <div className="mt-6 grid gap-4 lg:grid-cols-2">
                                 {catalog.map((course) => (
@@ -244,7 +244,7 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                                 <Heart className={`size-5 ${course.is_wishlisted ? 'fill-current' : ''}`} />
                                             </button>
                                         </div>
-                                        <div className="mt-4 flex flex-wrap gap-3 text-sm text-slate-600">
+                                        <div className="mt-4 flex flex-wrap gap-3 text-sm text-gray-300">
                                             <span className="rounded-full bg-amber-100 px-3 py-1 font-medium text-amber-900">
                                                 ${Number(course.price).toFixed(2)}
                                             </span>
@@ -291,8 +291,8 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                             <div className="flex items-center gap-3">
                                 <BookHeart className="size-5 text-rose-600" />
                                 <div>
-                                    <h2 className="text-xl font-semibold text-slate-950">Wishlist</h2>
-                                    <p className="text-sm text-slate-600">Your saved courses waiting for a future beta purchase.</p>
+                                    <h2 className="text-xl font-semibold text-white">Wishlist</h2>
+                                    <p className="text-sm text-gray-300">Your saved courses waiting for a future beta purchase.</p>
                                 </div>
                             </div>
                             <div className="mt-6 space-y-4">
@@ -300,9 +300,9 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                     <EmptyState title="Wishlist is empty" description="Save courses from the catalog to keep track of what you want next." />
                                 ) : (
                                     wishlist.map((course) => (
-                                        <div key={course.id} className="rounded-3xl border border-slate-200 bg-slate-50/80 p-5">
-                                            <p className="font-semibold text-slate-900">{course.title}</p>
-                                            <p className="mt-1 text-sm text-slate-600">{course.description}</p>
+                                    <div key={course.id} className="rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-5">
+                                                <p className="font-semibold text-white">{course.title}</p>
+                                                <p className="mt-1 text-sm text-gray-300">{course.description}</p>
                                             <div className="mt-4 flex gap-3">
                                                 <Button
                                                     type="button"
@@ -312,7 +312,7 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                                     <CreditCard className="size-4" />
                                                     Beta buy
                                                 </Button>
-                                                <Button type="button" variant="outline" className="rounded-2xl" onClick={() => void toggleWishlist({ ...course, is_wishlisted: true })}>
+                                                <Button type="button" variant="outline" className="rounded-2xl text-black" onClick={() => void toggleWishlist({ ...course, is_wishlisted: true })}>
                                                     Remove
                                                 </Button>
                                             </div>
@@ -326,10 +326,10 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                     {activeTab === 'notifications' ? (
                         <>
                             <div className="flex items-center gap-3">
-                                <Bell className="size-5 text-fuchsia-700" />
+                                <Bell className="size-5 text-purple-400" />
                                 <div>
-                                    <h2 className="text-xl font-semibold text-slate-950">Notifications</h2>
-                                    <p className="text-sm text-slate-600">Stay on top of fresh PDF chapter releases and activity.</p>
+                                    <h2 className="text-xl font-semibold text-white">Notifications</h2>
+                                    <p className="text-sm text-gray-300">Stay on top of fresh PDF chapter releases and activity.</p>
                                 </div>
                             </div>
                             <div className="mt-6 space-y-4">
@@ -345,8 +345,8 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                         >
                                             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                                                 <div>
-                                                    <p className="font-semibold text-slate-900">{notification.message}</p>
-                                                    <p className="mt-1 text-sm text-slate-600">{notification.course?.title ?? 'Course update'}</p>
+                                                    <p className="font-semibold text-white">{notification.message}</p>
+                                                    <p className="mt-1 text-sm text-gray-300">{notification.course?.title ?? 'Course update'}</p>
                                                 </div>
                                                 {!notification.is_read ? (
                                                     <Button type="button" variant="outline" className="rounded-2xl bg-white" onClick={() => void markAsRead(notification.id)}>

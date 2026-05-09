@@ -88,33 +88,33 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
 
     return (
         <div className="grid gap-6 xl:grid-cols-[360px,1fr]">
-            <div className="rounded-[2rem] border border-white/20 bg-white/10 p-6 text-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.85)] backdrop-blur-xl">
+            <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 text-white backdrop-blur-sm">
                 <div className="flex flex-col items-center text-center">
                     {avatarUrl ? (
                         <img src={avatarUrl} alt={profile?.name ?? 'Profile'} className="size-28 rounded-[2rem] object-cover shadow-2xl" />
                     ) : (
-                        <div className="flex size-28 items-center justify-center rounded-[2rem] bg-white/15">
+                        <div className="flex size-28 items-center justify-center rounded-[2rem] bg-purple-500/20">
                             <UserCircle2 className="size-14" />
                         </div>
                     )}
                     <h1 className="mt-5 text-2xl font-semibold">{profile?.name ?? 'Profile'}</h1>
-                    <p className="mt-1 text-sm text-slate-200">{profile?.email}</p>
-                    <p className="mt-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-100">
+                    <p className="mt-1 text-sm text-gray-300">{profile?.email}</p>
+                    <p className="mt-2 rounded-full bg-amber-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">
                         {profile?.role ?? 'member'}
                     </p>
-                    <p className="mt-5 text-sm text-slate-200">
+                    <p className="mt-5 text-sm text-gray-300">
                         {profile?.bio || 'Add a short bio so your dashboard feels more personal and complete.'}
                     </p>
                 </div>
             </div>
 
             <div className="space-y-6">
-                <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                     <div className="flex items-center gap-3">
-                        <Camera className="size-5 text-teal-700" />
+                        <Camera className="size-5 text-purple-400" />
                         <div>
-                            <h2 className="text-xl font-semibold text-slate-950">Profile details</h2>
-                            <p className="text-sm text-slate-600">Update your display name, bio, and profile photo.</p>
+                            <h2 className="text-xl font-semibold text-white">Profile details</h2>
+                            <p className="text-sm text-gray-300">Update your display name, bio, and profile photo.</p>
                         </div>
                     </div>
 
@@ -149,20 +149,20 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                                 }
                             />
                         </div>
-                        {message ? <p className="text-sm text-emerald-600">{message}</p> : null}
-                        {error ? <p className="text-sm text-red-600">{error}</p> : null}
-                        <Button type="submit" className="rounded-2xl bg-teal-600 text-white hover:bg-teal-700">
+                        {message ? <p className="text-sm text-emerald-400/90">{message}</p> : null}
+                        {error ? <p className="text-sm text-red-400/90">{error}</p> : null}
+                        <Button type="submit" className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700">
                             Save profile
                         </Button>
                     </form>
                 </div>
 
-                <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
                     <div className="flex items-center gap-3">
-                        <LockKeyhole className="size-5 text-amber-700" />
+                        <LockKeyhole className="size-5 text-purple-400" />
                         <div>
-                            <h2 className="text-xl font-semibold text-slate-950">Security</h2>
-                            <p className="text-sm text-slate-600">Change your password without leaving the dashboard.</p>
+                            <h2 className="text-xl font-semibold text-white">Security</h2>
+                            <p className="text-sm text-gray-300">Change your password without leaving the dashboard.</p>
                         </div>
                     </div>
 
