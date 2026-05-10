@@ -9,60 +9,67 @@ export default function AuthSimpleLayout({
     description,
 }: AuthLayoutProps) {
     return (
-        <div className="min-h-svh bg-[#fbf7ef] px-6 py-8 md:px-10">
-            <div className="mx-auto grid min-h-[calc(100svh-4rem)] max-w-7xl overflow-hidden rounded-[2.5rem] border border-black/10 bg-white shadow-[0_30px_90px_rgba(17,17,17,0.1)] lg:grid-cols-[1.08fr,0.92fr]">
-                <div className="brand-grid relative hidden overflow-hidden bg-[#fff6d0] p-10 lg:flex lg:flex-col lg:justify-between">
-                    <div className="absolute left-10 top-16 h-28 w-28 rounded-[2rem] bg-[#ef4444]" />
-                    <div className="absolute right-20 top-24 h-24 w-24 rounded-full bg-[#2563eb]" />
-                    <div className="absolute bottom-16 right-12 h-36 w-36 rounded-[2.5rem] bg-black" />
+        <div className="min-h-svh bg-[#fbf7ef] px-4 py-5 md:px-8 md:py-8">
+            <div className="mx-auto grid min-h-[calc(100svh-2.5rem)] max-w-7xl overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_20px_80px_rgba(17,17,17,0.08)] lg:grid-cols-[1.1fr,0.9fr]">
+                <div className="brand-gradient-overlay relative hidden overflow-hidden bg-[#fff6d0] p-10 lg:flex lg:flex-col lg:justify-between">
+                    <div className="absolute -left-8 top-12 h-32 w-32 rounded-[2.5rem] bg-[#ef4444]/90" />
+                    <div className="absolute right-16 top-20 h-28 w-28 rounded-full bg-[#2563eb]/90" />
+                    <div className="absolute -bottom-8 -right-8 h-48 w-48 rounded-[3rem] bg-black" />
+                    <div className="absolute left-1/3 top-1/3 h-16 w-16 rounded-full bg-[#ffd84d]/70" />
+
                     <div className="relative z-10 max-w-xl">
                         <Link href={home()} className="inline-flex items-center gap-3 font-medium">
                             <AppLogo />
                         </Link>
-                        <div className="mt-16 space-y-6">
-                            <span className="brand-pill bg-white/85 text-black">Admin Managed Access</span>
-                            <h1 className="max-w-lg text-5xl font-black leading-[1.05] text-black">
+                        <div className="mt-14 space-y-5">
+                            <span className="brand-pill bg-white/90 text-black shadow-sm">Admin Managed Access</span>
+                            <h1 className="max-w-lg text-5xl font-black leading-[1.05] tracking-[-0.03em] text-black">
                                 Learn in a workspace that feels polished from the first click.
                             </h1>
-                            <p className="max-w-md text-base leading-7 text-black/68">
+                            <p className="max-w-md text-base leading-7 text-black/65">
                                 Teachers publish structured courses, students unlock learning with guided access, and every dashboard stays crisp and focused.
                             </p>
                         </div>
                     </div>
+
                     <div className="relative z-10 grid max-w-xl grid-cols-3 gap-4">
-                        <div className="rounded-[1.75rem] bg-white p-5 shadow-[0_20px_40px_rgba(17,17,17,0.08)]">
-                            <div className="h-20 rounded-[1.25rem] bg-[#ffd84d]" />
+                        <div className="brand-surface p-5">
+                            <div className="flex h-20 items-center justify-center rounded-[1.25rem] bg-[#ffd84d]">
+                                <span className="text-2xl">📚</span>
+                            </div>
                             <p className="mt-4 text-sm font-semibold text-black">Course access</p>
                         </div>
-                        <div className="rounded-[1.75rem] bg-black p-5 text-white shadow-[0_20px_40px_rgba(17,17,17,0.12)]">
-                            <div className="h-20 rounded-[1.25rem] bg-[#2563eb]" />
+                        <div className="brand-surface-dark p-5">
+                            <div className="flex h-20 items-center justify-center rounded-[1.25rem] bg-[#2563eb]">
+                                <span className="text-2xl">🛠️</span>
+                            </div>
                             <p className="mt-4 text-sm font-semibold">Teacher tools</p>
                         </div>
-                        <div className="rounded-[1.75rem] bg-white p-5 shadow-[0_20px_40px_rgba(17,17,17,0.08)]">
-                            <div className="h-20 rounded-[1.25rem] bg-[#ef4444]" />
+                        <div className="brand-surface p-5">
+                            <div className="flex h-20 items-center justify-center rounded-[1.25rem] bg-[#ef4444]">
+                                <span className="text-2xl">🎓</span>
+                            </div>
                             <p className="mt-4 text-sm font-semibold text-black">Student flow</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="flex items-center justify-center bg-white p-6 md:p-10">
-                    <div className="w-full max-w-md">
-                        <div className="brand-surface-dark relative overflow-hidden p-8 md:p-10">
-                            <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-[#2563eb]" />
-                            <div className="absolute bottom-0 left-0 h-28 w-28 rounded-tr-[2rem] bg-[#ef4444]" />
-                            <div className="relative z-10 flex flex-col gap-8">
-                                <div className="flex flex-col items-start gap-4">
-                                    <Link href={home()} className="font-medium lg:hidden [&_span:first-child]:text-white [&_span:last-child]:text-white/65">
-                                        <AppLogo />
-                                    </Link>
+                <div className="flex items-center justify-center bg-white p-6 md:p-8">
+                    <div className="w-full max-w-sm">
+                        <div className="space-y-6">
+                            <div className="flex flex-col items-start gap-4">
+                                <Link href={home()} className="font-medium lg:hidden">
+                                    <AppLogo />
+                                </Link>
 
-                                    <div className="space-y-2">
-                                        <span className="brand-pill border-white/15 bg-white/8 text-white">Secure sign in</span>
-                                        <h1 className="text-3xl font-black leading-tight text-white">{title}</h1>
-                                        <p className="text-sm leading-6 text-white/70">{description}</p>
-                                    </div>
+                                <div className="space-y-2">
+                                    <span className="brand-pill border-black/8 bg-[#fff6d0] text-black">Secure sign in</span>
+                                    <h1 className="text-3xl font-black leading-tight tracking-[-0.02em] text-black">{title}</h1>
+                                    <p className="text-sm leading-6 text-black/55">{description}</p>
                                 </div>
-                                <div className="auth-on-dark">{children}</div>
+                            </div>
+                            <div className="bg-[#fbf7ef] rounded-[1.5rem] border border-black/6 p-6 md:p-7 shadow-sm">
+                                {children}
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,3 @@
-// Components
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import InputError from '@/components/input-error';
@@ -13,16 +12,16 @@ export default function ForgotPassword({ status }: { status?: string }) {
             <Head title="Forgot password" />
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-emerald-400">
+                <div className="mb-4 text-center text-sm font-medium text-emerald-600">
                     {status}
                 </div>
             )}
 
-            <div className="space-y-6">
+            <div className="space-y-5">
                 <Form action="/forgot-password" method="post">
                     {({ processing, errors }) => (
-                        <>
-                            <div className="grid gap-2">
+                        <div className="space-y-4">
+                            <div className="grid gap-1.5">
                                 <Label htmlFor="email">Email address</Label>
                                 <Input
                                     id="email"
@@ -32,27 +31,24 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     autoFocus
                                     placeholder="email@example.com"
                                 />
-
                                 <InputError message={errors.email} />
                             </div>
 
-                            <div className="my-6 flex items-center justify-start">
-                                <Button
-                                    className="w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
-                                    disabled={processing}
-                                    data-test="email-password-reset-link-button"
-                                >
-                                    {processing && (
-                                        <LoaderCircle className="h-4 w-4 animate-spin" />
-                                    )}
-                                    Email password reset link
-                                </Button>
-                            </div>
-                        </>
+                            <Button
+                                className="h-11 w-full rounded-xl bg-black text-white hover:bg-black/90"
+                                disabled={processing}
+                                data-test="email-password-reset-link-button"
+                            >
+                                {processing && (
+                                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                                )}
+                                Email password reset link
+                            </Button>
+                        </div>
                     )}
                 </Form>
 
-                <div className="space-x-1 text-center text-sm text-gray-300">
+                <div className="space-x-1 text-center text-sm text-black/55">
                     <span>Or, return to</span>
                     <TextLink href="/login">log in</TextLink>
                 </div>

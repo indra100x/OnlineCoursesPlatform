@@ -12,11 +12,11 @@ export default function Register() {
         <>
             <Head title="Student registration" />
 
-            <Form action="/register" method="post" resetOnSuccess={['password', 'password_confirmation']} className="flex flex-col gap-6">
+            <Form action="/register" method="post" resetOnSuccess={['password', 'password_confirmation']} className="flex flex-col gap-5">
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
+                        <div className="grid gap-5">
+                            <div className="grid gap-1.5">
                                 <Label htmlFor="name">Full name</Label>
                                 <Input
                                     id="name"
@@ -30,7 +30,7 @@ export default function Register() {
                                 <InputError message={errors.name} />
                             </div>
 
-                            <div className="grid gap-2">
+                            <div className="grid gap-1.5">
                                 <Label htmlFor="email">Email address</Label>
                                 <Input
                                     id="email"
@@ -43,7 +43,7 @@ export default function Register() {
                                 <InputError message={errors.email} />
                             </div>
 
-                            <div className="grid gap-2">
+                            <div className="grid gap-1.5">
                                 <Label htmlFor="password">Password</Label>
                                 <PasswordInput
                                     id="password"
@@ -55,7 +55,7 @@ export default function Register() {
                                 <InputError message={errors.password} />
                             </div>
 
-                            <div className="grid gap-2">
+                            <div className="grid gap-1.5">
                                 <Label htmlFor="password_confirmation">Confirm password</Label>
                                 <PasswordInput
                                     id="password_confirmation"
@@ -67,11 +67,11 @@ export default function Register() {
                                 <InputError message={errors.password_confirmation} />
                             </div>
 
-                            <div className="rounded-xl bg-white/10 px-4 py-3 text-sm text-white/70">
-                                New registrations are created as <span className="font-semibold text-[#ffd84d]">student</span> accounts.
+                            <div className="rounded-xl bg-[#fff6d0] px-4 py-3 text-sm text-black/70">
+                                New registrations are created as <span className="font-semibold text-black">student</span> accounts.
                             </div>
 
-                            <Button type="submit" className="h-11 w-full rounded-xl bg-[#ffd84d] text-black hover:bg-[#facc15]" disabled={processing}>
+                            <Button type="submit" className="h-11 w-full rounded-xl bg-black text-white hover:bg-black/90" disabled={processing}>
                                 {processing && <Spinner />}
                                 Create student account
                             </Button>
@@ -80,7 +80,7 @@ export default function Register() {
                 )}
             </Form>
 
-            <p className="text-center text-sm text-white/70">
+            <p className="mt-4 text-center text-sm text-black/55">
                 Already have an account? <TextLink href="/login">Log in</TextLink>
             </p>
         </>

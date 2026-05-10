@@ -23,8 +23,8 @@ export default function ResetPassword({ token, email }: Props) {
                 resetOnSuccess={['password', 'password_confirmation']}
             >
                 {({ processing, errors }) => (
-                    <div className="grid gap-6">
-                        <div className="grid gap-2">
+                    <div className="grid gap-5">
+                        <div className="grid gap-1.5">
                             <Label htmlFor="email">Email</Label>
                             <Input
                                 id="email"
@@ -35,13 +35,10 @@ export default function ResetPassword({ token, email }: Props) {
                                 className="mt-1 block w-full"
                                 readOnly
                             />
-                            <InputError
-                                message={errors.email}
-                                className="mt-2"
-                            />
+                            <InputError message={errors.email} className="mt-2" />
                         </div>
 
-                        <div className="grid gap-2">
+                        <div className="grid gap-1.5">
                             <Label htmlFor="password">Password</Label>
                             <PasswordInput
                                 id="password"
@@ -54,10 +51,8 @@ export default function ResetPassword({ token, email }: Props) {
                             <InputError message={errors.password} />
                         </div>
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="password_confirmation">
-                                Confirm password
-                            </Label>
+                        <div className="grid gap-1.5">
+                            <Label htmlFor="password_confirmation">Confirm password</Label>
                             <PasswordInput
                                 id="password_confirmation"
                                 name="password_confirmation"
@@ -65,15 +60,12 @@ export default function ResetPassword({ token, email }: Props) {
                                 className="mt-1 block w-full"
                                 placeholder="Confirm password"
                             />
-                            <InputError
-                                message={errors.password_confirmation}
-                                className="mt-2"
-                            />
+                            <InputError message={errors.password_confirmation} />
                         </div>
 
                         <Button
                             type="submit"
-                            className="mt-4 w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
+                            className="h-11 w-full rounded-xl bg-black text-white hover:bg-black/90"
                             disabled={processing}
                             data-test="reset-password-button"
                         >

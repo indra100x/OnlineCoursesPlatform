@@ -3,7 +3,6 @@ import { Bell, BookHeart, BookOpen, CreditCard, GraduationCap, Heart, ShoppingBa
 import { Link, useSearchParams } from 'react-router-dom';
 import api from '@/lib/api';
 import { EmptyState } from '@/components/platform/empty-state';
-import { StatsCard } from '@/components/platform/stats-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +11,13 @@ import type { Course, PlatformNotification, StudentCourse } from '@/types/platfo
 type StudentDashboardProps = {
     onUnreadCountChange: (count: number) => void;
 };
+
+const TABS = [
+    { key: 'courses', label: 'My Courses' },
+    { key: 'catalog', label: 'Catalog' },
+    { key: 'wishlist', label: 'Wishlist' },
+    { key: 'notifications', label: 'Notifications' },
+] as const;
 
 export default function StudentDashboard({ onUnreadCountChange }: StudentDashboardProps) {
     const [courses, setCourses] = useState<StudentCourse[]>([]);
@@ -133,59 +139,46 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
     const purchasedCount = catalog.filter((course) => course.is_purchased).length;
 
     return (
-        <div className="space-y-6">
-            <section className="grid gap-5 xl:grid-cols-[1.08fr,0.92fr]">
-                <div className="brand-surface-dark relative overflow-hidden p-7">
-                    <div className="absolute -left-8 top-12 h-24 w-24 rounded-full bg-[#ffd84d]" />
-                    <div className="absolute right-6 top-0 h-20 w-20 rounded-b-[1.8rem] bg-[#2563eb]" />
-                    <div className="relative z-10">
-                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/50">Student experience</p>
-                        <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-white">Buy, unlock, enroll, and keep momentum.</h2>
-                        <p className="mt-3 max-w-2xl text-sm leading-7 text-white/68">
-                            The flow stays simple for learners, but the presentation feels richer, brighter, and more premium at every step.
-                        </p>
-                    </div>
+        <div className="space-y-5">
+            <section className="grid gap-4 sm:grid-cols-4">
+                <div className="brand-surface p-5">
+                    <p className="brand-kicker">My Courses</p>
+                    <p className="mt-2 text-3xl font-black text-black">{courses.length}</p>
+                    <p className="mt-1 text-sm text-black/50">Enrolled and learning</p>
                 </div>
-
-                <div className="grid gap-5 sm:grid-cols-3 xl:grid-cols-3">
-                    <div className="brand-surface-soft p-5">
-                        <p className="brand-kicker">Current tab</p>
-                        <p className="mt-3 text-2xl font-black capitalize text-black">{activeTab}</p>
-                    </div>
-                    <div className="rounded-[2rem] bg-[#ffd84d] p-5 text-black shadow-[0_18px_44px_rgba(255,216,77,0.18)]">
-                        <p className="brand-kicker text-black/55">Unlocked purchases</p>
-                        <p className="mt-3 text-2xl font-black">{purchasedCount}</p>
-                    </div>
-                    <div className="brand-surface-soft p-5">
-                        <p className="brand-kicker">Unread</p>
-                        <p className="mt-3 text-2xl font-black text-black">{unreadCount}</p>
-                    </div>
+                <div className="brand-surface p-5">
+                    <p className="brand-kicker">Purchases</p>
+                    <p className="mt-2 text-3xl font-black text-black">{purchasedCount}</p>
+                    <p className="mt-1 text-sm text-black/50">Beta buy completions</p>
+                </div>
+                <div className="brand-surface-blue p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Wishlist</p>
+                    <p className="mt-2 text-3xl font-black text-white">{wishlist.length}</p>
+                    <p className="mt-1 text-sm text-white/65">Saved for later</p>
+                </div>
+                <div className="brand-surface-accent p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-black/55">Unread</p>
+                    <p className="mt-2 text-3xl font-black text-black">{unreadCount}</p>
+                    <p className="mt-1 text-sm text-black/55">Fresh notifications</p>
                 </div>
             </section>
 
-            <section className="grid gap-4 md:grid-cols-4">
-                <StatsCard label="My Courses" value={courses.length} hint="Courses you already unlocked and joined." />
-                <StatsCard label="Purchases" value={purchasedCount} hint="Beta purchases that revealed an enrollment code." />
-                <StatsCard label="Wishlist" value={wishlist.length} hint="Courses you saved for later." />
-                <StatsCard label="Unread Alerts" value={unreadCount} hint="Fresh updates from teachers and new chapter drops." />
-            </section>
-
-            <section className="grid gap-6 xl:grid-cols-[360px,1fr]">
-                <div className="space-y-6">
-                    <div className="brand-surface p-6">
+            <section className="grid gap-5 xl:grid-cols-[360px,1fr]">
+                <div className="space-y-5">
+                    <div className="brand-surface p-5">
                         <div className="flex items-center gap-3">
-                            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-black text-white">
-                                <GraduationCap className="size-5" />
+                            <div className="flex h-10 w-10 items-center justify-center rounded-[1.1rem] bg-black text-white">
+                                <GraduationCap className="size-4" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-semibold text-black">Join with unlocked code</h2>
-                                <p className="text-sm text-black/60">Beta purchase first, then use the revealed code to activate the course.</p>
+                                <h2 className="text-base font-semibold text-black">Join with code</h2>
+                                <p className="text-xs text-black/50">Use an enrollment code to activate a course.</p>
                             </div>
                         </div>
 
-                        <form className="mt-6 space-y-4" onSubmit={handleEnroll}>
-                            <div className="space-y-2">
-                                <Label htmlFor="enrollment-code">Enrollment code</Label>
+                        <form className="mt-4 space-y-3.5" onSubmit={handleEnroll}>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="enrollment-code" className="text-xs font-semibold">Enrollment code</Label>
                                 <Input
                                     id="enrollment-code"
                                     value={enrollmentCode}
@@ -194,26 +187,23 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                     required
                                 />
                             </div>
-                            {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p> : null}
-                            <Button type="submit" className="rounded-2xl bg-black text-white hover:bg-black/90">
+                            {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p> : null}
+                            <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90">
                                 Enroll now
                             </Button>
                         </form>
                     </div>
 
-                    <div className="brand-surface p-6">
-                        <div className="flex flex-wrap gap-3">
-                            {[
-                                ['courses', 'My Courses'],
-                                ['catalog', 'Catalog'],
-                                ['wishlist', 'Wishlist'],
-                                ['notifications', 'Notifications'],
-                            ].map(([value, label]) => (
+                    <div className="brand-surface p-4">
+                        <div className="flex flex-wrap gap-1.5">
+                            {TABS.map(({ key, label }) => (
                                 <Link
-                                    key={value}
-                                    to={`/dashboard/student?tab=${value}`}
-                                    className={`rounded-full px-4 py-2 text-sm font-medium ${
-                                        activeTab === value ? 'bg-black text-white' : 'border border-black/10 bg-white text-black hover:border-[#2563eb] hover:bg-[#edf4ff]'
+                                    key={key}
+                                    to={`/dashboard/student?tab=${key}`}
+                                    className={`rounded-[0.8rem] px-3.5 py-1.5 text-xs font-medium transition-all ${
+                                        activeTab === key
+                                            ? 'bg-black text-white shadow-sm'
+                                            : 'border border-black/8 bg-white text-black/60 hover:border-black/20 hover:text-black'
                                     }`}
                                 >
                                     {label}
@@ -223,14 +213,14 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                     </div>
                 </div>
 
-                <div className="brand-surface p-6">
+                <div className="brand-surface p-5">
                     {activeTab === 'courses' ? (
                         <>
                             <div>
-                                <h2 className="text-xl font-semibold text-black">My learning space</h2>
-                                <p className="text-sm text-black/60">Open any enrolled course to review chapters and leave a rating.</p>
+                                <h2 className="text-base font-semibold text-black">My learning space</h2>
+                                <p className="text-xs text-black/50">Open any enrolled course to review chapters and leave a rating.</p>
                             </div>
-                            <div className="mt-6 space-y-4">
+                            <div className="mt-4 space-y-3">
                                 {courses.length === 0 ? (
                                     <EmptyState title="No enrolled courses" description="Buy a course in beta, unlock the code, then enroll here." />
                                 ) : (
@@ -238,17 +228,17 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                         <Link
                                             key={course.id}
                                             to={`/dashboard/courses/${course.id}`}
-                                            className="block rounded-3xl border border-black/10 bg-[#fffdf7] p-5 transition hover:border-[#2563eb] hover:shadow-[0_18px_40px_rgba(37,99,235,0.08)]"
+                                            className="block rounded-[1.25rem] border border-black/8 bg-[#fffdf7] p-4 transition hover:border-[#2563eb]/20 hover:shadow-sm"
                                         >
-                                            <div className="flex items-start justify-between gap-4">
-                                                <div>
-                                                    <p className="font-semibold text-black">{course.title}</p>
-                                                    <p className="mt-1 text-sm text-black/60">{course.description}</p>
-                                                    <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#2563eb]">
+                                            <div className="flex items-start justify-between gap-3">
+                                                <div className="min-w-0">
+                                                    <p className="text-sm font-semibold text-black">{course.title}</p>
+                                                    <p className="mt-0.5 text-xs text-black/50 line-clamp-2">{course.description}</p>
+                                                    <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#2563eb]">
                                                         Teacher {course.teacher.name}
                                                     </p>
                                                 </div>
-                                                <BookOpen className="size-5 text-[#ef4444]" />
+                                                <BookOpen className="size-4 shrink-0 text-[#ef4444]" />
                                             </div>
                                         </Link>
                                     ))
@@ -260,61 +250,63 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                     {activeTab === 'catalog' ? (
                         <>
                             <div>
-                                <h2 className="text-xl font-semibold text-black">Course catalog</h2>
-                                <p className="text-sm text-black/60">Save favorites, beta-buy courses, and unlock enrollment codes.</p>
+                                <h2 className="text-base font-semibold text-black">Course catalog</h2>
+                                <p className="text-xs text-black/50">Save favorites, beta-buy courses, and unlock enrollment codes.</p>
                             </div>
-                            <div className="mt-6 grid gap-4 lg:grid-cols-2">
+                            <div className="mt-4 grid gap-3 lg:grid-cols-2">
                                 {catalog.map((course) => (
-                                    <div key={course.id} className="rounded-3xl border border-black/10 bg-[#fffdf7] p-5">
-                                        <div className="flex items-start justify-between gap-4">
-                                            <div>
-                                                <p className="font-semibold text-black">{course.title}</p>
-                                                <p className="mt-1 text-sm text-black/60">{course.description}</p>
+                                    <div key={course.id} className="rounded-[1.25rem] border border-black/8 bg-[#fffdf7] p-4">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-semibold text-black truncate">{course.title}</p>
+                                                <p className="mt-0.5 text-xs text-black/50 line-clamp-2">{course.description}</p>
                                                 {course.teacher ? (
                                                     <Link
                                                         to={`/dashboard/teachers/${course.teacher.id}`}
-                                                        className="mt-3 inline-flex text-xs font-semibold uppercase tracking-[0.2em] text-[#2563eb] transition hover:text-black"
+                                                        className="mt-2 inline-flex text-[10px] font-semibold uppercase tracking-[0.18em] text-[#2563eb] transition hover:text-black"
                                                     >
                                                         Teacher {course.teacher.name}
                                                     </Link>
                                                 ) : null}
                                             </div>
-                                            <button type="button" onClick={() => void toggleWishlist(course)} className="text-rose-500">
-                                                <Heart className={`size-5 ${course.is_wishlisted ? 'fill-current' : ''}`} />
+                                            <button type="button" onClick={() => void toggleWishlist(course)} className="text-rose-500 shrink-0">
+                                                <Heart className={`size-4 ${course.is_wishlisted ? 'fill-current' : ''}`} />
                                             </button>
                                         </div>
-                                        <div className="mt-4 flex flex-wrap gap-3 text-sm text-black/65">
-                                            <span className="rounded-full bg-[#ffd84d] px-3 py-1 font-medium text-black">
+                                        <div className="mt-3 flex flex-wrap gap-2 text-xs text-black/60">
+                                            <span className="rounded-full bg-[#ffd84d] px-2.5 py-0.5 font-medium text-black">
                                                 ${Number(course.price).toFixed(2)}
                                             </span>
                                             <span className="inline-flex items-center gap-1">
-                                                <Star className="size-4 text-[#ef4444]" />
-                                                {course.ratings_avg_rating ? Number(course.ratings_avg_rating).toFixed(1) : 'No rating yet'}
+                                                <Star className="size-3 text-[#ef4444]" />
+                                                {course.ratings_avg_rating ? Number(course.ratings_avg_rating).toFixed(1) : 'No rating'}
                                             </span>
                                         </div>
-                                        <div className="mt-5 flex flex-wrap gap-3">
+                                        <div className="mt-3 flex flex-wrap gap-2">
                                             {course.is_purchased ? (
                                                 <>
-                                                    <div className="rounded-2xl bg-[#edf4ff] px-4 py-2 text-sm font-medium text-[#2563eb]">
-                                                        Code unlocked: {course.enrollment_code}
+                                                    <div className="rounded-[0.8rem] bg-[#edf4ff] px-3 py-1.5 text-[11px] font-medium text-[#2563eb]">
+                                                        Code: {course.enrollment_code}
                                                     </div>
                                                     {!course.is_enrolled ? (
                                                         <Button
                                                             type="button"
-                                                            className="rounded-2xl bg-black text-white hover:bg-black/90"
+                                                            size="sm"
+                                                            className="rounded-[0.8rem] bg-black text-white hover:bg-black/90 text-[11px]"
                                                             onClick={() => void enrollWithUnlockedCode(course)}
                                                         >
-                                                            Use code and enroll
+                                                            Enroll now
                                                         </Button>
                                                     ) : null}
                                                 </>
                                             ) : (
                                                 <Button
                                                     type="button"
-                                                    className="rounded-2xl bg-[#ffd84d] text-black hover:bg-[#facc15]"
+                                                    size="sm"
+                                                    className="rounded-[0.8rem] bg-[#ffd84d] text-black hover:bg-[#facc15] text-[11px]"
                                                     onClick={() => void handlePurchase(course.id)}
                                                 >
-                                                    <ShoppingBag className="size-4" />
+                                                    <ShoppingBag className="size-3" />
                                                     Beta buy
                                                 </Button>
                                             )}
@@ -328,32 +320,33 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                     {activeTab === 'wishlist' ? (
                         <>
                             <div className="flex items-center gap-3">
-                                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#ef4444] text-white">
-                                    <BookHeart className="size-5" />
+                                <div className="flex h-10 w-10 items-center justify-center rounded-[1.1rem] bg-[#ef4444] text-white">
+                                    <BookHeart className="size-4" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-semibold text-black">Wishlist</h2>
-                                    <p className="text-sm text-black/60">Your saved courses waiting for a future beta purchase.</p>
+                                    <h2 className="text-base font-semibold text-black">Wishlist</h2>
+                                    <p className="text-xs text-black/50">Your saved courses waiting for a future beta purchase.</p>
                                 </div>
                             </div>
-                            <div className="mt-6 space-y-4">
+                            <div className="mt-4 space-y-3">
                                 {wishlist.length === 0 ? (
                                     <EmptyState title="Wishlist is empty" description="Save courses from the catalog to keep track of what you want next." />
                                 ) : (
                                     wishlist.map((course) => (
-                                    <div key={course.id} className="rounded-3xl border border-black/10 bg-[#fffdf7] p-5">
-                                                <p className="font-semibold text-black">{course.title}</p>
-                                                <p className="mt-1 text-sm text-black/60">{course.description}</p>
-                                            <div className="mt-4 flex gap-3">
+                                        <div key={course.id} className="rounded-[1.25rem] border border-black/8 bg-[#fffdf7] p-4">
+                                            <p className="text-sm font-semibold text-black">{course.title}</p>
+                                            <p className="mt-0.5 text-xs text-black/50 line-clamp-2">{course.description}</p>
+                                            <div className="mt-3 flex gap-2">
                                                 <Button
                                                     type="button"
-                                                    className="rounded-2xl bg-[#ffd84d] text-black hover:bg-[#facc15]"
+                                                    size="sm"
+                                                    className="rounded-[0.8rem] bg-[#ffd84d] text-black hover:bg-[#facc15] text-[11px]"
                                                     onClick={() => void handlePurchase(course.id)}
                                                 >
-                                                    <CreditCard className="size-4" />
+                                                    <CreditCard className="size-3" />
                                                     Beta buy
                                                 </Button>
-                                                <Button type="button" variant="outline" className="rounded-2xl" onClick={() => void toggleWishlist({ ...course, is_wishlisted: true })}>
+                                                <Button type="button" variant="outline" size="sm" className="rounded-[0.8rem] text-[11px]" onClick={() => void toggleWishlist({ ...course, is_wishlisted: true })}>
                                                     Remove
                                                 </Button>
                                             </div>
@@ -367,32 +360,32 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                     {activeTab === 'notifications' ? (
                         <>
                             <div className="flex items-center gap-3">
-                                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2563eb] text-white">
-                                    <Bell className="size-5" />
+                                <div className="flex h-10 w-10 items-center justify-center rounded-[1.1rem] bg-[#2563eb] text-white">
+                                    <Bell className="size-4" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-semibold text-black">Notifications</h2>
-                                    <p className="text-sm text-black/60">Stay on top of fresh chapter releases and activity.</p>
+                                    <h2 className="text-base font-semibold text-black">Notifications</h2>
+                                    <p className="text-xs text-black/50">Stay on top of fresh chapter releases and activity.</p>
                                 </div>
                             </div>
-                            <div className="mt-6 space-y-4">
+                            <div className="mt-4 space-y-3">
                                 {notifications.length === 0 ? (
                                     <EmptyState title="No notifications yet" description="You'll see new chapter alerts here as teachers publish them." />
                                 ) : (
                                     notifications.map((notification) => (
                                         <div
                                             key={notification.id}
-                                            className={`rounded-3xl border p-5 ${
-                                                notification.is_read ? 'border-black/10 bg-[#fffdf7]' : 'border-[#2563eb]/20 bg-[#edf4ff]'
+                                            className={`rounded-[1.25rem] border p-4 ${
+                                                notification.is_read ? 'border-black/8 bg-[#fffdf7]' : 'border-[#2563eb]/20 bg-[#edf4ff]'
                                             }`}
                                         >
-                                            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                                            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                                 <div>
-                                                    <p className="font-semibold text-black">{notification.message}</p>
-                                                    <p className="mt-1 text-sm text-black/60">{notification.course?.title ?? 'Course update'}</p>
+                                                    <p className="text-sm font-semibold text-black">{notification.message}</p>
+                                                    <p className="mt-0.5 text-xs text-black/50">{notification.course?.title ?? 'Course update'}</p>
                                                 </div>
                                                 {!notification.is_read ? (
-                                                    <Button type="button" variant="outline" className="rounded-2xl" onClick={() => void markAsRead(notification.id)}>
+                                                    <Button type="button" variant="outline" size="sm" className="rounded-[0.8rem] shrink-0 text-[11px]" onClick={() => void markAsRead(notification.id)}>
                                                         Mark as read
                                                     </Button>
                                                 ) : null}

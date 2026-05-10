@@ -53,7 +53,7 @@ export default function TwoFactorChallenge() {
         <>
             <Head title="Two-factor authentication" />
 
-            <div className="space-y-6">
+            <div className="space-y-5">
                 <Form
                     {...store.form()}
                     className="space-y-4"
@@ -61,9 +61,9 @@ export default function TwoFactorChallenge() {
                     resetOnSuccess={!showRecoveryInput}
                 >
                     {({ errors, processing, clearErrors }) => (
-                        <>
+                        <div className="space-y-4">
                             {showRecoveryInput ? (
-                                <>
+                                <div className="grid gap-1.5">
                                     <Input
                                         name="recovery_code"
                                         type="text"
@@ -71,10 +71,8 @@ export default function TwoFactorChallenge() {
                                         autoFocus={showRecoveryInput}
                                         required
                                     />
-                                    <InputError
-                                        message={errors.recovery_code}
-                                    />
-                                </>
+                                    <InputError message={errors.recovery_code} />
+                                </div>
                             ) : (
                                 <div className="flex flex-col items-center justify-center space-y-3 text-center">
                                     <div className="flex w-full items-center justify-center">
@@ -106,17 +104,17 @@ export default function TwoFactorChallenge() {
 
                             <Button
                                 type="submit"
-                                className="w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
+                                className="h-11 w-full rounded-xl bg-black text-white hover:bg-black/90"
                                 disabled={processing}
                             >
                                 Continue
                             </Button>
 
-                            <div className="text-center text-sm text-gray-300">
+                            <div className="text-center text-sm text-black/55">
                                 <span>or you can </span>
                                 <button
                                     type="button"
-                                    className="cursor-pointer text-purple-300 underline decoration-purple-500 underline-offset-4 transition-colors duration-300 ease-out hover:text-purple-200"
+                                    className="cursor-pointer font-medium text-[#2563eb] underline decoration-[#2563eb]/30 underline-offset-4 transition-colors hover:text-black"
                                     onClick={() =>
                                         toggleRecoveryMode(clearErrors)
                                     }
@@ -124,7 +122,7 @@ export default function TwoFactorChallenge() {
                                     {authConfigContent.toggleText}
                                 </button>
                             </div>
-                        </>
+                        </div>
                     )}
                 </Form>
             </div>

@@ -7,7 +7,7 @@ export default function VerifyEmail() {
         <>
             <Head title="Email verification disabled" />
             <div className="space-y-4 text-center">
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-black/55">
                     Email verification is not enabled for this project flow.
                 </p>
                 <TextLink href={login()}>Back to login</TextLink>
