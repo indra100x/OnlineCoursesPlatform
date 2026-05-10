@@ -1,323 +1,423 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { BookOpen, Users, Zap, Award, Play, ArrowRight, Check } from 'lucide-react';
+import {
+    ArrowRight,
+    Award,
+    Bell,
+    BookOpen,
+    Check,
+    GraduationCap,
+    HeartHandshake,
+    Play,
+    ShieldCheck,
+    Star,
+    Users,
+} from 'lucide-react';
+import AppLogo from '@/components/app-logo';
 import { dashboard, login } from '@/routes';
+
+const categories = [
+    { name: 'Computer Science', courses: '48 courses', color: 'bg-[#fff6d0]' },
+    { name: 'Business Systems', courses: '31 courses', color: 'bg-[#edf4ff]' },
+    { name: 'Design Practice', courses: '26 courses', color: 'bg-[#ffe4e4]' },
+    { name: 'Teacher Training', courses: '19 courses', color: 'bg-black text-white' },
+];
+
+const features = [
+    {
+        icon: ShieldCheck,
+        title: 'Admin-managed access',
+        description: 'No open registration. Accounts are provisioned intentionally for every teacher and student.',
+        accent: 'bg-[#ffd84d]',
+    },
+    {
+        icon: BookOpen,
+        title: 'Structured course building',
+        description: 'Publish courses with pricing, enrollment codes, chapters, and visible student progress.',
+        accent: 'bg-[#2563eb]',
+    },
+    {
+        icon: Bell,
+        title: 'Real student notifications',
+        description: 'New chapter releases trigger in-app alerts so learners always know what changed.',
+        accent: 'bg-[#ef4444]',
+    },
+    {
+        icon: HeartHandshake,
+        title: 'Student-first flow',
+        description: 'Wishlist, beta purchase, rating, and enrollment all happen in one clear experience.',
+        accent: 'bg-black',
+    },
+];
+
+const highlights = [
+    { value: '12K+', label: 'student sessions' },
+    { value: '640+', label: 'managed cohorts' },
+    { value: '94%', label: 'return learners' },
+    { value: '4.9/5', label: 'course satisfaction' },
+];
+
+const journey = [
+    'Admin creates teacher and student accounts',
+    'Teacher launches a course and publishes chapters',
+    'Student purchases, unlocks the code, and enrolls',
+];
+
+const proofCards = [
+    { title: 'Managed onboarding', value: '100%', note: 'admin controlled accounts', color: 'bg-black text-white' },
+    { title: 'Course conversion', value: '32%', note: 'wishlist to beta buy flow', color: 'bg-[#ffd84d] text-black' },
+    { title: 'Student return rate', value: '94%', note: 'repeat course engagement', color: 'bg-[#2563eb] text-white' },
+];
 
 export default function Welcome() {
     const { auth } = usePage().props;
 
-    const features = [
-        {
-            icon: BookOpen,
-            title: 'Create Courses',
-            description: 'Build engaging courses with PDFs, videos, and links. Share knowledge with the world.',
-        },
-        {
-            icon: Users,
-            title: 'Connect Learners',
-            description: 'Build your student community and track their progress in real-time.',
-        },
-        {
-            icon: Zap,
-            title: 'Fast Delivery',
-            description: 'Instant access to course materials with lightning-fast performance.',
-        },
-        {
-            icon: Award,
-            title: 'Track Success',
-            description: 'Monitor ratings, reviews, and student engagement metrics.',
-        },
-    ];
-
-    const stats = [
-        { number: '10K+', label: 'Active Learners' },
-        { number: '500+', label: 'Courses' },
-        { number: '4.9★', label: 'Average Rating' },
-    ];
-
-    const pricing = [
-        {
-            name: 'Free',
-            price: '$0',
-            description: 'Perfect for getting started',
-            features: ['Up to 3 courses', 'Basic analytics', 'Community support'],
-        },
-        {
-            name: 'Pro',
-            price: '$29',
-            period: '/month',
-            description: 'For active educators',
-            features: ['Unlimited courses', 'Advanced analytics', 'Priority support', 'Custom branding'],
-            highlighted: true,
-        },
-        {
-            name: 'Enterprise',
-            price: 'Custom',
-            description: 'For institutions',
-            features: ['Everything in Pro', 'API access', 'Dedicated support', 'Custom features'],
-        },
-    ];
-
     return (
         <>
-            <Head title="CourseHub - Learn & Teach Online" />
-            <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
-                {/* Navigation */}
-                <nav className="border-b border-purple-500/20 bg-black/40 backdrop-blur-md">
-                    <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <div className="flex aspect-square size-10 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 shadow-lg">
-                                    <svg
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        className="size-6 text-white"
-                                    >
-                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                                    </svg>
-                                </div>
-                                <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                                    CourseHub
-                                </span>
-                            </div>
+            <Head title="CourseAtlas | Premium Learning Platform" />
 
-                            <div className="flex items-center gap-4">
-                                {auth.user ? (
+            <div className="min-h-screen bg-[#fbf7ef] text-black">
+                <nav className="sticky top-0 z-40 border-b border-black/8 bg-[#fbf7ef]/90 backdrop-blur-xl">
+                    <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+                        <Link href={auth.user ? dashboard() : login()} className="flex items-center">
+                            <AppLogo />
+                        </Link>
+
+                        <div className="hidden items-center gap-8 lg:flex">
+                            <a href="#features" className="text-sm font-medium text-black/65 transition hover:text-black">Features</a>
+                            <a href="#categories" className="text-sm font-medium text-black/65 transition hover:text-black">Categories</a>
+                            <a href="#process" className="text-sm font-medium text-black/65 transition hover:text-black">Process</a>
+                            <a href="#cta" className="text-sm font-medium text-black/65 transition hover:text-black">Launch</a>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            {auth.user ? (
+                                <Link
+                                    href={dashboard()}
+                                    className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-black/90"
+                                >
+                                    Open dashboard
+                                    <ArrowRight className="size-4" />
+                                </Link>
+                            ) : (
+                                <>
+                                    <Link href={login()} className="hidden rounded-full border border-black/10 px-5 py-2.5 text-sm font-semibold text-black lg:inline-flex">
+                                        Login
+                                    </Link>
                                     <Link
-                                        href={dashboard()}
-                                        className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-2.5 font-medium text-white transition-all hover:shadow-lg hover:shadow-purple-500/50"
+                                        href="/register"
+                                        className="inline-flex items-center gap-2 rounded-full bg-[#ffd84d] px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-[#facc15]"
                                     >
-                                        Dashboard
+                                        Student register
                                         <ArrowRight className="size-4" />
                                     </Link>
-                                ) : (
-                                    <>
-                                        <Link
-                                            href={login()}
-                                            className="rounded-lg px-6 py-2.5 font-medium text-gray-300 transition-colors hover:text-white"
-                                        >
-                                            Log In
-                                        </Link>
-                                        <Link
-                                            href={login()}
-                                            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-2.5 font-medium text-white transition-all hover:shadow-lg hover:shadow-purple-500/50"
-                                        >
-                                            Sign Up
-                                            <ArrowRight className="size-4" />
-                                        </Link>
-                                    </>
-                                )}
-                            </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </nav>
 
-                {/* Hero Section */}
-                <section className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8 lg:py-32">
-                    {/* Gradient orbs */}
-                    <div className="absolute -left-20 top-0 h-72 w-72 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 opacity-10 blur-3xl" />
-                    <div className="absolute -right-20 top-32 h-72 w-72 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 opacity-10 blur-3xl" />
+                <main>
+                    <section className="relative overflow-hidden px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16">
+                        <div className="absolute left-[-6rem] top-16 h-56 w-56 rounded-full bg-[#ffd84d]/60 blur-3xl" />
+                        <div className="absolute right-[-4rem] top-24 h-64 w-64 rounded-full bg-[#2563eb]/18 blur-3xl" />
+                        <div className="absolute bottom-8 right-1/4 h-40 w-40 rounded-full bg-[#ef4444]/18 blur-3xl" />
 
-                    <div className="relative mx-auto max-w-4xl text-center">
-                        <h1 className="mb-6 text-4xl font-bold leading-tight text-white sm:text-6xl lg:text-7xl">
-                            Empower Learning,
-                            <br />
-                            <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                                Create Impact
-                            </span>
-                        </h1>
-
-                        <p className="mb-8 text-lg text-gray-300 sm:text-xl">
-                            Build and share courses with your students. From PDFs to videos—everything you need to teach and
-                            inspire on one beautiful platform.
-                        </p>
-
-                        <div className="flex flex-col justify-center gap-4 sm:flex-row">
-                            <Link
-                                href={login()}
-                                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:shadow-purple-500/50"
-                            >
-                                <Play className="size-5" />
-                                Get Started Free
-                                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-                            </Link>
-                            <button className="inline-flex items-center justify-center gap-2 rounded-lg border border-purple-500/30 px-8 py-4 font-semibold text-gray-100 transition-all hover:border-purple-500/50 hover:bg-purple-500/10">
-                                Watch Demo
-                            </button>
-                        </div>
-
-                        {/* Stats */}
-                        <div className="mt-16 grid gap-8 sm:grid-cols-3">
-                            {stats.map((stat) => (
-                                <div key={stat.label} className="rounded-lg border border-purple-500/20 bg-purple-500/5 p-6 backdrop-blur-sm">
-                                    <p className="text-3xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text">
-                                        {stat.number}
+                        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.05fr,0.95fr] lg:items-center">
+                            <div className="space-y-8">
+                                <div className="space-y-5">
+                                    <span className="brand-pill bg-white text-black">Production-ready course operations</span>
+                                    <h1 className="max-w-3xl text-5xl font-black leading-[0.96] tracking-[-0.04em] sm:text-6xl lg:text-7xl">
+                                        A learning platform with
+                                        <span className="block text-[#2563eb]">sharper structure</span>
+                                        and a more premium feel.
+                                    </h1>
+                                    <p className="max-w-2xl text-lg leading-8 text-black/68">
+                                        CourseAtlas helps admins control access, gives teachers serious publishing tools, and gives students a clean path from purchase to enrollment to course completion.
                                     </p>
-                                    <p className="mt-2 text-sm text-gray-400">{stat.label}</p>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
 
-                {/* Features Section */}
-                <section className="relative px-4 py-20 sm:px-6 lg:px-8">
-                    <div className="mx-auto max-w-6xl">
-                        <div className="mb-16 text-center">
-                            <h2 className="mb-4 text-4xl font-bold text-white">Powerful Features for Educators</h2>
-                            <p className="text-gray-400">Everything you need to create, manage, and grow your courses</p>
-                        </div>
-
-                        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-                            {features.map((feature) => {
-                                const Icon = feature.icon;
-                                return (
-                                    <div
-                                        key={feature.title}
-                                        className="group rounded-xl border border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-blue-500/10 p-6 transition-all hover:border-purple-500/50 hover:bg-purple-500/20 backdrop-blur-sm"
+                                <div className="flex flex-col gap-4 sm:flex-row">
+                                    <Link
+                                        href={auth.user ? dashboard() : '/register'}
+                                        className="inline-flex items-center justify-center gap-2 rounded-full bg-black px-7 py-4 text-base font-semibold text-white transition hover:bg-black/90"
                                     >
-                                        <div className="mb-4 inline-flex rounded-lg bg-gradient-to-br from-purple-600/20 to-blue-600/20 p-3">
-                                            <Icon className="size-6 text-purple-400" />
+                                        {auth.user ? 'Go to dashboard' : 'Create student account'}
+                                        <ArrowRight className="size-4" />
+                                    </Link>
+                                    <a
+                                        href="#features"
+                                        className="inline-flex items-center justify-center gap-2 rounded-full border border-black/10 bg-white px-7 py-4 text-base font-semibold text-black transition hover:bg-[#fff6d0]"
+                                    >
+                                        <Play className="size-4" />
+                                        Explore the experience
+                                    </a>
+                                </div>
+
+                                <div className="grid gap-4 sm:grid-cols-3">
+                                    {highlights.map((item) => (
+                                        <div key={item.label} className="brand-surface p-5">
+                                            <p className="text-3xl font-black text-black">{item.value}</p>
+                                            <p className="mt-2 text-sm uppercase tracking-[0.18em] text-black/45">{item.label}</p>
                                         </div>
-                                        <h3 className="mb-2 text-lg font-semibold text-white">{feature.title}</h3>
-                                        <p className="text-sm text-gray-400">{feature.description}</p>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </section>
-
-                {/* How It Works */}
-                <section className="relative px-4 py-20 sm:px-6 lg:px-8">
-                    <div className="mx-auto max-w-6xl">
-                        <div className="mb-16 text-center">
-                            <h2 className="mb-4 text-4xl font-bold text-white">Get Started in Minutes</h2>
-                            <p className="text-gray-400">Three simple steps to launch your first course</p>
-                        </div>
-
-                        <div className="grid gap-8 md:grid-cols-3">
-                            {[
-                                {
-                                    number: '01',
-                                    title: 'Create Your Course',
-                                    description: 'Set up your course with title, description, and pricing.',
-                                },
-                                {
-                                    number: '02',
-                                    title: 'Add Content',
-                                    description: 'Upload PDFs, videos, or add links to external resources.',
-                                },
-                                {
-                                    number: '03',
-                                    title: 'Share & Earn',
-                                    description: 'Share your enrollment code and start teaching your students.',
-                                },
-                            ].map((step) => (
-                                <div key={step.number} className="text-center">
-                                    <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-blue-600">
-                                        <span className="text-2xl font-bold text-white">{step.number}</span>
-                                    </div>
-                                    <h3 className="mb-2 text-lg font-semibold text-white">{step.title}</h3>
-                                    <p className="text-gray-400">{step.description}</p>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+                            </div>
 
-                {/* Pricing Section */}
-                <section className="relative px-4 py-20 sm:px-6 lg:px-8">
-                    <div className="mx-auto max-w-6xl">
-                        <div className="mb-16 text-center">
-                            <h2 className="mb-4 text-4xl font-bold text-white">Simple, Transparent Pricing</h2>
-                            <p className="text-gray-400">Choose the plan that works best for you</p>
-                        </div>
+                            <div className="relative">
+                                <div className="brand-surface-dark relative overflow-hidden p-6 sm:p-8">
+                                    <div className="absolute -left-10 top-10 h-32 w-32 rounded-full bg-[#ffd84d]" />
+                                    <div className="absolute right-8 top-0 h-24 w-24 rounded-b-[1.75rem] bg-[#2563eb]" />
+                                    <div className="absolute bottom-0 left-24 h-20 w-28 rounded-t-[1.5rem] bg-[#ef4444]" />
 
-                        <div className="grid gap-8 md:grid-cols-3">
-                            {pricing.map((plan) => (
-                                <div
-                                    key={plan.name}
-                                    className={`rounded-xl border transition-all ${
-                                        plan.highlighted
-                                            ? 'border-purple-500/50 bg-gradient-to-br from-purple-500/20 to-blue-500/20 shadow-xl shadow-purple-500/20 scale-105'
-                                            : 'border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-blue-500/10 hover:border-purple-500/30'
-                                    } p-8 backdrop-blur-sm`}
-                                >
-                                    <h3 className="mb-2 text-xl font-bold text-white">{plan.name}</h3>
-                                    <p className="mb-4 text-sm text-gray-400">{plan.description}</p>
+                                    <div className="relative z-10 grid gap-5">
+                                        <div className="flex items-center justify-between rounded-[1.75rem] border border-white/10 bg-white/8 px-5 py-4">
+                                            <div>
+                                                <p className="text-xs uppercase tracking-[0.22em] text-white/50">Teacher workspace</p>
+                                                <h2 className="mt-2 text-2xl font-black text-white">Launch course operations</h2>
+                                            </div>
+                                            <div className="rounded-full bg-[#ffd84d] px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-black">
+                                                Live
+                                            </div>
+                                        </div>
 
-                                    <div className="mb-6">
-                                        <span className="text-4xl font-bold text-white">{plan.price}</span>
-                                        {plan.period && <span className="text-gray-400">{plan.period}</span>}
+                                        <div className="grid gap-4 sm:grid-cols-[1.2fr,0.8fr]">
+                                            <div className="rounded-[1.75rem] bg-white p-5 text-black shadow-[0_18px_40px_rgba(17,17,17,0.12)]">
+                                                <div className="flex items-center justify-between">
+                                                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-black/45">Course capsule</p>
+                                                    <Star className="size-4 text-[#ef4444]" />
+                                                </div>
+                                                <h3 className="mt-4 text-2xl font-black">Design Systems for Educators</h3>
+                                                <p className="mt-3 text-sm leading-6 text-black/65">
+                                                    Enrollment code, chapter publishing, student visibility, and rating feedback in one controlled flow.
+                                                </p>
+                                                <div className="mt-6 flex flex-wrap gap-2">
+                                                    <span className="brand-tag-yellow">$89 beta</span>
+                                                    <span className="brand-tag-blue">24 lessons</span>
+                                                    <span className="brand-tag-red">4.9 rating</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="grid gap-4">
+                                                <div className="rounded-[1.75rem] bg-[#2563eb] p-5 text-white shadow-[0_16px_36px_rgba(37,99,235,0.2)]">
+                                                    <Users className="size-6" />
+                                                    <p className="mt-6 text-3xl font-black">218</p>
+                                                    <p className="mt-1 text-sm text-white/75">active enrollments</p>
+                                                </div>
+                                                <div className="rounded-[1.75rem] bg-[#ffd84d] p-5 text-black shadow-[0_16px_36px_rgba(255,216,77,0.18)]">
+                                                    <Bell className="size-6" />
+                                                    <p className="mt-6 text-3xl font-black">12</p>
+                                                    <p className="mt-1 text-sm text-black/65">new chapter alerts</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid gap-4 sm:grid-cols-3">
+                                            <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-4 text-white">
+                                                <Award className="size-5 text-[#ffd84d]" />
+                                                <p className="mt-4 text-sm font-semibold">Premium brand feel</p>
+                                            </div>
+                                            <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-4 text-white">
+                                                <GraduationCap className="size-5 text-[#ef4444]" />
+                                                <p className="mt-4 text-sm font-semibold">Student-centered journey</p>
+                                            </div>
+                                            <div className="rounded-[1.6rem] border border-white/10 bg-white/8 p-4 text-white">
+                                                <ShieldCheck className="size-5 text-[#2563eb]" />
+                                                <p className="mt-4 text-sm font-semibold">Admin control built in</p>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                    <button
-                                        className={`mb-6 w-full rounded-lg py-3 font-semibold transition-all ${
-                                            plan.highlighted
-                                                ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:shadow-lg hover:shadow-purple-500/50'
-                                                : 'border border-purple-500/30 text-gray-100 hover:bg-purple-500/10'
-                                        }`}
-                                    >
-                                        Get Started
-                                    </button>
+                        <div className="mx-auto mt-8 grid max-w-7xl gap-4 lg:grid-cols-[0.9fr,1.1fr]">
+                            <div className="brand-surface-soft p-6">
+                                <p className="brand-kicker">Why brands use this look</p>
+                                <h3 className="mt-3 text-3xl font-black tracking-[-0.03em] text-black">
+                                    It feels closer to a premium SaaS launch than a generic template.
+                                </h3>
+                                <p className="mt-4 max-w-2xl text-sm leading-7 text-black/62">
+                                    Bigger contrast moves, stronger geometry, and more varied information density make the experience feel more commercial without abandoning clarity.
+                                </p>
+                            </div>
 
-                                    <ul className="space-y-3">
-                                        {plan.features.map((feature) => (
-                                            <li key={feature} className="flex items-center gap-3 text-sm text-gray-300">
-                                                <Check className="size-4 text-purple-400" />
-                                                {feature}
+                            <div className="grid gap-4 sm:grid-cols-3">
+                                {proofCards.map((card) => (
+                                    <div key={card.title} className={`rounded-[2rem] p-5 shadow-[0_18px_44px_rgba(17,17,17,0.08)] ${card.color}`}>
+                                        <p className={`text-xs font-semibold uppercase tracking-[0.22em] ${card.color.includes('text-white') ? 'text-white/55' : 'text-black/50'}`}>
+                                            {card.title}
+                                        </p>
+                                        <p className="mt-4 text-4xl font-black tracking-[-0.04em]">{card.value}</p>
+                                        <p className={`mt-3 text-sm leading-6 ${card.color.includes('text-white') ? 'text-white/72' : 'text-black/62'}`}>
+                                            {card.note}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="categories" className="px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+                        <div className="mx-auto max-w-7xl">
+                            <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                                <div>
+                                    <p className="text-sm font-semibold uppercase tracking-[0.24em] text-black/45">Popular directions</p>
+                                    <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] text-black sm:text-4xl">
+                                        Course categories that feel curated, not generic.
+                                    </h2>
+                                </div>
+                                <p className="max-w-xl text-base leading-7 text-black/62">
+                                    Inspired by modern education and product websites, the interface now mixes editorial spacing, richer layering, and clearer contrast.
+                                </p>
+                            </div>
+
+                            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                                {categories.map((category) => (
+                                    <div key={category.name} className={`brand-surface overflow-hidden p-0 ${category.color}`}>
+                                        <div className="border-b border-black/8 px-6 py-5">
+                                            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-black/45">Category</p>
+                                            <h3 className="mt-3 text-2xl font-black">{category.name}</h3>
+                                        </div>
+                                        <div className="px-6 py-5">
+                                            <p className="text-sm text-black/65">{category.courses}</p>
+                                            <p className="mt-5 text-sm leading-6 text-black/62">
+                                                Ready for structured enrollment, polished delivery, and strong visual clarity across desktop and mobile.
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="features" className="px-4 py-12 sm:px-6 lg:px-8 lg:py-18">
+                        <div className="mx-auto max-w-7xl">
+                            <div className="mb-10 grid gap-6 lg:grid-cols-[0.9fr,1.1fr] lg:items-end">
+                                <div>
+                                    <p className="text-sm font-semibold uppercase tracking-[0.24em] text-black/45">Platform strengths</p>
+                                    <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] sm:text-4xl">
+                                        More layered, more editorial, and more believable as a real product.
+                                    </h2>
+                                </div>
+                                <p className="text-base leading-7 text-black/62">
+                                    The new direction leans on strong asymmetry, colored utility cards, dense information panels, and bright call-to-action moments instead of a flat one-note landing page.
+                                </p>
+                            </div>
+
+                            <div className="grid gap-5 lg:grid-cols-2 2xl:grid-cols-4">
+                                {features.map((feature) => {
+                                    const Icon = feature.icon;
+
+                                    return (
+                                        <article key={feature.title} className="brand-surface group p-6 transition hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(17,17,17,0.1)]">
+                                            <div className={`flex h-14 w-14 items-center justify-center rounded-[1.25rem] ${feature.accent} ${feature.accent === 'bg-[#ffd84d]' ? 'text-black' : 'text-white'}`}>
+                                                <Icon className="size-6" />
+                                            </div>
+                                            <h3 className="mt-6 text-2xl font-black tracking-[-0.02em] text-black">{feature.title}</h3>
+                                            <p className="mt-3 text-sm leading-7 text-black/62">{feature.description}</p>
+                                        </article>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="process" className="px-4 py-12 sm:px-6 lg:px-8 lg:py-18">
+                        <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[0.78fr,1.22fr]">
+                            <div className="brand-surface-dark p-8">
+                                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/45">How it works</p>
+                                <h2 className="mt-4 text-4xl font-black leading-tight text-white">
+                                    Designed around one clean operational loop.
+                                </h2>
+                                <div className="mt-8 space-y-4">
+                                    {journey.map((step, index) => (
+                                        <div key={step} className="flex items-start gap-4 rounded-[1.5rem] border border-white/10 bg-white/8 p-4">
+                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#ffd84d] text-sm font-black text-black">
+                                                0{index + 1}
+                                            </div>
+                                            <p className="text-sm leading-7 text-white/75">{step}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="grid gap-5 sm:grid-cols-2">
+                                <div className="brand-surface brand-grid p-6">
+                                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-black/45">Teacher operations</p>
+                                    <p className="mt-5 text-3xl font-black leading-tight">Create courses, upload chapters, and watch enrollments grow.</p>
+                                    <div className="mt-6 flex flex-wrap gap-2">
+                                        <span className="brand-tag-blue">Ratings</span>
+                                        <span className="brand-tag-red">Notifications</span>
+                                        <span className="brand-tag-yellow">Enrollment codes</span>
+                                    </div>
+                                </div>
+
+                                <div className="rounded-[2rem] bg-[#ef4444] p-6 text-white shadow-[0_24px_60px_rgba(239,68,68,0.18)]">
+                                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-white/65">Student flow</p>
+                                    <p className="mt-5 text-3xl font-black leading-tight">Wishlist, buy, unlock, enroll, learn.</p>
+                                    <p className="mt-4 text-sm leading-7 text-white/75">The journey stays simple while still feeling rich and intentional.</p>
+                                </div>
+
+                                <div className="rounded-[2rem] bg-[#2563eb] p-6 text-white shadow-[0_24px_60px_rgba(37,99,235,0.16)]">
+                                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-white/65">Admin control</p>
+                                    <p className="mt-5 text-3xl font-black leading-tight">Role-based access without public registration.</p>
+                                    <p className="mt-4 text-sm leading-7 text-white/75">Safer by default and aligned with managed education workflows.</p>
+                                </div>
+
+                                <div className="brand-surface p-6">
+                                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-black/45">Why it feels better</p>
+                                    <ul className="mt-5 space-y-4">
+                                        {[
+                                            'Higher contrast and clearer information hierarchy',
+                                            'Brighter accent colors used intentionally instead of everywhere',
+                                            'More visual depth through layered panels and mixed densities',
+                                        ].map((item) => (
+                                            <li key={item} className="flex gap-3 text-sm leading-7 text-black/62">
+                                                <Check className="mt-1 size-4 shrink-0 text-black" />
+                                                <span>{item}</span>
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* CTA Section */}
-                <section className="relative px-4 py-20 sm:px-6 lg:px-8">
-                    <div className="relative mx-auto max-w-4xl overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-600/20 to-blue-600/20 px-8 py-16 text-center backdrop-blur-sm">
-                        {/* Background decorations */}
-                        <div className="absolute -left-20 -top-20 h-40 w-40 rounded-full bg-purple-600 opacity-20 blur-3xl" />
-                        <div className="absolute -right-20 -bottom-20 h-40 w-40 rounded-full bg-blue-600 opacity-20 blur-3xl" />
-
-                        <div className="relative">
-                            <h2 className="mb-4 text-3xl font-bold text-white sm:text-4xl">
-                                Ready to Transform Your Teaching?
-                            </h2>
-                            <p className="mb-8 text-lg text-gray-300">Join thousands of educators building amazing learning experiences.</p>
-                            <Link
-                                href={login()}
-                                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:shadow-purple-500/50"
-                            >
-                                Start Teaching Today
-                                <ArrowRight className="size-5" />
-                            </Link>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Footer */}
-                <footer className="border-t border-purple-500/20 bg-black/40 px-4 py-8 sm:px-6 lg:px-8 backdrop-blur-md">
-                    <div className="mx-auto max-w-6xl">
-                        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-                            <div className="flex items-center gap-2">
-                                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="size-5 text-white">
-                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                                    </svg>
-                                </div>
-                                <span className="font-semibold text-white">CourseHub</span>
                             </div>
-                            <p className="text-sm text-gray-400">&copy; 2026 CourseHub. All rights reserved.</p>
                         </div>
-                    </div>
-                </footer>
+                    </section>
+
+                    <section id="cta" className="px-4 pb-18 pt-10 sm:px-6 lg:px-8">
+                        <div className="mx-auto max-w-7xl">
+                            <div className="brand-surface-dark relative overflow-hidden px-8 py-12 text-center sm:px-12 sm:py-16">
+                                <div className="absolute left-10 top-0 h-24 w-24 rounded-b-[2rem] bg-[#ffd84d]" />
+                                <div className="absolute right-16 top-8 h-28 w-28 rounded-full bg-[#2563eb]" />
+                                <div className="absolute bottom-0 right-8 h-24 w-24 rounded-tl-[2rem] bg-[#ef4444]" />
+
+                                <div className="relative z-10 mx-auto max-w-3xl">
+                                    <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/50">Ready to use it</p>
+                                    <h2 className="mt-4 text-4xl font-black leading-tight text-white sm:text-5xl">
+                                        Launch a cleaner learning platform with a stronger first impression.
+                                    </h2>
+                                    <p className="mt-5 text-base leading-8 text-white/72">
+                                        The frontend now has a more distinctive visual identity. If you want, the next pass can make the dashboards even more advanced with charts, richer tables, and animated transitions.
+                                    </p>
+                                    <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+                                        <Link
+                                            href={auth.user ? dashboard() : '/register'}
+                                            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ffd84d] px-7 py-4 text-base font-semibold text-black transition hover:bg-[#facc15]"
+                                        >
+                                            {auth.user ? 'Open workspace' : 'Register now'}
+                                            <ArrowRight className="size-4" />
+                                        </Link>
+                                        <a
+                                            href="#categories"
+                                            className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/8 px-7 py-4 text-base font-semibold text-white transition hover:bg-white/12"
+                                        >
+                                            Browse sections
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
             </div>
         </>
     );

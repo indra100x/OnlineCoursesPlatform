@@ -88,33 +88,37 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
 
     return (
         <div className="grid gap-6 xl:grid-cols-[360px,1fr]">
-            <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 text-white backdrop-blur-sm">
+            <div className="brand-surface-dark relative overflow-hidden p-6 text-white">
+                <div className="absolute -top-8 right-6 h-24 w-24 rounded-full bg-[#2563eb]" />
+                <div className="absolute bottom-0 left-0 h-24 w-24 rounded-tr-[2rem] bg-[#ef4444]" />
                 <div className="flex flex-col items-center text-center">
                     {avatarUrl ? (
                         <img src={avatarUrl} alt={profile?.name ?? 'Profile'} className="size-28 rounded-[2rem] object-cover shadow-2xl" />
                     ) : (
-                        <div className="flex size-28 items-center justify-center rounded-[2rem] bg-purple-500/20">
+                        <div className="flex size-28 items-center justify-center rounded-[2rem] bg-white/10">
                             <UserCircle2 className="size-14" />
                         </div>
                     )}
                     <h1 className="mt-5 text-2xl font-semibold">{profile?.name ?? 'Profile'}</h1>
-                    <p className="mt-1 text-sm text-gray-300">{profile?.email}</p>
-                    <p className="mt-2 rounded-full bg-amber-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-300">
+                    <p className="mt-1 text-sm text-white/65">{profile?.email}</p>
+                    <p className="mt-2 rounded-full bg-[#ffd84d] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-black">
                         {profile?.role ?? 'member'}
                     </p>
-                    <p className="mt-5 text-sm text-gray-300">
+                    <p className="mt-5 text-sm text-white/70">
                         {profile?.bio || 'Add a short bio so your dashboard feels more personal and complete.'}
                     </p>
                 </div>
             </div>
 
             <div className="space-y-6">
-                <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                <div className="brand-surface p-6">
                     <div className="flex items-center gap-3">
-                        <Camera className="size-5 text-purple-400" />
+                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-black text-white">
+                            <Camera className="size-5" />
+                        </div>
                         <div>
-                            <h2 className="text-xl font-semibold text-white">Profile details</h2>
-                            <p className="text-sm text-gray-300">Update your display name, bio, and profile photo.</p>
+                            <h2 className="text-xl font-semibold text-black">Profile details</h2>
+                            <p className="text-sm text-black/60">Update your display name, bio, and profile photo.</p>
                         </div>
                     </div>
 
@@ -132,7 +136,7 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                             <Label htmlFor="profile-bio">Bio</Label>
                             <textarea
                                 id="profile-bio"
-                                className="min-h-32 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                                className="min-h-32 w-full rounded-xl border border-black/15 bg-white px-3 py-2 text-sm text-black outline-none focus:border-[#2563eb]"
                                 value={profileForm.bio}
                                 onChange={(event) => setProfileForm((current) => ({ ...current, bio: event.target.value }))}
                                 placeholder="Tell students or collaborators a bit about yourself."
@@ -149,20 +153,22 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                                 }
                             />
                         </div>
-                        {message ? <p className="text-sm text-emerald-400/90">{message}</p> : null}
-                        {error ? <p className="text-sm text-red-400/90">{error}</p> : null}
-                        <Button type="submit" className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700">
+                        {message ? <p className="rounded-xl bg-[#fff6d0] px-3 py-2 text-sm text-black">{message}</p> : null}
+                        {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p> : null}
+                        <Button type="submit" className="rounded-2xl bg-black text-white hover:bg-black/90">
                             Save profile
                         </Button>
                     </form>
                 </div>
 
-                <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                <div className="brand-surface p-6">
                     <div className="flex items-center gap-3">
-                        <LockKeyhole className="size-5 text-purple-400" />
+                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2563eb] text-white">
+                            <LockKeyhole className="size-5" />
+                        </div>
                         <div>
-                            <h2 className="text-xl font-semibold text-white">Security</h2>
-                            <p className="text-sm text-gray-300">Change your password without leaving the dashboard.</p>
+                            <h2 className="text-xl font-semibold text-black">Security</h2>
+                            <p className="text-sm text-black/60">Change your password without leaving the dashboard.</p>
                         </div>
                     </div>
 
@@ -210,7 +216,7 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                             />
                         </div>
                         <div className="md:col-span-2">
-                            <Button type="submit" className="rounded-2xl bg-amber-500 text-slate-950 hover:bg-amber-400">
+                            <Button type="submit" className="rounded-2xl bg-[#ffd84d] text-black hover:bg-[#facc15]">
                                 Update password
                             </Button>
                         </div>

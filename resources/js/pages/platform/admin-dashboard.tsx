@@ -114,6 +114,35 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
 
     return (
         <div className="space-y-6">
+            <section className="grid gap-5 xl:grid-cols-[1.15fr,0.85fr]">
+                <div className="brand-surface-dark relative overflow-hidden p-7">
+                    <div className="absolute -left-10 top-8 h-28 w-28 rounded-full bg-[#ffd84d]" />
+                    <div className="absolute right-6 top-0 h-20 w-20 rounded-b-[1.8rem] bg-[#2563eb]" />
+                    <div className="relative z-10">
+                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/50">Admin command</p>
+                        <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-white">Control access with clarity.</h2>
+                        <p className="mt-3 max-w-2xl text-sm leading-7 text-white/68">
+                            Create managed accounts, keep the directory clean, and shape a more professional learning environment from one control surface.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="grid gap-5 md:grid-cols-3 xl:grid-cols-1">
+                    <div className="brand-surface-soft p-5">
+                        <p className="brand-kicker">Access model</p>
+                        <p className="mt-3 text-2xl font-black text-black">No public registration</p>
+                    </div>
+                    <div className="rounded-[2rem] bg-[#ffd84d] p-5 text-black shadow-[0_18px_44px_rgba(255,216,77,0.18)]">
+                        <p className="brand-kicker text-black/55">Operational note</p>
+                        <p className="mt-3 text-2xl font-black">Invite intentionally, not openly.</p>
+                    </div>
+                    <div className="brand-surface-soft p-5">
+                        <p className="brand-kicker">Directory state</p>
+                        <p className="mt-3 text-2xl font-black text-black">{filteredUsers.length} visible users</p>
+                    </div>
+                </div>
+            </section>
+
             <section className="grid gap-4 md:grid-cols-3">
                 <StatsCard label="Users" value={users.length} hint="Every teacher and student account lives here." />
                 <StatsCard label="Teachers" value={teachersCount} hint="Teachers can create courses and chapters." />
@@ -121,14 +150,16 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
             </section>
 
             <section className="grid gap-6 xl:grid-cols-[360px,1fr]">
-                <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                <div className="brand-surface p-6">
                     <div className="flex items-center gap-3">
-                        <UserCog className="size-5 text-purple-400" />
+                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-black text-white">
+                            <UserCog className="size-5" />
+                        </div>
                         <div>
-                            <h2 className="text-xl font-semibold text-white">
+                            <h2 className="text-xl font-semibold text-black">
                                 {editingUser ? 'Update user' : 'Create user'}
                             </h2>
-                            <p className="text-sm text-gray-300">
+                            <p className="text-sm text-black/60">
                                 Only teachers and students can be created here.
                             </p>
                         </div>
@@ -169,7 +200,7 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                             <Label htmlFor="role">Role</Label>
                             <select
                                 id="role"
-                                className="flex h-9 w-full rounded-md border border-purple-400/50 bg-purple-900/40 px-3 py-1 text-sm text-white"
+                                className="flex h-10 w-full rounded-xl border border-black/15 bg-white px-3 py-1 text-sm text-black outline-none focus:border-[#2563eb]"
                                 value={form.role}
                                 onChange={(event) =>
                                     setForm((current) => ({
@@ -183,10 +214,10 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                             </select>
                         </div>
 
-                        {error ? <p className="text-sm text-red-500/90">{error}</p> : null}
+                        {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p> : null}
 
                         <div className="flex gap-3">
-                            <Button type="submit" className="rounded-2xl" disabled={submitting}>
+                            <Button type="submit" className="rounded-2xl bg-black text-white" disabled={submitting}>
                                 {editingUser ? 'Update user' : 'Create user'}
                             </Button>
                             {editingUser ? (
@@ -206,11 +237,11 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                     </form>
                 </div>
 
-                <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                <div className="brand-surface p-6">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h2 className="text-xl font-semibold text-white">User directory</h2>
-                            <p className="text-sm text-gray-300">Search, update, and retire access from one place.</p>
+                            <h2 className="text-xl font-semibold text-black">User directory</h2>
+                            <p className="text-sm text-black/60">Search, update, and retire access from one place.</p>
                         </div>
                         <div className="w-full sm:w-72">
                             <Input
@@ -231,22 +262,22 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                                 {filteredUsers.map((user) => (
                                     <div
                                         key={user.id}
-                                        className="flex flex-col gap-4 rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-4 lg:flex-row lg:items-center lg:justify-between"
+                                        className="flex flex-col gap-4 rounded-[1.75rem] border border-black/10 bg-[#fffdf7] p-4 lg:flex-row lg:items-center lg:justify-between"
                                     >
                                         <div className="flex items-start gap-3">
-                                            <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 text-white">
+                                            <div className="flex size-11 items-center justify-center rounded-2xl bg-black text-white">
                                                 <Users className="size-5" />
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-white">{user.name}</p>
-                                                <p className="text-sm text-gray-400">{user.email}</p>
-                                                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-purple-300">
+                                                <p className="font-semibold text-black">{user.name}</p>
+                                                <p className="text-sm text-black/55">{user.email}</p>
+                                                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#2563eb]">
                                                     {user.role}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="flex gap-3">
-                                            <Button type="button" variant="outline" className="rounded-2xl text-black" onClick={() => startEdit(user)}>
+                                            <Button type="button" variant="outline" className="rounded-2xl" onClick={() => startEdit(user)}>
                                                 Edit
                                             </Button>
                                             <Button

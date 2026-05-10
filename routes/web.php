@@ -8,10 +8,12 @@ use App\Http\Controllers\Student\CoursePurchaseController;
 use App\Http\Controllers\Student\CourseRatingController;
 use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Student\StudentCourseController;
+use App\Http\Controllers\Student\TeacherProfileController;
 use App\Http\Controllers\Student\WishlistController;
 use App\Http\Controllers\Teacher\CourseChapterController;
 use App\Http\Controllers\Teacher\CourseController;
 use App\Http\Controllers\Teacher\CourseStudentController;
+use App\Http\Controllers\Teacher\StudentProfileController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
@@ -42,10 +44,12 @@ Route::middleware('auth')->group(function () {
         Route::delete('/courses/{course}', [CourseController::class, 'destroy']);
         Route::post('/courses/{course}/chapters', [CourseChapterController::class, 'store']);
         Route::get('/courses/{course}/students', [CourseStudentController::class, 'index']);
+        Route::get('/students/{student}/profile', [StudentProfileController::class, 'show']);
     });
 
     Route::middleware('role:student')->group(function () {
         Route::get('/catalog', [CourseCatalogController::class, 'index']);
+        Route::get('/teachers/{teacher}/profile', [TeacherProfileController::class, 'show']);
         Route::get('/wishlist', [WishlistController::class, 'index']);
         Route::post('/wishlist', [WishlistController::class, 'store']);
         Route::delete('/wishlist/{course}', [WishlistController::class, 'destroy']);

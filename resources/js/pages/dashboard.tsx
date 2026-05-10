@@ -6,6 +6,8 @@ import AdminDashboard from '@/pages/platform/admin-dashboard';
 import CourseDetailsPage from '@/pages/platform/course-details-page';
 import ProfilePage from '@/pages/platform/profile-page';
 import StudentDashboard from '@/pages/platform/student-dashboard';
+import StudentProfilePage from '@/pages/platform/student-profile-page';
+import TeacherPublicProfilePage from '@/pages/platform/teacher-public-profile-page';
 import TeacherDashboard from '@/pages/platform/teacher-dashboard';
 import type { User } from '@/types';
 
@@ -82,6 +84,26 @@ export default function Dashboard() {
                             element={
                                 currentUser.role === 'student' ? (
                                     <CourseDetailsPage />
+                                ) : (
+                                    <RoleRedirect role={currentUser.role} />
+                                )
+                            }
+                        />
+                        <Route
+                            path="/dashboard/students/:studentId"
+                            element={
+                                currentUser.role === 'teacher' ? (
+                                    <StudentProfilePage />
+                                ) : (
+                                    <RoleRedirect role={currentUser.role} />
+                                )
+                            }
+                        />
+                        <Route
+                            path="/dashboard/teachers/:teacherId"
+                            element={
+                                currentUser.role === 'student' ? (
+                                    <TeacherPublicProfilePage />
                                 ) : (
                                     <RoleRedirect role={currentUser.role} />
                                 )

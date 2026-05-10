@@ -11,11 +11,13 @@ import { Spinner } from '@/components/ui/spinner';
 type Props = {
     status?: string;
     canResetPassword: boolean;
+    canRegister?: boolean;
 };
 
 export default function Login({
     status,
     canResetPassword,
+    canRegister = false,
 }: Props) {
     return (
         <>
@@ -80,7 +82,7 @@ export default function Login({
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
+                                className="mt-4 h-11 w-full rounded-xl bg-[#ffd84d] text-black hover:bg-[#facc15]"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -93,8 +95,14 @@ export default function Login({
                 )}
             </Form>
 
+            {canRegister ? (
+                <p className="text-center text-sm text-white/70">
+                    New student? <TextLink href="/register">Create an account</TextLink>
+                </p>
+            ) : null}
+
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-emerald-400">
+                <div className="mb-4 rounded-xl bg-white/10 px-4 py-3 text-center text-sm font-medium text-[#ffd84d]">
                     {status}
                 </div>
             )}
@@ -104,5 +112,5 @@ export default function Login({
 
 Login.layout = {
     title: 'Log in to your account',
-    description: 'Use the account credentials created for you by the platform administrator.',
+    description: 'Log in with your existing account, or register as a student to start exploring courses.',
 };

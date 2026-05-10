@@ -1,5 +1,6 @@
 import { type FormEvent, startTransition, useEffect, useEffectEvent, useState } from 'react';
 import { BookOpen, FileText, Plus, Star, Users, Video, Link as LinkIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import api from '@/lib/api';
 import { EmptyState } from '@/components/platform/empty-state';
 import { StatsCard } from '@/components/platform/stats-card';
@@ -164,6 +165,37 @@ export default function TeacherDashboard() {
 
     return (
         <div className="space-y-6">
+            <section className="grid gap-5 xl:grid-cols-[1.1fr,0.9fr]">
+                <div className="brand-surface-dark relative overflow-hidden p-7">
+                    <div className="absolute -right-8 top-0 h-24 w-24 rounded-b-[1.8rem] bg-[#2563eb]" />
+                    <div className="absolute bottom-0 left-10 h-20 w-28 rounded-t-[1.6rem] bg-[#ef4444]" />
+                    <div className="relative z-10">
+                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/50">Teacher studio</p>
+                        <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-white">Build courses that feel worth buying.</h2>
+                        <p className="mt-3 max-w-2xl text-sm leading-7 text-white/68">
+                            Package your expertise with pricing, chapters, ratings, and a student view that feels more polished and commercially believable.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="grid gap-5 sm:grid-cols-3 xl:grid-cols-3">
+                    <div className="brand-surface-soft p-5">
+                        <p className="brand-kicker">Catalog value</p>
+                        <p className="mt-3 text-2xl font-black text-black">
+                            ${courses.reduce((total, course) => total + Number(course.price || 0), 0).toFixed(0)}
+                        </p>
+                    </div>
+                    <div className="rounded-[2rem] bg-[#ffd84d] p-5 text-black shadow-[0_18px_44px_rgba(255,216,77,0.18)]">
+                        <p className="brand-kicker text-black/55">Course state</p>
+                        <p className="mt-3 text-2xl font-black">{selectedCourse ? 'Editing live' : 'Select a course'}</p>
+                    </div>
+                    <div className="brand-surface-soft p-5">
+                        <p className="brand-kicker">Enrolled students</p>
+                        <p className="mt-3 text-2xl font-black text-black">{students.length}</p>
+                    </div>
+                </div>
+            </section>
+
             <section className="grid gap-4 md:grid-cols-4">
                 <StatsCard label="Courses" value={courses.length} hint="Courses published from your teacher workspace." />
                 <StatsCard
@@ -185,9 +217,9 @@ export default function TeacherDashboard() {
 
             <section className="grid gap-6 xl:grid-cols-[380px,1fr]">
                 <div className="space-y-6">
-                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
-                        <h2 className="text-xl font-semibold text-white">Launch a course</h2>
-                        <p className="mt-1 text-sm text-gray-300">Add a price, make it look premium, and unlock beta buying for students.</p>
+                    <div className="brand-surface p-6">
+                        <h2 className="text-xl font-semibold text-black">Launch a course</h2>
+                        <p className="mt-1 text-sm text-black/60">Add a price, shape the offer, and prepare it for student purchases.</p>
 
                         <form className="mt-6 space-y-4" onSubmit={handleCreateCourse}>
                             <div className="space-y-2">
@@ -215,24 +247,24 @@ export default function TeacherDashboard() {
                                 <Label htmlFor="course-description">Description</Label>
                                 <textarea
                                     id="course-description"
-                                    className="min-h-32 w-full rounded-md border border-purple-500/50 bg-transparent px-3 py-2 text-sm text-white placeholder:text-gray-400"
+                                    className="min-h-32 w-full rounded-xl border border-black/15 bg-white px-3 py-2 text-sm text-black placeholder:text-black/35 outline-none focus:border-[#2563eb]"
                                     value={courseForm.description}
                                     onChange={(event) => setCourseForm((current) => ({ ...current, description: event.target.value }))}
                                     required
                                 />
                             </div>
-                            <Button type="submit" className="rounded-2xl bg-cyan-600 text-white hover:bg-cyan-700">
+                            <Button type="submit" className="rounded-2xl bg-black text-white hover:bg-black/90">
                                 <Plus className="size-4" />
                                 Create course
                             </Button>
                         </form>
                     </div>
 
-                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
-                        <h2 className="text-xl font-semibold text-white">Your premium lineup</h2>
+                    <div className="brand-surface p-6">
+                        <h2 className="text-xl font-semibold text-black">Your premium lineup</h2>
                         <div className="mt-4 space-y-3">
                             {loading ? (
-                                <p className="text-sm text-gray-400">Loading courses...</p>
+                                <p className="text-sm text-black/45">Loading courses...</p>
                             ) : courses.length === 0 ? (
                                 <EmptyState title="No courses yet" description="Create your first course to start selling beta access and publishing PDF chapters." />
                             ) : (
@@ -243,14 +275,14 @@ export default function TeacherDashboard() {
                                         onClick={() => setSelectedCourse(course)}
                                         className={`w-full rounded-3xl border p-4 text-left transition ${
                                             selectedCourse?.id === course.id
-                                                ? 'border-cyan-700 bg-cyan-700 text-white'
-                                                : 'border-slate-200 bg-slate-50/80 hover:bg-slate-100'
+                                                ? 'border-black bg-black text-white'
+                                                : 'border-black/10 bg-[#fffdf7] hover:border-[#2563eb] hover:bg-white'
                                         }`}
                                     >
                                         <div className="flex items-start justify-between gap-4">
                                             <div>
                                                 <p className="font-semibold">{course.title}</p>
-                                                <p className={`mt-1 text-sm ${selectedCourse?.id === course.id ? 'text-cyan-100' : 'text-slate-600'}`}>
+                                                <p className={`mt-1 text-sm ${selectedCourse?.id === course.id ? 'text-white/72' : 'text-black/60'}`}>
                                                     {course.description}
                                                 </p>
                                             </div>
@@ -271,20 +303,22 @@ export default function TeacherDashboard() {
                 <div className="space-y-6">
                     {selectedCourse ? (
                         <>
-                            <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                            <div className="brand-surface-dark relative overflow-hidden p-6">
+                                <div className="absolute -right-10 top-0 h-24 w-24 rounded-b-[2rem] bg-[#2563eb]" />
+                                <div className="absolute bottom-0 left-0 h-16 w-28 rounded-tr-[2rem] bg-[#ef4444]" />
                                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                                    <div>
-                                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-purple-300">
+                                    <div className="relative z-10">
+                                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/60">
                                             Enrollment code {selectedCourse.enrollment_code}
                                         </p>
                                         <h2 className="mt-2 text-2xl font-semibold text-white">{selectedCourse.title}</h2>
-                                        <p className="mt-2 max-w-2xl text-sm text-gray-300">{selectedCourse.description}</p>
-                                        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-300">
-                                            <span className="rounded-full bg-amber-500/20 px-3 py-1 font-medium text-amber-300">
+                                        <p className="mt-2 max-w-2xl text-sm text-white/72">{selectedCourse.description}</p>
+                                        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-white/72">
+                                            <span className="rounded-full bg-[#ffd84d] px-3 py-1 font-medium text-black">
                                                 ${Number(selectedCourse.price).toFixed(2)}
                                             </span>
                                             <span className="inline-flex items-center gap-1">
-                                                <Star className="size-4 fill-amber-400 text-amber-400" />
+                                                <Star className="size-4 fill-[#ffd84d] text-[#ffd84d]" />
                                                 {selectedCourse.ratings_avg_rating ? Number(selectedCourse.ratings_avg_rating).toFixed(1) : 'No rating yet'}
                                             </span>
                                         </div>
@@ -302,57 +336,57 @@ export default function TeacherDashboard() {
 
                             <div className="space-y-6">
                                 <div className="grid gap-6 lg:grid-cols-3">
-                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                                    <div className="brand-surface p-6">
                                         <div className="flex items-center justify-between">
-                                            <h3 className="text-lg font-semibold text-white">PDF Chapter</h3>
-                                            <FileText className="size-5 text-purple-400" />
+                                            <h3 className="text-lg font-semibold text-black">PDF Chapter</h3>
+                                            <FileText className="size-5 text-[#ef4444]" />
                                         </div>
-                                        <p className="mt-2 text-sm text-gray-300">Upload a PDF file as a chapter.</p>
+                                        <p className="mt-2 text-sm text-black/60">Upload a PDF file as a chapter.</p>
                                         <button
                                             type="button"
                                             onClick={() => setChapterForm((current) => ({ ...current, type: 'pdf' }))}
                                             className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
                                                 chapterForm.type === 'pdf'
-                                                    ? 'border-purple-600 bg-gradient-to-r from-purple-600 to-blue-600 text-white'
-                                                    : 'border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 text-gray-300 hover:border-purple-500/50'
+                                                    ? 'border-black bg-black text-white'
+                                                    : 'border-black/10 bg-white text-black hover:border-[#ef4444]'
                                             }`}
                                         >
                                             {chapterForm.type === 'pdf' ? 'Selected' : 'Select'}
                                         </button>
                                     </div>
 
-                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                                    <div className="brand-surface p-6">
                                         <div className="flex items-center justify-between">
-                                            <h3 className="text-lg font-semibold text-white">Video Chapter</h3>
-                                            <Video className="size-5 text-purple-400" />
+                                            <h3 className="text-lg font-semibold text-black">Video Chapter</h3>
+                                            <Video className="size-5 text-[#2563eb]" />
                                         </div>
-                                        <p className="mt-2 text-sm text-gray-300">Upload a video file as a chapter.</p>
+                                        <p className="mt-2 text-sm text-black/60">Upload a video file as a chapter.</p>
                                         <button
                                             type="button"
                                             onClick={() => setChapterForm((current) => ({ ...current, type: 'video' }))}
                                             className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
                                                 chapterForm.type === 'video'
-                                                    ? 'border-purple-600 bg-gradient-to-r from-purple-600 to-blue-600 text-white'
-                                                    : 'border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 text-gray-300 hover:border-purple-500/50'
+                                                    ? 'border-black bg-black text-white'
+                                                    : 'border-black/10 bg-white text-black hover:border-[#2563eb]'
                                             }`}
                                         >
                                             {chapterForm.type === 'video' ? 'Selected' : 'Select'}
                                         </button>
                                     </div>
 
-                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                                    <div className="brand-surface p-6">
                                         <div className="flex items-center justify-between">
-                                            <h3 className="text-lg font-semibold text-white">Link Chapter</h3>
-                                            <LinkIcon className="size-5 text-purple-400" />
+                                            <h3 className="text-lg font-semibold text-black">Link Chapter</h3>
+                                            <LinkIcon className="size-5 text-[#ffd84d]" />
                                         </div>
-                                        <p className="mt-2 text-sm text-gray-300">Add a link to external content.</p>
+                                        <p className="mt-2 text-sm text-black/60">Add a link to external content.</p>
                                         <button
                                             type="button"
                                             onClick={() => setChapterForm((current) => ({ ...current, type: 'link' }))}
                                             className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
                                                 chapterForm.type === 'link'
-                                                    ? 'border-purple-600 bg-gradient-to-r from-purple-600 to-blue-600 text-white'
-                                                    : 'border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 text-gray-300 hover:border-purple-500/50'
+                                                    ? 'border-black bg-black text-white'
+                                                    : 'border-black/10 bg-white text-black hover:border-[#ffd84d]'
                                             }`}
                                         >
                                             {chapterForm.type === 'link' ? 'Selected' : 'Select'}
@@ -361,11 +395,11 @@ export default function TeacherDashboard() {
                                 </div>
 
                                 <div className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
-                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
-                                        <h3 className="text-xl font-semibold text-white">
+                                    <div className="brand-surface p-6">
+                                        <h3 className="text-xl font-semibold text-black">
                                             Create {chapterForm.type === 'pdf' ? 'PDF' : chapterForm.type === 'video' ? 'Video' : 'Link'} Chapter
                                         </h3>
-                                        <p className="mt-1 text-sm text-gray-300">
+                                        <p className="mt-1 text-sm text-black/60">
                                             {chapterForm.type === 'pdf'
                                                 ? 'Upload a PDF chapter and trigger student notifications.'
                                                 : chapterForm.type === 'video'
@@ -434,21 +468,23 @@ export default function TeacherDashboard() {
                                                 </div>
                                             )}
 
-                                            {error ? <p className="text-sm text-red-600">{error}</p> : null}
+                                            {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p> : null}
 
-                                            <Button type="submit" className="rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700">
+                                            <Button type="submit" className="rounded-2xl bg-black text-white hover:bg-black/90">
                                                 <Plus className="size-4" />
                                                 Create chapter
                                             </Button>
                                         </form>
                                     </div>
 
-                                    <div className="rounded-[2rem] border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-6 backdrop-blur-sm">
+                                    <div className="brand-surface p-6">
                                         <div className="flex items-center gap-3">
-                                            <Users className="size-5 text-purple-400" />
+                                            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-black text-white">
+                                                <Users className="size-5" />
+                                            </div>
                                             <div>
-                                                <h3 className="text-xl font-semibold text-white">Enrolled students</h3>
-                                                <p className="text-sm text-gray-300">Students currently learning inside this course.</p>
+                                                <h3 className="text-xl font-semibold text-black">Enrolled students</h3>
+                                                <p className="text-sm text-black/60">Students currently learning inside this course.</p>
                                             </div>
                                         </div>
 
@@ -457,10 +493,17 @@ export default function TeacherDashboard() {
                                                 <EmptyState title="No students enrolled yet" description="Beta buyers can unlock the code, then enroll here once they use it." />
                                             ) : (
                                                 students.map((student) => (
-                                                    <div key={student.id} className="rounded-3xl border border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-blue-500/5 p-4">
-                                                        <p className="font-semibold text-white">{student.name}</p>
-                                                        <p className="text-sm text-gray-400">{student.email}</p>
-                                                    </div>
+                                                    <Link
+                                                        key={student.id}
+                                                        to={`/dashboard/students/${student.id}`}
+                                                        className="block rounded-3xl border border-black/10 bg-[#fffdf7] p-4 transition hover:border-[#2563eb] hover:shadow-[0_16px_34px_rgba(37,99,235,0.08)]"
+                                                    >
+                                                        <p className="font-semibold text-black">{student.name}</p>
+                                                        <p className="text-sm text-black/55">{student.email}</p>
+                                                        <p className="mt-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#2563eb]">
+                                                            View profile
+                                                        </p>
+                                                    </Link>
                                                 ))
                                             )}
                                         </div>
