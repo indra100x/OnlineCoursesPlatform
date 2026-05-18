@@ -6,9 +6,11 @@ RUN apk add --no-cache \
     unzip \
     libzip-dev \
     oniguruma-dev \
+    libpq-dev \
     libpng-dev \
     && docker-php-ext-install \
     pdo_mysql \
+    pdo_pgsql \
     mbstring \
     zip \
     bcmath \
@@ -64,6 +66,7 @@ RUN apk add --no-cache \
     php83-mbstring \
     php83-pdo \
     php83-pdo_mysql \
+    php83-pgsql \
     php83-tokenizer \
     php83-xml \
     php83-xmlwriter \

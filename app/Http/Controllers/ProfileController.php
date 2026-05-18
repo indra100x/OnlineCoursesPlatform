@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\MediaStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -9,6 +10,10 @@ use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
+    public function __construct(
+        protected MediaStorage $mediaStorage,
+    ) {}
+
     public function show(Request $request): JsonResponse
     {
         return response()->json([
@@ -39,7 +44,10 @@ class ProfileController extends Controller
         ];
 
         if ($request->file('avatar')) {
-            $payload['avatar_path'] = $request->file('avatar')->store('avatars', 'public');
+            $payload['avatar_path'] = $this->mediaStorage->storeImage(
+                $request->file('avatar'),
+                'avatars'
+            );
         }
 
         $user->update($payload);

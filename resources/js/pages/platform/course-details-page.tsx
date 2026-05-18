@@ -2,6 +2,7 @@ import { type FormEvent, useEffect, useEffectEvent, useState } from 'react';
 import { ArrowLeft, FileText, Star } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import api from '@/lib/api';
+import { assetUrl } from '@/lib/utils';
 import { EmptyState } from '@/components/platform/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -116,7 +117,7 @@ export default function CourseDetailsPage() {
 
                                         <div className="mt-4 rounded-[1.15rem] border border-black/8 bg-[#fffdf7] px-4 py-3 text-xs text-black/60">
                                             <a
-                                                href={`/storage/${chapter.file_path}`}
+                                                href={assetUrl(chapter.file_path) ?? '#'}
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="inline-flex items-center gap-1.5 font-semibold text-black transition-colors hover:text-[#2563eb]"

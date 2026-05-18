@@ -6,12 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Notification;
+use App\Support\MediaStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CourseChapterController extends Controller
 {
+    public function __construct(
+        protected MediaStorage $mediaStorage,
+    ) {}
+
     public function store(Request $request, Course $course): JsonResponse
     {
         abort_unless($course->teacher_id === $request->user()->id, 403);
@@ -24,7 +29,10 @@ class CourseChapterController extends Controller
         $chapter = DB::transaction(function () use ($request, $course, $validated) {
             $nextPosition = (int) $course->chapters()->max('position') + 1;
 
-            $storedFile = $request->file('file')->store('chapters', 'public');
+            $storedFile = $this->mediaStorage->storeDocument(
+                $request->file('file'),
+                'chapters'
+            );
 
             $chapter = Chapter::create([
                 'course_id' => $course->id,

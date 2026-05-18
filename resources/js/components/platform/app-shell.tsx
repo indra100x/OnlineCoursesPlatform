@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Bell, BookOpen, GraduationCap, LogOut, ShieldCheck, UserCircle2, type LucideIcon } from 'lucide-react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
+import { assetUrl } from '@/lib/utils';
 import type { Role } from '@/types/platform';
 
 type ShellUser = {
@@ -37,7 +38,7 @@ const navByRole: Record<Role, { label: string; to: string; icon: LucideIcon }[]>
 
 export function AppShell({ children, user, unreadCount, csrfToken }: AppShellProps) {
     const location = useLocation();
-    const avatarUrl = user.avatar_path ? `/storage/${user.avatar_path}` : null;
+    const avatarUrl = assetUrl(user.avatar_path);
 
     return (
         <div className="min-h-screen bg-[#fbf7ef] text-black">

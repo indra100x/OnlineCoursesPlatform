@@ -3,6 +3,7 @@ import { useEffect, useEffectEvent, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { EmptyState } from '@/components/platform/empty-state';
 import api from '@/lib/api';
+import { assetUrl } from '@/lib/utils';
 import type { StudentProfileView } from '@/types/platform';
 
 export default function StudentProfilePage() {
@@ -51,9 +52,9 @@ export default function StudentProfilePage() {
                     <section className="grid gap-5 xl:grid-cols-[0.75fr,1.25fr]">
                         <div className="brand-surface-dark p-6 text-white">
                             <div className="flex flex-col items-center text-center">
-                                {data.student.avatar_path ? (
+                                {assetUrl(data.student.avatar_path) ? (
                                     <img
-                                        src={`/storage/${data.student.avatar_path}`}
+                                        src={assetUrl(data.student.avatar_path) ?? undefined}
                                         alt={data.student.name}
                                         className="size-24 rounded-[1.5rem] object-cover shadow-lg ring-2 ring-white/20"
                                     />

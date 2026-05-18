@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/platform/empty-state';
 import api from '@/lib/api';
+import { assetUrl } from '@/lib/utils';
 import type { Course, TeacherProfileView } from '@/types/platform';
 
 export default function TeacherPublicProfilePage() {
@@ -74,9 +75,9 @@ export default function TeacherPublicProfilePage() {
                 <section className="grid gap-5 xl:grid-cols-[0.78fr,1.22fr]">
                     <div className="brand-surface-dark p-6 text-white">
                         <div className="flex flex-col items-center text-center">
-                            {data.teacher.avatar_path ? (
+                            {assetUrl(data.teacher.avatar_path) ? (
                                 <img
-                                    src={`/storage/${data.teacher.avatar_path}`}
+                                    src={assetUrl(data.teacher.avatar_path) ?? undefined}
                                     alt={data.teacher.name}
                                     className="size-24 rounded-[1.5rem] object-cover shadow-lg ring-2 ring-white/20"
                                 />

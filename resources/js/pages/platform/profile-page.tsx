@@ -4,6 +4,7 @@ import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { assetUrl } from '@/lib/utils';
 import type { Profile } from '@/types/platform';
 
 type ProfilePageProps = {
@@ -84,7 +85,7 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
         }
     }
 
-    const avatarUrl = profile?.avatar_path ? `/storage/${profile.avatar_path}` : null;
+    const avatarUrl = assetUrl(profile?.avatar_path);
 
     return (
         <div className="grid gap-5 xl:grid-cols-[340px,1fr]">

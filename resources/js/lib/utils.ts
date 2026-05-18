@@ -10,3 +10,15 @@ export function cn(...inputs: ClassValue[]) {
 export function toUrl(url: NonNullable<InertiaLinkProps['href']>): string {
     return typeof url === 'string' ? url : url.url;
 }
+
+export function assetUrl(path: string | null | undefined): string | null {
+    if (!path) {
+        return null;
+    }
+
+    if (/^https?:\/\//i.test(path)) {
+        return path;
+    }
+
+    return `/storage/${path.replace(/^\/+/, '')}`;
+}
