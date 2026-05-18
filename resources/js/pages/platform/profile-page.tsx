@@ -87,40 +87,42 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
     const avatarUrl = profile?.avatar_path ? `/storage/${profile.avatar_path}` : null;
 
     return (
-        <div className="grid gap-6 xl:grid-cols-[360px,1fr]">
-            <div className="rounded-[2rem] border border-white/20 bg-white/10 p-6 text-white shadow-[0_24px_80px_-40px_rgba(15,23,42,0.85)] backdrop-blur-xl">
+        <div className="grid gap-5 xl:grid-cols-[340px,1fr]">
+            <div className="brand-surface-dark p-6 text-white">
                 <div className="flex flex-col items-center text-center">
                     {avatarUrl ? (
-                        <img src={avatarUrl} alt={profile?.name ?? 'Profile'} className="size-28 rounded-[2rem] object-cover shadow-2xl" />
+                        <img src={avatarUrl} alt={profile?.name ?? 'Profile'} className="size-24 rounded-[1.5rem] object-cover shadow-lg ring-2 ring-white/20" />
                     ) : (
-                        <div className="flex size-28 items-center justify-center rounded-[2rem] bg-white/15">
-                            <UserCircle2 className="size-14" />
+                        <div className="flex size-24 items-center justify-center rounded-[1.5rem] bg-white/10 ring-2 ring-white/10">
+                            <UserCircle2 className="size-12" />
                         </div>
                     )}
-                    <h1 className="mt-5 text-2xl font-semibold">{profile?.name ?? 'Profile'}</h1>
-                    <p className="mt-1 text-sm text-slate-200">{profile?.email}</p>
-                    <p className="mt-2 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-100">
+                    <h1 className="mt-4 text-xl font-bold">{profile?.name ?? 'Profile'}</h1>
+                    <p className="mt-0.5 text-sm text-white/60">{profile?.email}</p>
+                    <p className="mt-2 rounded-full bg-[#ffd84d] px-3 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-black">
                         {profile?.role ?? 'member'}
                     </p>
-                    <p className="mt-5 text-sm text-slate-200">
+                    <p className="mt-4 text-sm leading-relaxed text-white/65">
                         {profile?.bio || 'Add a short bio so your dashboard feels more personal and complete.'}
                     </p>
                 </div>
             </div>
 
-            <div className="space-y-6">
-                <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+            <div className="space-y-5">
+                <div className="brand-surface p-5">
                     <div className="flex items-center gap-3">
-                        <Camera className="size-5 text-teal-700" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-[1.1rem] bg-black text-white">
+                            <Camera className="size-4" />
+                        </div>
                         <div>
-                            <h2 className="text-xl font-semibold text-slate-950">Profile details</h2>
-                            <p className="text-sm text-slate-600">Update your display name, bio, and profile photo.</p>
+                            <h2 className="text-base font-semibold text-black">Profile details</h2>
+                            <p className="text-xs text-black/50">Update your display name, bio, and profile photo.</p>
                         </div>
                     </div>
 
-                    <form className="mt-6 space-y-4" onSubmit={handleProfileSubmit}>
-                        <div className="space-y-2">
-                            <Label htmlFor="profile-name">Name</Label>
+                    <form className="mt-4 space-y-3.5" onSubmit={handleProfileSubmit}>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="profile-name" className="text-xs font-semibold">Name</Label>
                             <Input
                                 id="profile-name"
                                 value={profileForm.name}
@@ -128,18 +130,18 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                                 required
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="profile-bio">Bio</Label>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="profile-bio" className="text-xs font-semibold">Bio</Label>
                             <textarea
                                 id="profile-bio"
-                                className="min-h-32 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                                className="min-h-28 w-full rounded-xl border border-black/12 bg-white px-3 py-2.5 text-sm text-black placeholder:text-black/30 outline-none transition-all focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/10"
                                 value={profileForm.bio}
                                 onChange={(event) => setProfileForm((current) => ({ ...current, bio: event.target.value }))}
                                 placeholder="Tell students or collaborators a bit about yourself."
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="profile-avatar">Profile photo</Label>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="profile-avatar" className="text-xs font-semibold">Profile photo</Label>
                             <Input
                                 id="profile-avatar"
                                 type="file"
@@ -149,26 +151,28 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                                 }
                             />
                         </div>
-                        {message ? <p className="text-sm text-emerald-600">{message}</p> : null}
-                        {error ? <p className="text-sm text-red-600">{error}</p> : null}
-                        <Button type="submit" className="rounded-2xl bg-teal-600 text-white hover:bg-teal-700">
+                        {message ? <p className="rounded-xl bg-[#fff6d0] px-3 py-2 text-xs text-black">{message}</p> : null}
+                        {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p> : null}
+                        <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90">
                             Save profile
                         </Button>
                     </form>
                 </div>
 
-                <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+                <div className="brand-surface p-5">
                     <div className="flex items-center gap-3">
-                        <LockKeyhole className="size-5 text-amber-700" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-[1.1rem] bg-[#2563eb] text-white">
+                            <LockKeyhole className="size-4" />
+                        </div>
                         <div>
-                            <h2 className="text-xl font-semibold text-slate-950">Security</h2>
-                            <p className="text-sm text-slate-600">Change your password without leaving the dashboard.</p>
+                            <h2 className="text-base font-semibold text-black">Security</h2>
+                            <p className="text-xs text-black/50">Change your password without leaving the dashboard.</p>
                         </div>
                     </div>
 
-                    <form className="mt-6 grid gap-4 md:grid-cols-2" onSubmit={handlePasswordSubmit}>
-                        <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor="current-password">Current password</Label>
+                    <form className="mt-4 grid gap-3.5 md:grid-cols-2" onSubmit={handlePasswordSubmit}>
+                        <div className="space-y-1.5 md:col-span-2">
+                            <Label htmlFor="current-password" className="text-xs font-semibold">Current password</Label>
                             <Input
                                 id="current-password"
                                 type="password"
@@ -182,8 +186,8 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                                 required
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="new-password">New password</Label>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="new-password" className="text-xs font-semibold">New password</Label>
                             <Input
                                 id="new-password"
                                 type="password"
@@ -194,8 +198,8 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                                 required
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="confirm-password">Confirm password</Label>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="confirm-password" className="text-xs font-semibold">Confirm password</Label>
                             <Input
                                 id="confirm-password"
                                 type="password"
@@ -210,7 +214,7 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                             />
                         </div>
                         <div className="md:col-span-2">
-                            <Button type="submit" className="rounded-2xl bg-amber-500 text-slate-950 hover:bg-amber-400">
+                            <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90">
                                 Update password
                             </Button>
                         </div>

@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import AppLogoIcon from '@/components/app-logo-icon';
+import AppLogo from '@/components/app-logo';
 import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 
@@ -9,28 +9,70 @@ export default function AuthSimpleLayout({
     description,
 }: AuthLayoutProps) {
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
-            <div className="w-full max-w-sm">
-                <div className="flex flex-col gap-8">
-                    <div className="flex flex-col items-center gap-4">
-                        <Link
-                            href={home()}
-                            className="flex flex-col items-center gap-2 font-medium"
-                        >
-                            <div className="mb-1 flex h-9 w-9 items-center justify-center rounded-md">
-                                <AppLogoIcon className="size-9 fill-current text-[var(--foreground)] dark:text-white" />
-                            </div>
-                            <span className="sr-only">{title}</span>
-                        </Link>
+        <div className="min-h-svh bg-[#fbf7ef] px-4 py-5 md:px-8 md:py-8">
+            <div className="mx-auto grid min-h-[calc(100svh-2.5rem)] max-w-7xl overflow-hidden rounded-[2rem] border border-black/8 bg-white shadow-[0_20px_80px_rgba(17,17,17,0.08)] lg:grid-cols-[1.1fr,0.9fr]">
+                <div className="brand-gradient-overlay relative hidden overflow-hidden bg-[#fff6d0] p-10 lg:flex lg:flex-col lg:justify-between">
+                    <div className="absolute -left-8 top-12 h-32 w-32 rounded-[2.5rem] bg-[#ef4444]/90" />
+                    <div className="absolute right-16 top-20 h-28 w-28 rounded-full bg-[#2563eb]/90" />
+                    <div className="absolute -bottom-8 -right-8 h-48 w-48 rounded-[3rem] bg-black" />
+                    <div className="absolute left-1/3 top-1/3 h-16 w-16 rounded-full bg-[#ffd84d]/70" />
 
-                        <div className="space-y-2 text-center">
-                            <h1 className="text-xl font-medium">{title}</h1>
-                            <p className="text-center text-sm text-muted-foreground">
-                                {description}
+                    <div className="relative z-10 max-w-xl">
+                        <Link href={home()} className="inline-flex items-center gap-3 font-medium">
+                            <AppLogo />
+                        </Link>
+                        <div className="mt-14 space-y-5">
+                            <span className="brand-pill bg-white/90 text-black shadow-sm">Admin Managed Access</span>
+                            <h1 className="max-w-lg text-5xl font-black leading-[1.05] tracking-[-0.03em] text-black">
+                                Learn in a workspace that feels polished from the first click.
+                            </h1>
+                            <p className="max-w-md text-base leading-7 text-black/65">
+                                Teachers publish structured courses, students unlock learning with guided access, and every dashboard stays crisp and focused.
                             </p>
                         </div>
                     </div>
-                    {children}
+
+                    <div className="relative z-10 grid max-w-xl grid-cols-3 gap-4">
+                        <div className="brand-surface p-5">
+                            <div className="flex h-20 items-center justify-center rounded-[1.25rem] bg-[#ffd84d]">
+                                <span className="text-2xl">📚</span>
+                            </div>
+                            <p className="mt-4 text-sm font-semibold text-black">Course access</p>
+                        </div>
+                        <div className="brand-surface-dark p-5">
+                            <div className="flex h-20 items-center justify-center rounded-[1.25rem] bg-[#2563eb]">
+                                <span className="text-2xl">🛠️</span>
+                            </div>
+                            <p className="mt-4 text-sm font-semibold">Teacher tools</p>
+                        </div>
+                        <div className="brand-surface p-5">
+                            <div className="flex h-20 items-center justify-center rounded-[1.25rem] bg-[#ef4444]">
+                                <span className="text-2xl">🎓</span>
+                            </div>
+                            <p className="mt-4 text-sm font-semibold text-black">Student flow</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex items-center justify-center bg-white p-6 md:p-8">
+                    <div className="w-full max-w-sm">
+                        <div className="space-y-6">
+                            <div className="flex flex-col items-start gap-4">
+                                <Link href={home()} className="font-medium lg:hidden">
+                                    <AppLogo />
+                                </Link>
+
+                                <div className="space-y-2">
+                                    <span className="brand-pill border-black/8 bg-[#fff6d0] text-black">Secure sign in</span>
+                                    <h1 className="text-3xl font-black leading-tight tracking-[-0.02em] text-black">{title}</h1>
+                                    <p className="text-sm leading-6 text-black/55">{description}</p>
+                                </div>
+                            </div>
+                            <div className="bg-[#fbf7ef] rounded-[1.5rem] border border-black/6 p-6 md:p-7 shadow-sm">
+                                {children}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

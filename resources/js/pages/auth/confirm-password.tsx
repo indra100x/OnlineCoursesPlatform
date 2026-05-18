@@ -13,9 +13,9 @@ export default function ConfirmPassword() {
 
             <Form {...store.form()} resetOnSuccess={['password']}>
                 {({ processing, errors }) => (
-                    <div className="space-y-6">
-                        <div className="grid gap-2">
-                            <Label htmlFor="password">Password</Label>
+                    <div className="space-y-5">
+                        <div className="grid gap-1.5">
+                            <Label htmlFor="password" className="text-xs font-semibold">Password</Label>
                             <PasswordInput
                                 id="password"
                                 name="password"
@@ -23,13 +23,12 @@ export default function ConfirmPassword() {
                                 autoComplete="current-password"
                                 autoFocus
                             />
-
                             <InputError message={errors.password} />
                         </div>
 
                         <div className="flex items-center">
                             <Button
-                                className="w-full"
+                                className="w-full rounded-xl bg-black text-white hover:bg-black/90"
                                 disabled={processing}
                                 data-test="confirm-password-button"
                             >

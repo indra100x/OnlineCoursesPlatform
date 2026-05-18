@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -37,6 +38,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     private function configureActions(): void
     {
+        Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
     }
 
@@ -50,6 +52,8 @@ class FortifyServiceProvider extends ServiceProvider
             'canRegister' => Features::enabled(Features::registration()),
             'status' => $request->session()->get('status'),
         ]));
+
+        Fortify::registerView(fn () => Inertia::render('auth/register'));
 
         Fortify::resetPasswordView(fn (Request $request) => Inertia::render('auth/reset-password', [
             'email' => $request->email,
@@ -82,6 +86,14 @@ class FortifyServiceProvider extends ServiceProvider
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
+        });
+
+        RateLimiter::for('teacher-requests', function (Request $request) {
+            return Limit::perHour(3)->by($request->ip());
+        });
+
+        RateLimiter::for('registration', function (Request $request) {
+            return Limit::perHour(3)->by($request->ip());
         });
     }
 }

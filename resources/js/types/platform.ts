@@ -12,6 +12,7 @@ export type PlatformUser = {
 };
 
 export type Teacher = Pick<PlatformUser, 'id' | 'name' | 'email' | 'avatar_path' | 'bio'>;
+export type PublicStudent = Pick<PlatformUser, 'id' | 'name' | 'email' | 'avatar_path' | 'bio' | 'created_at'>;
 
 export type Chapter = {
     id: number;
@@ -52,6 +53,7 @@ export type Course = {
     is_wishlisted?: boolean;
     is_enrolled?: boolean;
     created_at: string;
+    enrolled_at?: string;
 };
 
 export type StudentCourse = Course & {
@@ -84,4 +86,26 @@ export type PlatformNotification = {
     created_at: string;
     course?: Pick<Course, 'id' | 'title'>;
     chapter?: Pick<Chapter, 'id' | 'title'>;
+};
+
+export type TeacherProfileView = {
+    teacher: Teacher & Pick<PlatformUser, 'created_at'>;
+    courses: Course[];
+};
+
+export type StudentProfileView = {
+    student: PublicStudent;
+    courses: Course[];
+};
+
+export type TeacherRequestItem = {
+    id: number;
+    name: string;
+    email: string;
+    bio: string | null;
+    proof_link: string | null;
+    status: 'pending' | 'approved' | 'rejected';
+    admin_notes: string | null;
+    created_at: string;
+    updated_at: string;
 };

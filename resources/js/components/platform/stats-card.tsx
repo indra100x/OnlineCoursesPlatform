@@ -6,12 +6,19 @@ type StatsCardProps = {
 
 export function StatsCard({ label, value, hint }: StatsCardProps) {
     return (
-        <div className="rounded-3xl border border-white/60 bg-white/90 p-5 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)] backdrop-blur">
-            <p className="text-sm font-medium uppercase tracking-[0.2em] text-slate-500">
+        <div className="brand-surface brand-grid-fine relative overflow-hidden p-5">
+            <div className="absolute -top-8 right-4 h-20 w-20 rounded-full bg-[#ffd84d]/50 blur-2xl" />
+            <div className="absolute -bottom-8 left-0 h-20 w-20 rounded-full bg-[#2563eb]/8 blur-2xl" />
+            <p className="relative text-xs font-semibold uppercase tracking-[0.2em] text-black/45">
                 {label}
             </p>
-            <p className="mt-4 text-4xl font-semibold text-slate-900">{value}</p>
-            <p className="mt-2 text-sm text-slate-600">{hint}</p>
+            <div className="relative mt-4 flex items-end justify-between gap-4">
+                <p className="text-3xl font-black tracking-[-0.04em] text-black">{value}</p>
+                <div className="rounded-full bg-black/90 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white">
+                    Live
+                </div>
+            </div>
+            <p className="relative mt-2 max-w-[18rem] text-xs leading-relaxed text-black/55">{hint}</p>
         </div>
     );
 }

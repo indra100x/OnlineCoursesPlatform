@@ -1,8 +1,7 @@
 import { type FormEvent, useDeferredValue, useEffect, useEffectEvent, useState } from 'react';
-import { Trash2, UserCog, Users } from 'lucide-react';
+import { Pencil, Plus, Trash2, Users } from 'lucide-react';
 import api from '@/lib/api';
 import { EmptyState } from '@/components/platform/empty-state';
-import { StatsCard } from '@/components/platform/stats-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -113,30 +112,44 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
     }
 
     return (
-        <div className="space-y-6">
-            <section className="grid gap-4 md:grid-cols-3">
-                <StatsCard label="Users" value={users.length} hint="Every teacher and student account lives here." />
-                <StatsCard label="Teachers" value={teachersCount} hint="Teachers can create courses and chapters." />
-                <StatsCard label="Students" value={studentsCount} hint="Students only log in and enroll by code." />
+        <div className="space-y-5">
+            <section className="grid gap-4 sm:grid-cols-3">
+                <div className="brand-surface p-5">
+                    <p className="brand-kicker">Total users</p>
+                    <p className="mt-2 text-3xl font-black text-black">{users.length}</p>
+                    <p className="mt-1 text-sm text-black/50">All accounts on the platform</p>
+                </div>
+                <div className="brand-surface-blue p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Teachers</p>
+                    <p className="mt-2 text-3xl font-black text-white">{teachersCount}</p>
+                    <p className="mt-1 text-sm text-white/65">Course creators and publishers</p>
+                </div>
+                <div className="brand-surface-accent p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-black/55">Students</p>
+                    <p className="mt-2 text-3xl font-black text-black">{studentsCount}</p>
+                    <p className="mt-1 text-sm text-black/55">Enrolled learners</p>
+                </div>
             </section>
 
-            <section className="grid gap-6 xl:grid-cols-[360px,1fr]">
-                <div className="rounded-[2rem] border border-white/60 bg-white/90 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
+            <section className="grid gap-5 xl:grid-cols-[380px,1fr]">
+                <div className="brand-surface p-5">
                     <div className="flex items-center gap-3">
-                        <UserCog className="size-5 text-sky-700" />
+                        <div className="flex h-10 w-10 items-center justify-center rounded-[1.1rem] bg-black text-white">
+                            {editingUser ? <Pencil className="size-4" /> : <Plus className="size-4" />}
+                        </div>
                         <div>
-                            <h2 className="text-xl font-semibold text-slate-950">
+                            <h2 className="text-base font-semibold text-black">
                                 {editingUser ? 'Update user' : 'Create user'}
                             </h2>
-                            <p className="text-sm text-slate-600">
+                            <p className="text-xs text-black/50">
                                 Only teachers and students can be created here.
                             </p>
                         </div>
                     </div>
 
-                    <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Name</Label>
+                    <form className="mt-5 space-y-3.5" onSubmit={handleSubmit}>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="name" className="text-xs font-semibold">Name</Label>
                             <Input
                                 id="name"
                                 value={form.name}
@@ -144,8 +157,8 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                                 required
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="email" className="text-xs font-semibold">Email</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -154,22 +167,22 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                                 required
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="password" className="text-xs font-semibold">Password</Label>
                             <Input
                                 id="password"
                                 type="password"
                                 value={form.password}
                                 onChange={(event) => setForm((current) => ({ ...current, password: event.target.value }))}
-                                placeholder={editingUser ? 'Leave blank to keep current password' : 'Temporary password'}
+                                placeholder={editingUser ? 'Leave blank to keep current' : 'Temporary password'}
                                 required={!editingUser}
                             />
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="role">Role</Label>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="role" className="text-xs font-semibold">Role</Label>
                             <select
                                 id="role"
-                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+                                className="w-full rounded-xl border border-black/12 bg-white px-3 py-2.5 text-sm text-black outline-none transition-all focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/10"
                                 value={form.role}
                                 onChange={(event) =>
                                     setForm((current) => ({
@@ -183,17 +196,17 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                             </select>
                         </div>
 
-                        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+                        {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p> : null}
 
-                        <div className="flex gap-3">
-                            <Button type="submit" className="rounded-2xl" disabled={submitting}>
+                        <div className="flex gap-2">
+                            <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90" disabled={submitting}>
                                 {editingUser ? 'Update user' : 'Create user'}
                             </Button>
                             {editingUser ? (
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    className="rounded-2xl"
+                                    className="rounded-xl"
                                     onClick={() => {
                                         setEditingUser(null);
                                         setForm(initialForm);
@@ -206,13 +219,13 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                     </form>
                 </div>
 
-                <div className="rounded-[2rem] border border-white/60 bg-white/90 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="brand-surface p-5">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <h2 className="text-xl font-semibold text-slate-950">User directory</h2>
-                            <p className="text-sm text-slate-600">Search, update, and retire access from one place.</p>
+                            <h2 className="text-base font-semibold text-black">User directory</h2>
+                            <p className="text-xs text-black/50">Search, update, and retire access from one place.</p>
                         </div>
-                        <div className="w-full sm:w-72">
+                        <div className="w-full sm:w-60">
                             <Input
                                 value={search}
                                 onChange={(event) => setSearch(event.target.value)}
@@ -221,42 +234,43 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                         </div>
                     </div>
 
-                    <div className="mt-6">
+                    <div className="mt-4">
                         {loading ? (
-                            <p className="text-sm text-slate-500">Loading users...</p>
+                            <p className="text-sm text-black/45">Loading users...</p>
                         ) : filteredUsers.length === 0 ? (
                             <EmptyState title="No users yet" description="Create the first teacher or student account to get started." />
                         ) : (
-                            <div className="space-y-3">
+                            <div className="space-y-2">
                                 {filteredUsers.map((user) => (
                                     <div
                                         key={user.id}
-                                        className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-slate-50/80 p-4 lg:flex-row lg:items-center lg:justify-between"
+                                        className="flex flex-col gap-3 rounded-[1.25rem] border border-black/8 bg-[#fffdf7] p-4 sm:flex-row sm:items-center sm:justify-between hover:border-black/15 transition-colors"
                                     >
                                         <div className="flex items-start gap-3">
-                                            <div className="flex size-11 items-center justify-center rounded-2xl bg-slate-900 text-white">
-                                                <Users className="size-5" />
+                                            <div className="flex size-10 shrink-0 items-center justify-center rounded-[1rem] bg-black text-white">
+                                                <Users className="size-4" />
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-slate-900">{user.name}</p>
-                                                <p className="text-sm text-slate-600">{user.email}</p>
-                                                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">
+                                                <p className="text-sm font-semibold text-black">{user.name}</p>
+                                                <p className="text-xs text-black/50">{user.email}</p>
+                                                <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#2563eb]">
                                                     {user.role}
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex gap-3">
-                                            <Button type="button" variant="outline" className="rounded-2xl" onClick={() => startEdit(user)}>
+                                        <div className="flex gap-2">
+                                            <Button type="button" variant="outline" size="sm" className="rounded-[0.8rem]" onClick={() => startEdit(user)}>
                                                 Edit
                                             </Button>
                                             <Button
                                                 type="button"
                                                 variant="destructive"
-                                                className="rounded-2xl"
+                                                size="sm"
+                                                className="rounded-[0.8rem]"
                                                 onClick={() => void handleDelete(user)}
                                                 disabled={user.id === currentUserId}
                                             >
-                                                <Trash2 className="size-4" />
+                                                <Trash2 className="size-3.5" />
                                                 Delete
                                             </Button>
                                         </div>

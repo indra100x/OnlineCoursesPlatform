@@ -11,11 +11,13 @@ import { Spinner } from '@/components/ui/spinner';
 type Props = {
     status?: string;
     canResetPassword: boolean;
+    canRegister?: boolean;
 };
 
 export default function Login({
     status,
     canResetPassword,
+    canRegister = false,
 }: Props) {
     return (
         <>
@@ -25,12 +27,12 @@ export default function Login({
                 action="/login"
                 method="post"
                 resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
+                className="flex flex-col gap-5"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
+                        <div className="grid gap-5">
+                            <div className="grid gap-1.5">
                                 <Label htmlFor="email">Email address</Label>
                                 <Input
                                     id="email"
@@ -45,13 +47,13 @@ export default function Login({
                                 <InputError message={errors.email} />
                             </div>
 
-                            <div className="grid gap-2">
+                            <div className="grid gap-1.5">
                                 <div className="flex items-center">
                                     <Label htmlFor="password">Password</Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href="/forgot-password"
-                                            className="ml-auto text-sm"
+                                            className="ml-auto text-xs"
                                             tabIndex={5}
                                         >
                                             Forgot password?
@@ -69,18 +71,18 @@ export default function Login({
                                 <InputError message={errors.password} />
                             </div>
 
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center gap-2">
                                 <Checkbox
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember" className="text-sm">Remember me</Label>
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="h-11 w-full rounded-xl bg-black text-white hover:bg-black/90"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -93,8 +95,14 @@ export default function Login({
                 )}
             </Form>
 
+            {canRegister ? (
+                <p className="mt-4 text-center text-sm text-black/55">
+                    New student? <TextLink href="/register">Create an account</TextLink>
+                </p>
+            ) : null}
+
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <div className="mb-4 rounded-xl bg-[#fff6d0] px-4 py-3 text-center text-sm font-medium text-black">
                     {status}
                 </div>
             )}
@@ -104,5 +112,5 @@ export default function Login({
 
 Login.layout = {
     title: 'Log in to your account',
-    description: 'Use the account credentials created for you by the platform administrator.',
+    description: 'Log in with your existing account, or register as a student to start exploring courses.',
 };

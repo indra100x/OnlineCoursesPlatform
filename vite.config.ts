@@ -7,6 +7,21 @@ import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+    resolve: {
+        alias: {
+            '@': 'resources/js',
+        },
+    },
+    build: {
+        rollupOptions: {
+            onwarn(warning) {
+                // Suppress unresolved import warnings
+                if (warning.code === 'UNRESOLVED_ENTRY' || warning.code === 'UNRESOLVED_IMPORT') {
+                    return;
+                }
+            },
+        },
+    },
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.tsx'],

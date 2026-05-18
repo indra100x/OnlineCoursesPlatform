@@ -8,14 +8,26 @@ use App\Http\Controllers\Student\CoursePurchaseController;
 use App\Http\Controllers\Student\CourseRatingController;
 use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Student\StudentCourseController;
+use App\Http\Controllers\Student\TeacherProfileController;
 use App\Http\Controllers\Student\WishlistController;
 use App\Http\Controllers\Teacher\CourseChapterController;
 use App\Http\Controllers\Teacher\CourseController;
 use App\Http\Controllers\Teacher\CourseStudentController;
+use App\Http\Controllers\Teacher\StudentProfileController;
+use App\Http\Controllers\TeacherRequestController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/login')->name('home');
+Route::get('/', function () {
+    return Inertia::render('welcome');
+})->name('home');
+
+Route::get('/teacher-register', fn () => Inertia::render('auth/teacher-register'))
+    ->middleware('throttle:registration')
+    ->name('teacher.register');
+
+Route::post('/teacher-requests', [TeacherRequestController::class, 'store'])
+    ->middleware('throttle:teacher-requests');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{any?}', fn () => Inertia::render('dashboard'))
@@ -31,6 +43,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/users', [UserManagementController::class, 'store']);
         Route::put('/users/{user}', [UserManagementController::class, 'update']);
         Route::delete('/users/{user}', [UserManagementController::class, 'destroy']);
+
+        Route::get('/teacher-requests', [TeacherRequestController::class, 'index']);
+        Route::post('/teacher-requests/{teacherRequest}/approve', [TeacherRequestController::class, 'approve']);
+        Route::post('/teacher-requests/{teacherRequest}/reject', [TeacherRequestController::class, 'reject']);
     });
 
     Route::middleware('role:teacher')->group(function () {
@@ -40,10 +56,12 @@ Route::middleware('auth')->group(function () {
         Route::delete('/courses/{course}', [CourseController::class, 'destroy']);
         Route::post('/courses/{course}/chapters', [CourseChapterController::class, 'store']);
         Route::get('/courses/{course}/students', [CourseStudentController::class, 'index']);
+        Route::get('/students/{student}/profile', [StudentProfileController::class, 'show']);
     });
 
     Route::middleware('role:student')->group(function () {
         Route::get('/catalog', [CourseCatalogController::class, 'index']);
+        Route::get('/teachers/{teacher}/profile', [TeacherProfileController::class, 'show']);
         Route::get('/wishlist', [WishlistController::class, 'index']);
         Route::post('/wishlist', [WishlistController::class, 'store']);
         Route::delete('/wishlist/{course}', [WishlistController::class, 'destroy']);

@@ -30,13 +30,14 @@ Public registration is disabled. Only the admin can create users.
 
 | Layer | Technology |
 | --- | --- |
-| Backend | Laravel 13 |
+| Backend | Laravel 13 (PHP 8.3) |
 | Auth | Laravel Fortify session authentication |
 | Frontend | React 19 |
 | Routing | React Router |
 | API client | Axios |
-| Styling | Tailwind CSS |
-| Database | MySQL |
+| Styling | Tailwind CSS 4 |
+| Database | MySQL 8.0 |
+| Containerisation | Docker + docker-compose |
 
 ## Feature summary
 
@@ -213,24 +214,63 @@ Reference SQL:
 - `GET /notifications`
 - `PUT /notifications/{id}/read`
 
-## Local setup
+## Setup
+
+### Option A — Docker (recommended)
+
+### Requirements
+
+- Docker + Docker Compose
+
+### Install
+
+1. Copy and configure environment:
+
+```bash
+copy .env.example .env
+```
+
+2. Build and start all services:
+
+```bash
+docker compose up -d
+```
+
+3. Generate app key and run migrations:
+
+```bash
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate --seed
+```
+
+4. Open:
+
+```text
+http://localhost
+```
+
+---
+
+### Option B — Manual
 
 ### Requirements
 
 - PHP 8.3+
 - Composer
 - Node.js + npm
-- MySQL
+- MySQL 8.0
 
 ### Install
 
-1. Create `.env` if needed:
+1. Create `.env`:
 
 ```bash
 copy .env.example .env
 ```
 
-2. Set your MySQL credentials in `.env`
+2. Set your MySQL credentials in `.env` (host `127.0.0.1`, DB name `laravel`, your username/password).
+
+> **Tip:** If using XAMPP, use `root` with an empty password.
 
 3. Install dependencies and prepare the database:
 

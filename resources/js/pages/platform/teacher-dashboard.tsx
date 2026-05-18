@@ -1,8 +1,8 @@
 import { type FormEvent, startTransition, useEffect, useEffectEvent, useState } from 'react';
-import { BookOpen, FileText, Plus, Star, Users, Video, Link as LinkIcon } from 'lucide-react';
+import { BookOpen, DollarSign, FileText, Plus, Star, Trash2, Users, Video, Link as LinkIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import api from '@/lib/api';
 import { EmptyState } from '@/components/platform/empty-state';
-import { StatsCard } from '@/components/platform/stats-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -163,35 +163,45 @@ export default function TeacherDashboard() {
     }
 
     return (
-        <div className="space-y-6">
-            <section className="grid gap-4 md:grid-cols-4">
-                <StatsCard label="Courses" value={courses.length} hint="Courses published from your teacher workspace." />
-                <StatsCard
-                    label="Revenue Beta"
-                    value={`$${courses.reduce((total, course) => total + Number(course.price || 0), 0).toFixed(2)}`}
-                    hint="Catalog value across all your current courses."
-                />
-                <StatsCard
-                    label="Students"
-                    value={courses.reduce((total, course) => total + (course.enrollments_count ?? 0), 0)}
-                    hint="Current enrollments across your course library."
-                />
-                <StatsCard
-                    label="Ratings"
-                    value={courses.reduce((total, course) => total + (course.ratings_count ?? 0), 0)}
-                    hint="Feedback entries submitted by enrolled students."
-                />
+        <div className="space-y-5">
+            <section className="grid gap-4 sm:grid-cols-4">
+                <div className="brand-surface p-5">
+                    <p className="brand-kicker">Courses</p>
+                    <p className="mt-2 text-3xl font-black text-black">{courses.length}</p>
+                    <p className="mt-1 text-sm text-black/50">Published courses</p>
+                </div>
+                <div className="brand-surface p-5">
+                    <p className="brand-kicker">Catalog value</p>
+                    <p className="mt-2 text-3xl font-black text-black">
+                        ${courses.reduce((total, course) => total + Number(course.price || 0), 0).toFixed(0)}
+                    </p>
+                    <p className="mt-1 text-sm text-black/50">Total price across courses</p>
+                </div>
+                <div className="brand-surface-blue p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Students</p>
+                    <p className="mt-2 text-3xl font-black text-white">
+                        {courses.reduce((total, course) => total + (course.enrollments_count ?? 0), 0)}
+                    </p>
+                    <p className="mt-1 text-sm text-white/65">Current enrollments</p>
+                </div>
+                <div className="brand-surface-accent p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-black/55">Ratings</p>
+                    <p className="mt-2 text-3xl font-black text-black">
+                        {courses.reduce((total, course) => total + (course.ratings_count ?? 0), 0)}
+                    </p>
+                    <p className="mt-1 text-sm text-black/55">Feedback entries</p>
+                </div>
             </section>
 
-            <section className="grid gap-6 xl:grid-cols-[380px,1fr]">
-                <div className="space-y-6">
-                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                        <h2 className="text-xl font-semibold text-slate-950">Launch a course</h2>
-                        <p className="mt-1 text-sm text-slate-600">Add a price, make it look premium, and unlock beta buying for students.</p>
+            <section className="grid gap-5 xl:grid-cols-[380px,1fr]">
+                <div className="space-y-5">
+                    <div className="brand-surface p-5">
+                        <h2 className="text-base font-semibold text-black">Launch a course</h2>
+                        <p className="mt-0.5 text-xs text-black/50">Add a price, shape the offer, and prepare it for student purchases.</p>
 
-                        <form className="mt-6 space-y-4" onSubmit={handleCreateCourse}>
-                            <div className="space-y-2">
-                                <Label htmlFor="course-title">Title</Label>
+                        <form className="mt-4 space-y-3.5" onSubmit={handleCreateCourse}>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="course-title" className="text-xs font-semibold">Title</Label>
                                 <Input
                                     id="course-title"
                                     value={courseForm.title}
@@ -199,8 +209,8 @@ export default function TeacherDashboard() {
                                     required
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="course-price">Price</Label>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="course-price" className="text-xs font-semibold">Price</Label>
                                 <Input
                                     id="course-price"
                                     type="number"
@@ -211,28 +221,28 @@ export default function TeacherDashboard() {
                                     required
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="course-description">Description</Label>
+                            <div className="space-y-1.5">
+                                <Label htmlFor="course-description" className="text-xs font-semibold">Description</Label>
                                 <textarea
                                     id="course-description"
-                                    className="min-h-32 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm"
+                                    className="min-h-28 w-full rounded-xl border border-black/12 bg-white px-3 py-2.5 text-sm text-black placeholder:text-black/30 outline-none transition-all focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/10"
                                     value={courseForm.description}
                                     onChange={(event) => setCourseForm((current) => ({ ...current, description: event.target.value }))}
                                     required
                                 />
                             </div>
-                            <Button type="submit" className="rounded-2xl bg-cyan-600 text-white hover:bg-cyan-700">
+                            <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90">
                                 <Plus className="size-4" />
                                 Create course
                             </Button>
                         </form>
                     </div>
 
-                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                        <h2 className="text-xl font-semibold text-slate-950">Your premium lineup</h2>
-                        <div className="mt-4 space-y-3">
+                    <div className="brand-surface p-5">
+                        <h2 className="text-base font-semibold text-black">Your courses</h2>
+                        <div className="mt-3 space-y-2">
                             {loading ? (
-                                <p className="text-sm text-slate-500">Loading courses...</p>
+                                <p className="text-sm text-black/45">Loading courses...</p>
                             ) : courses.length === 0 ? (
                                 <EmptyState title="No courses yet" description="Create your first course to start selling beta access and publishing PDF chapters." />
                             ) : (
@@ -241,22 +251,22 @@ export default function TeacherDashboard() {
                                         key={course.id}
                                         type="button"
                                         onClick={() => setSelectedCourse(course)}
-                                        className={`w-full rounded-3xl border p-4 text-left transition ${
+                                        className={`w-full rounded-[1.25rem] border p-4 text-left transition-all ${
                                             selectedCourse?.id === course.id
-                                                ? 'border-cyan-700 bg-cyan-700 text-white'
-                                                : 'border-slate-200 bg-slate-50/80 hover:bg-slate-100'
+                                                ? 'border-black bg-black text-white'
+                                                : 'border-black/8 bg-[#fffdf7] hover:border-[#2563eb]/30 hover:shadow-sm'
                                         }`}
                                     >
-                                        <div className="flex items-start justify-between gap-4">
-                                            <div>
-                                                <p className="font-semibold">{course.title}</p>
-                                                <p className={`mt-1 text-sm ${selectedCourse?.id === course.id ? 'text-cyan-100' : 'text-slate-600'}`}>
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div className="min-w-0">
+                                                <p className="text-sm font-semibold truncate">{course.title}</p>
+                                                <p className={`mt-0.5 text-xs line-clamp-2 ${selectedCourse?.id === course.id ? 'text-white/65' : 'text-black/55'}`}>
                                                     {course.description}
                                                 </p>
                                             </div>
-                                            <BookOpen className="size-5 shrink-0" />
+                                            <BookOpen className="size-4 shrink-0" />
                                         </div>
-                                        <div className="mt-4 flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.2em]">
+                                        <div className={`mt-3 flex flex-wrap gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] ${selectedCourse?.id === course.id ? 'text-white/60' : 'text-black/45'}`}>
                                             <span>${Number(course.price).toFixed(2)}</span>
                                             <span>{course.enrollments_count ?? 0} students</span>
                                             <span>{course.ratings_avg_rating ? `${Number(course.ratings_avg_rating).toFixed(1)} stars` : 'No ratings'}</span>
@@ -268,202 +278,211 @@ export default function TeacherDashboard() {
                     </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-5">
                     {selectedCourse ? (
                         <>
-                            <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                            <div className="brand-surface-dark p-5">
+                                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                     <div>
-                                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-700">
-                                            Enrollment code {selectedCourse.enrollment_code}
+                                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50">
+                                            Code: {selectedCourse.enrollment_code}
                                         </p>
-                                        <h2 className="mt-2 text-2xl font-semibold text-slate-950">{selectedCourse.title}</h2>
-                                        <p className="mt-2 max-w-2xl text-sm text-slate-600">{selectedCourse.description}</p>
-                                        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-slate-600">
-                                            <span className="rounded-full bg-amber-100 px-3 py-1 font-medium text-amber-900">
+                                        <h2 className="mt-1.5 text-xl font-bold text-white">{selectedCourse.title}</h2>
+                                        <p className="mt-1 max-w-2xl text-sm text-white/65">{selectedCourse.description}</p>
+                                        <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
+                                            <span className="rounded-full bg-[#ffd84d] px-3 py-1 font-medium text-black">
                                                 ${Number(selectedCourse.price).toFixed(2)}
                                             </span>
-                                            <span className="inline-flex items-center gap-1">
-                                                <Star className="size-4 text-amber-500" />
+                                            <span className="inline-flex items-center gap-1 text-white/65">
+                                                <Star className="size-3.5 fill-[#ffd84d] text-[#ffd84d]" />
                                                 {selectedCourse.ratings_avg_rating ? Number(selectedCourse.ratings_avg_rating).toFixed(1) : 'No rating yet'}
                                             </span>
                                         </div>
                                     </div>
                                     <Button
                                         type="button"
-                                        variant="destructive"
-                                        className="rounded-2xl"
+                                        variant="outline"
+                                        size="sm"
+                                        className="shrink-0 rounded-[1rem] border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300"
                                         onClick={() => void handleDeleteCourse(selectedCourse.id)}
                                     >
-                                        Delete course
+                                        <Trash2 className="size-3.5" />
+                                        Delete
                                     </Button>
                                 </div>
                             </div>
 
-                            <div className="space-y-6">
-                                <div className="grid gap-6 lg:grid-cols-3">
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="text-lg font-semibold text-slate-950">PDF Chapter</h3>
-                                            <FileText className="size-5 text-cyan-700" />
-                                        </div>
-                                        <p className="mt-2 text-sm text-slate-600">Upload a PDF file as a chapter.</p>
-                                        <button
-                                            type="button"
-                                            onClick={() => setChapterForm((current) => ({ ...current, type: 'pdf' }))}
-                                            className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
-                                                chapterForm.type === 'pdf'
-                                                    ? 'border-cyan-700 bg-cyan-100 text-cyan-900'
-                                                    : 'border-slate-200 bg-slate-50/80 text-slate-900 hover:bg-slate-100'
-                                            }`}
-                                        >
-                                            {chapterForm.type === 'pdf' ? 'Selected' : 'Select'}
-                                        </button>
+                            <div className="grid gap-4 sm:grid-cols-3">
+                                <div className="brand-surface p-4">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-sm font-semibold text-black">PDF Chapter</h3>
+                                        <FileText className="size-4 text-[#ef4444]" />
                                     </div>
-
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="text-lg font-semibold text-slate-950">Video Chapter</h3>
-                                            <Video className="size-5 text-cyan-700" />
-                                        </div>
-                                        <p className="mt-2 text-sm text-slate-600">Upload a video file as a chapter.</p>
-                                        <button
-                                            type="button"
-                                            onClick={() => setChapterForm((current) => ({ ...current, type: 'video' }))}
-                                            className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
-                                                chapterForm.type === 'video'
-                                                    ? 'border-cyan-700 bg-cyan-100 text-cyan-900'
-                                                    : 'border-slate-200 bg-slate-50/80 text-slate-900 hover:bg-slate-100'
-                                            }`}
-                                        >
-                                            {chapterForm.type === 'video' ? 'Selected' : 'Select'}
-                                        </button>
-                                    </div>
-
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                        <div className="flex items-center justify-between">
-                                            <h3 className="text-lg font-semibold text-slate-950">Link Chapter</h3>
-                                            <LinkIcon className="size-5 text-cyan-700" />
-                                        </div>
-                                        <p className="mt-2 text-sm text-slate-600">Add a link to external content.</p>
-                                        <button
-                                            type="button"
-                                            onClick={() => setChapterForm((current) => ({ ...current, type: 'link' }))}
-                                            className={`mt-4 w-full rounded-xl border px-4 py-2 text-sm font-medium transition ${
-                                                chapterForm.type === 'link'
-                                                    ? 'border-cyan-700 bg-cyan-100 text-cyan-900'
-                                                    : 'border-slate-200 bg-slate-50/80 text-slate-900 hover:bg-slate-100'
-                                            }`}
-                                        >
-                                            {chapterForm.type === 'link' ? 'Selected' : 'Select'}
-                                        </button>
-                                    </div>
+                                    <p className="mt-1 text-xs text-black/50">Upload a PDF file as a chapter.</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setChapterForm((current) => ({ ...current, type: 'pdf' }))}
+                                        className={`mt-3 w-full rounded-[0.9rem] border px-3 py-2 text-xs font-medium transition ${
+                                            chapterForm.type === 'pdf'
+                                                ? 'border-black bg-black text-white'
+                                                : 'border-black/10 bg-white text-black hover:border-[#ef4444]'
+                                        }`}
+                                    >
+                                        {chapterForm.type === 'pdf' ? 'Selected' : 'Select'}
+                                    </button>
                                 </div>
 
-                                <div className="grid gap-6 lg:grid-cols-[1.2fr,0.8fr]">
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                        <h3 className="text-xl font-semibold text-slate-950">
-                                            Create {chapterForm.type === 'pdf' ? 'PDF' : chapterForm.type === 'video' ? 'Video' : 'Link'} Chapter
-                                        </h3>
-                                        <p className="mt-1 text-sm text-slate-600">
-                                            {chapterForm.type === 'pdf'
-                                                ? 'Upload a PDF chapter and trigger student notifications.'
-                                                : chapterForm.type === 'video'
-                                                  ? 'Upload a video file for your students to watch.'
-                                                  : 'Add a link to external learning resources.'}
-                                        </p>
+                                <div className="brand-surface p-4">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-sm font-semibold text-black">Video Chapter</h3>
+                                        <Video className="size-4 text-[#2563eb]" />
+                                    </div>
+                                    <p className="mt-1 text-xs text-black/50">Upload a video file.</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setChapterForm((current) => ({ ...current, type: 'video' }))}
+                                        className={`mt-3 w-full rounded-[0.9rem] border px-3 py-2 text-xs font-medium transition ${
+                                            chapterForm.type === 'video'
+                                                ? 'border-black bg-black text-white'
+                                                : 'border-black/10 bg-white text-black hover:border-[#2563eb]'
+                                        }`}
+                                    >
+                                        {chapterForm.type === 'video' ? 'Selected' : 'Select'}
+                                    </button>
+                                </div>
 
-                                        <form className="mt-6 space-y-4" onSubmit={handleAddChapter}>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="chapter-title">Chapter title</Label>
+                                <div className="brand-surface p-4">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-sm font-semibold text-black">Link Chapter</h3>
+                                        <LinkIcon className="size-4 text-[#ffd84d]" />
+                                    </div>
+                                    <p className="mt-1 text-xs text-black/50">Add a link to external content.</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setChapterForm((current) => ({ ...current, type: 'link' }))}
+                                        className={`mt-3 w-full rounded-[0.9rem] border px-3 py-2 text-xs font-medium transition ${
+                                            chapterForm.type === 'link'
+                                                ? 'border-black bg-black text-white'
+                                                : 'border-black/10 bg-white text-black hover:border-[#ffd84d]'
+                                        }`}
+                                    >
+                                        {chapterForm.type === 'link' ? 'Selected' : 'Select'}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="grid gap-5 lg:grid-cols-[1.2fr,0.8fr]">
+                                <div className="brand-surface p-5">
+                                    <h3 className="text-base font-semibold text-black">
+                                        Create {chapterForm.type === 'pdf' ? 'PDF' : chapterForm.type === 'video' ? 'Video' : 'Link'} Chapter
+                                    </h3>
+                                    <p className="mt-0.5 text-xs text-black/50">
+                                        {chapterForm.type === 'pdf'
+                                            ? 'Upload a PDF chapter and trigger student notifications.'
+                                            : chapterForm.type === 'video'
+                                                ? 'Upload a video file for your students to watch.'
+                                                : 'Add a link to external learning resources.'}
+                                    </p>
+
+                                    <form className="mt-4 space-y-3.5" onSubmit={handleAddChapter}>
+                                        <div className="space-y-1.5">
+                                            <Label htmlFor="chapter-title" className="text-xs font-semibold">Chapter title</Label>
+                                            <Input
+                                                id="chapter-title"
+                                                value={chapterForm.title}
+                                                onChange={(event) =>
+                                                    setChapterForm((current) => ({ ...current, title: event.target.value }))
+                                                }
+                                                required
+                                            />
+                                        </div>
+
+                                        {chapterForm.type === 'pdf' ? (
+                                            <div className="space-y-1.5">
+                                                <Label htmlFor="chapter-file" className="text-xs font-semibold">PDF file</Label>
                                                 <Input
-                                                    id="chapter-title"
-                                                    value={chapterForm.title}
+                                                    id="chapter-file"
+                                                    type="file"
+                                                    accept="application/pdf"
                                                     onChange={(event) =>
-                                                        setChapterForm((current) => ({ ...current, title: event.target.value }))
+                                                        setChapterForm((current) => ({
+                                                            ...current,
+                                                            file: event.target.files?.[0] ?? null,
+                                                        }))
                                                     }
                                                     required
                                                 />
                                             </div>
+                                        ) : chapterForm.type === 'video' ? (
+                                            <div className="space-y-1.5">
+                                                <Label htmlFor="chapter-video" className="text-xs font-semibold">Video file</Label>
+                                                <Input
+                                                    id="chapter-video"
+                                                    type="file"
+                                                    accept="video/*"
+                                                    onChange={(event) =>
+                                                        setChapterForm((current) => ({
+                                                            ...current,
+                                                            videoFile: event.target.files?.[0] ?? null,
+                                                        }))
+                                                    }
+                                                    required
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-1.5">
+                                                <Label htmlFor="chapter-url" className="text-xs font-semibold">Link URL</Label>
+                                                <Input
+                                                    id="chapter-url"
+                                                    type="url"
+                                                    value={chapterForm.url}
+                                                    onChange={(event) =>
+                                                        setChapterForm((current) => ({ ...current, url: event.target.value }))
+                                                    }
+                                                    placeholder="https://..."
+                                                    required
+                                                />
+                                            </div>
+                                        )}
 
-                                            {chapterForm.type === 'pdf' ? (
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="chapter-file">PDF file</Label>
-                                                    <Input
-                                                        id="chapter-file"
-                                                        type="file"
-                                                        accept="application/pdf"
-                                                        onChange={(event) =>
-                                                            setChapterForm((current) => ({
-                                                                ...current,
-                                                                file: event.target.files?.[0] ?? null,
-                                                            }))
-                                                        }
-                                                        required
-                                                    />
-                                                </div>
-                                            ) : chapterForm.type === 'video' ? (
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="chapter-video">Video file</Label>
-                                                    <Input
-                                                        id="chapter-video"
-                                                        type="file"
-                                                        accept="video/*"
-                                                        onChange={(event) =>
-                                                            setChapterForm((current) => ({
-                                                                ...current,
-                                                                videoFile: event.target.files?.[0] ?? null,
-                                                            }))
-                                                        }
-                                                        required
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <div className="space-y-2">
-                                                    <Label htmlFor="chapter-url">Link URL</Label>
-                                                    <Input
-                                                        id="chapter-url"
-                                                        type="url"
-                                                        value={chapterForm.url}
-                                                        onChange={(event) =>
-                                                            setChapterForm((current) => ({ ...current, url: event.target.value }))
-                                                        }
-                                                        placeholder="https://..."
-                                                        required
-                                                    />
-                                                </div>
-                                            )}
+                                        {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p> : null}
 
-                                            {error ? <p className="text-sm text-red-600">{error}</p> : null}
+                                        <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90">
+                                            <Plus className="size-4" />
+                                            Create chapter
+                                        </Button>
+                                    </form>
+                                </div>
 
-                                            <Button type="submit" className="rounded-2xl bg-cyan-600 text-white hover:bg-cyan-700">
-                                                <Plus className="size-4" />
-                                                Create chapter
-                                            </Button>
-                                        </form>
+                                <div className="brand-surface p-5">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-10 w-10 items-center justify-center rounded-[1.1rem] bg-black text-white">
+                                            <Users className="size-4" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-base font-semibold text-black">Enrolled students</h3>
+                                            <p className="text-xs text-black/50">Students currently learning inside this course.</p>
+                                        </div>
                                     </div>
 
-                                    <div className="rounded-[2rem] border border-white/60 bg-white/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.45)]">
-                                        <div className="flex items-center gap-3">
-                                            <Users className="size-5 text-cyan-700" />
-                                            <div>
-                                                <h3 className="text-xl font-semibold text-slate-950">Enrolled students</h3>
-                                                <p className="text-sm text-slate-600">Students currently learning inside this course.</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-6 space-y-3">
-                                            {students.length === 0 ? (
-                                                <EmptyState title="No students enrolled yet" description="Beta buyers can unlock the code, then enroll here once they use it." />
-                                            ) : (
-                                                students.map((student) => (
-                                                    <div key={student.id} className="rounded-3xl border border-slate-200 bg-slate-50/80 p-4">
-                                                        <p className="font-semibold text-slate-900">{student.name}</p>
-                                                        <p className="text-sm text-slate-600">{student.email}</p>
-                                                    </div>
-                                                ))
-                                            )}
-                                        </div>
+                                    <div className="mt-4 space-y-2">
+                                        {students.length === 0 ? (
+                                            <EmptyState title="No students enrolled yet" description="Beta buyers can unlock the code, then enroll here once they use it." />
+                                        ) : (
+                                            students.map((student) => (
+                                                <Link
+                                                    key={student.id}
+                                                    to={`/dashboard/students/${student.id}`}
+                                                    className="block rounded-[1.15rem] border border-black/8 bg-[#fffdf7] p-3.5 transition hover:border-[#2563eb]/20 hover:shadow-sm"
+                                                >
+                                                    <p className="text-sm font-semibold text-black">{student.name}</p>
+                                                    <p className="text-xs text-black/50">{student.email}</p>
+                                                    <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#2563eb]">
+                                                        View profile
+                                                    </p>
+                                                </Link>
+                                            ))
+                                        )}
                                     </div>
                                 </div>
                             </div>
