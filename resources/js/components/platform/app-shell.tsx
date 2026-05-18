@@ -21,6 +21,7 @@ type AppShellProps = PropsWithChildren<{
 const navByRole: Record<Role, { label: string; to: string; icon: LucideIcon }[]> = {
     admin: [
         { label: 'Dashboard', to: '/dashboard/admin', icon: ShieldCheck },
+        { label: 'Teacher Requests', to: '/dashboard/admin/teacher-requests', icon: UserCircle2 },
         { label: 'Profile', to: '/dashboard/profile', icon: UserCircle2 },
     ],
     teacher: [

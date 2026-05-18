@@ -10,7 +10,7 @@ import { Spinner } from '@/components/ui/spinner';
 export default function Register() {
     return (
         <>
-            <Head title="Student registration" />
+            <Head title="Register" />
 
             <Form action="/register" method="post" resetOnSuccess={['password', 'password_confirmation']} className="flex flex-col gap-5">
                 {({ processing, errors }) => (
@@ -73,7 +73,7 @@ export default function Register() {
 
                             <Button type="submit" className="h-11 w-full rounded-xl bg-black text-white hover:bg-black/90" disabled={processing}>
                                 {processing && <Spinner />}
-                                Create student account
+                                Register
                             </Button>
                         </div>
                     </>
@@ -82,12 +82,14 @@ export default function Register() {
 
             <p className="mt-4 text-center text-sm text-black/55">
                 Already have an account? <TextLink href="/login">Log in</TextLink>
+                {' · '}
+                <TextLink href="/teacher-register">Teacher registration</TextLink>
             </p>
         </>
     );
 }
 
 Register.layout = {
-    title: 'Create your student account',
+    title: 'Register',
     description: 'Register as a student to browse the catalog, buy courses, and enroll with your unlocked code.',
 };

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { BrowserRouter, MemoryRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from '@/components/platform/app-shell';
 import AdminDashboard from '@/pages/platform/admin-dashboard';
+import AdminTeacherRequests from '@/pages/platform/admin-teacher-requests';
 import CourseDetailsPage from '@/pages/platform/course-details-page';
 import ProfilePage from '@/pages/platform/profile-page';
 import StudentDashboard from '@/pages/platform/student-dashboard';
@@ -54,6 +55,16 @@ export default function Dashboard() {
                             element={
                                 currentUser.role === 'admin' ? (
                                     <AdminDashboard currentUserId={currentUser.id} />
+                                ) : (
+                                    <RoleRedirect role={currentUser.role} />
+                                )
+                            }
+                        />
+                        <Route
+                            path="/dashboard/admin/teacher-requests"
+                            element={
+                                currentUser.role === 'admin' ? (
+                                    <AdminTeacherRequests />
                                 ) : (
                                     <RoleRedirect role={currentUser.role} />
                                 )

@@ -97,3 +97,15 @@ export type StudentProfileView = {
     student: PublicStudent;
     courses: Course[];
 };
+
+export type TeacherRequestItem = {
+    id: number;
+    name: string;
+    email: string;
+    bio: string | null;
+    proof_link: string | null;
+    status: 'pending' | 'approved' | 'rejected';
+    admin_notes: string | null;
+    created_at: string;
+    updated_at: string;
+};

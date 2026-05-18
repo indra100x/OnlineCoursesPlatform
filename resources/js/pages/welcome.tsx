@@ -107,7 +107,7 @@ export default function Welcome() {
                                         href="/register"
                                         className="inline-flex items-center gap-2 rounded-[1rem] bg-[#ffd84d] px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-[#facc15]"
                                     >
-                                        Student register
+                                        Register
                                         <ArrowRight className="size-4" />
                                     </Link>
                                 </>

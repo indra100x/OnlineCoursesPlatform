@@ -1,5 +1,6 @@
 /.phpunit.cache
 /bootstrap/ssr
+/bootstrap/cache/*.php
 /node_modules
 /public/build
 /public/fonts-manifest.dev.json
@@ -27,3 +28,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/database/*.sqlite
+/database/*.sqlite-shm
+/database/*.sqlite-wal
+/docker/php/php.ini

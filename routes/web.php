@@ -14,12 +14,20 @@ use App\Http\Controllers\Teacher\CourseChapterController;
 use App\Http\Controllers\Teacher\CourseController;
 use App\Http\Controllers\Teacher\CourseStudentController;
 use App\Http\Controllers\Teacher\StudentProfileController;
+use App\Http\Controllers\TeacherRequestController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
+
+Route::get('/teacher-register', fn () => Inertia::render('auth/teacher-register'))
+    ->middleware('throttle:registration')
+    ->name('teacher.register');
+
+Route::post('/teacher-requests', [TeacherRequestController::class, 'store'])
+    ->middleware('throttle:teacher-requests');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{any?}', fn () => Inertia::render('dashboard'))
@@ -35,6 +43,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/users', [UserManagementController::class, 'store']);
         Route::put('/users/{user}', [UserManagementController::class, 'update']);
         Route::delete('/users/{user}', [UserManagementController::class, 'destroy']);
+
+        Route::get('/teacher-requests', [TeacherRequestController::class, 'index']);
+        Route::post('/teacher-requests/{teacherRequest}/approve', [TeacherRequestController::class, 'approve']);
+        Route::post('/teacher-requests/{teacherRequest}/reject', [TeacherRequestController::class, 'reject']);
     });
 
     Route::middleware('role:teacher')->group(function () {
