@@ -1,4 +1,4 @@
-import { type FormEvent, useDeferredValue, useEffect, useEffectEvent, useState } from 'react';
+import { type FormEvent, useCallback, useDeferredValue, useEffect, useState } from 'react';
 import { Pencil, Plus, Trash2, Users } from 'lucide-react';
 import api from '@/lib/api';
 import { EmptyState } from '@/components/platform/empty-state';
@@ -35,7 +35,7 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const loadUsers = useEffectEvent(async () => {
+    const loadUsers = useCallback(async () => {
         setLoading(true);
         setError(null);
 
@@ -47,11 +47,11 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
         } finally {
             setLoading(false);
         }
-    });
+    }, []);
 
     useEffect(() => {
         void loadUsers();
-    }, []);
+    }, [loadUsers]);
 
     const filteredUsers = users.filter((user) => {
         const haystack = `${user.name} ${user.email} ${user.role}`.toLowerCase();

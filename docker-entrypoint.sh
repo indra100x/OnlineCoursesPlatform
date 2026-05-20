@@ -43,9 +43,16 @@ rm -f public/hot
 # Wait for database to be ready
 echo "Waiting for database at $DB_HOST:$DB_PORT..."
 for i in $(seq 1 30); do
-    if php -r "new PDO('mysql:host=$DB_HOST;port=$DB_PORT', '$DB_USERNAME', '$DB_PASSWORD');" 2>/dev/null; then
-        echo "Database is ready!"
-        break
+    if [ "$DB_CONNECTION" = "pgsql" ]; then
+        if php -r "new PDO('pgsql:host=$DB_HOST;port=$DB_PORT;dbname=$DB_DATABASE;sslmode=require', '$DB_USERNAME', '$DB_PASSWORD');" 2>/dev/null; then
+            echo "Database is ready!"
+            break
+        fi
+    else
+        if php -r "new PDO('mysql:host=$DB_HOST;port=$DB_PORT', '$DB_USERNAME', '$DB_PASSWORD');" 2>/dev/null; then
+            echo "Database is ready!"
+            break
+        fi
     fi
     echo "Attempt $i/30: Database not ready yet..."
     sleep 1
@@ -88,12 +95,8 @@ fi
 
 php artisan storage:link --force 2>/dev/null || true
 
-php artisan migrate --force 2>/dev/null || {
-    echo "WARNING: Migration failed. Check database connection and run: php artisan migrate --force"
-}
-
-php artisan db:seed --force 2>/dev/null || {
-    echo "WARNING: Seeding failed. Check database connection and run: php artisan db:seed --force"
-}
+# Skip auto-migrations on startup - run manually via: docker exec web-project-app php artisan migrate:fresh --seed
+# php artisan migrate --force 2>/dev/null || true
+# php artisan db:seed --force 2>/dev/null || true
 
 exec "$@"
