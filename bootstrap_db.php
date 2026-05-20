@@ -10,16 +10,16 @@ $db = $container->make('db');
 
 try {
     echo "Dropping existing tables...\n";
-    
+
     $connection = $db->connection();
-    
+
     // Drop existing tables
     $connection->statement('DROP INDEX IF EXISTS sessions_last_activity_index');
     $connection->statement('DROP TABLE IF EXISTS sessions');
     $connection->statement('DROP TABLE IF EXISTS password_reset_tokens');
     $connection->statement('DROP INDEX IF EXISTS users_email_unique');
     $connection->statement('DROP TABLE IF EXISTS users');
-    
+
     echo "Creating users table...\n";
     $connection->statement('
         CREATE TABLE users (
@@ -35,10 +35,10 @@ try {
             updated_at TIMESTAMP NULL
         )
     ');
-    
+
     echo "Creating unique index on users email...\n";
     $connection->statement('CREATE UNIQUE INDEX users_email_unique ON users(email)');
-    
+
     echo "Creating password reset tokens table...\n";
     $connection->statement('
         CREATE TABLE password_reset_tokens (
@@ -47,7 +47,7 @@ try {
             created_at TIMESTAMP NULL
         )
     ');
-    
+
     echo "Creating sessions table...\n";
     $connection->statement('
         CREATE TABLE sessions (
@@ -59,10 +59,10 @@ try {
             last_activity INTEGER NOT NULL
         )
     ');
-    
+
     echo "Creating index on sessions last_activity...\n";
     $connection->statement('CREATE INDEX sessions_last_activity_index ON sessions(last_activity)');
-    
+
     echo "\nAll tables created successfully!\n";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
