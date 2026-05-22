@@ -7,9 +7,7 @@ services:
       composer install --no-dev --optimize-autoloader
       npm install --legacy-peer-deps
       npm run build
-    startCommand: |
-      php artisan migrate --force
-      php -S 0.0.0.0:8080 -t public
+    startCommand: php -S 0.0.0.0:8080 -t public
     envVars:
       - key: APP_ENV
         value: production
@@ -17,3 +15,5 @@ services:
         value: false
       - key: LOG_CHANNEL
         value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
