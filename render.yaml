@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: online-courses-platform
+    env: php
+    plan: free
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      npm install --legacy-peer-deps
+      npm run build
+    startCommand: |
+      php artisan config:cache
+      php artisan route:cache
+      php artisan migrate --force
+      php -S 0.0.0.0:8080 -t public
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: LOG_CHANNEL
+        value: stderr
