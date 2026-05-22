@@ -1,9 +1,10 @@
-import { type FormEvent, useEffect, useEffectEvent, useState } from 'react';
 import { Camera, LockKeyhole, UserCircle2 } from 'lucide-react';
-import api from '@/lib/api';
+import {  useEffect, useState } from 'react';
+import type {FormEvent} from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import api from '@/lib/api';
 import { assetUrl } from '@/lib/utils';
 import type { Profile } from '@/types/platform';
 
@@ -22,21 +23,21 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
     const [message, setMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const loadProfile = useEffectEvent(async () => {
-        try {
-            const response = await api.get<{ profile: Profile }>('/profile');
-            setProfile(response.data.profile);
-            setProfileForm((current) => ({
-                ...current,
-                name: response.data.profile.name,
-                bio: response.data.profile.bio ?? '',
-            }));
-        } catch {
-            setError('Unable to load your profile.');
-        }
-    });
-
     useEffect(() => {
+        const loadProfile = async () => {
+            try {
+                const response = await api.get<{ profile: Profile }>('/profile');
+                setProfile(response.data.profile);
+                setProfileForm((current) => ({
+                    ...current,
+                    name: response.data.profile.name,
+                    bio: response.data.profile.bio ?? '',
+                }));
+            } catch {
+                setError('Unable to load your profile.');
+            }
+        };
+
         void loadProfile();
     }, []);
 
@@ -61,6 +62,11 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
             });
             setProfile(response.data.profile);
             setMessage(response.data.message);
+            setProfileForm((current) => ({
+                ...current,
+                name: response.data.profile.name,
+                bio: response.data.profile.bio ?? '',
+            }));
             onProfileRefresh(response.data.profile);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to update your profile.');

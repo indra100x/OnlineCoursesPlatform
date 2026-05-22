@@ -1,12 +1,13 @@
-import { type FormEvent, useEffect, useEffectEvent, useState } from 'react';
 import { ArrowLeft, FileText, Star } from 'lucide-react';
+import {  useEffect, useState } from 'react';
+import type {FormEvent} from 'react';
 import { Link, useParams } from 'react-router-dom';
-import api from '@/lib/api';
-import { assetUrl } from '@/lib/utils';
 import { EmptyState } from '@/components/platform/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import api from '@/lib/api';
+import { assetUrl } from '@/lib/utils';
 import type { CourseRating, StudentCourse } from '@/types/platform';
 
 export default function CourseDetailsPage() {
@@ -16,25 +17,25 @@ export default function CourseDetailsPage() {
     const [error, setError] = useState<string | null>(null);
     const [ratingForm, setRatingForm] = useState({ rating: '5', review: '' });
 
-    const loadCourse = useEffectEvent(async () => {
-        if (!courseId) {
-            return;
-        }
-
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await api.get<{ course: StudentCourse }>(`/courses/${courseId}/chapters`);
-            setCourse(response.data.course);
-        } catch {
-            setError('Unable to load this course right now.');
-        } finally {
-            setLoading(false);
-        }
-    });
-
     useEffect(() => {
+        const loadCourse = async () => {
+            if (!courseId) {
+                return;
+            }
+
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await api.get<{ course: StudentCourse }>(`/courses/${courseId}/chapters`);
+                setCourse(response.data.course);
+            } catch {
+                setError('Unable to load this course right now.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         void loadCourse();
     }, [courseId]);
 
@@ -50,7 +51,18 @@ export default function CourseDetailsPage() {
                 rating: Number(ratingForm.rating),
                 review: ratingForm.review,
             });
-            await loadCourse();
+
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await api.get<{ course: StudentCourse }>(`/courses/${courseId}/chapters`);
+                setCourse(response.data.course);
+            } catch {
+                setError('Unable to load this course right now.');
+            } finally {
+                setLoading(false);
+            }
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to save your rating.');
         }

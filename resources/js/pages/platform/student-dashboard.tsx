@@ -1,11 +1,12 @@
-import { type FormEvent, useEffect, useEffectEvent, useState } from 'react';
 import { Bell, BookHeart, BookOpen, CreditCard, GraduationCap, Heart, ShoppingBag, Star } from 'lucide-react';
+import {  useEffect, useState } from 'react';
+import type {FormEvent} from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import api from '@/lib/api';
 import { EmptyState } from '@/components/platform/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import api from '@/lib/api';
 import type { Course, PlatformNotification, StudentCourse } from '@/types/platform';
 
 type StudentDashboardProps = {
@@ -30,34 +31,34 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
 
     const activeTab = searchParams.get('tab') ?? 'courses';
 
-    const loadCourses = useEffectEvent(async () => {
+    const loadCourses = async () => {
         try {
             const response = await api.get<{ courses: StudentCourse[] }>('/my-courses');
             setCourses(response.data.courses);
         } catch {
             setError('Unable to load your courses right now.');
         }
-    });
+    };
 
-    const loadCatalog = useEffectEvent(async () => {
+    const loadCatalog = async () => {
         try {
             const response = await api.get<{ courses: Course[] }>('/catalog');
             setCatalog(response.data.courses);
         } catch {
             setError('Unable to load the catalog right now.');
         }
-    });
+    };
 
-    const loadWishlist = useEffectEvent(async () => {
+    const loadWishlist = async () => {
         try {
             const response = await api.get<{ courses: Course[] }>('/wishlist');
             setWishlist(response.data.courses);
         } catch {
             setWishlist([]);
         }
-    });
+    };
 
-    const loadNotifications = useEffectEvent(async () => {
+    const loadNotifications = async () => {
         try {
             const response = await api.get<{ notifications: PlatformNotification[] }>('/notifications');
             setNotifications(response.data.notifications);
@@ -65,15 +66,16 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
         } catch {
             setError('Unable to load notifications right now.');
         }
-    });
-
-    async function refreshStudentData() {
-        await Promise.all([loadCourses(), loadCatalog(), loadWishlist(), loadNotifications()]);
-    }
+    };
 
     useEffect(() => {
+        const refreshStudentData = async () => {
+            await Promise.all([loadCourses(), loadCatalog(), loadWishlist(), loadNotifications()]);
+        };
+
         void refreshStudentData();
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onUnreadCountChange]);
 
     async function handleEnroll(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -82,7 +84,7 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
         try {
             await api.post('/enroll', { enrollment_code: enrollmentCode });
             setEnrollmentCode('');
-            await refreshStudentData();
+            await Promise.all([loadCourses(), loadCatalog(), loadWishlist(), loadNotifications()]);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Enrollment failed.');
         }
@@ -91,7 +93,7 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
     async function markAsRead(notificationId: number) {
         try {
             await api.put(`/notifications/${notificationId}/read`);
-            await loadNotifications();
+            void loadNotifications();
         } catch {
             setError('Unable to mark this notification as read.');
         }
@@ -100,7 +102,7 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
     async function handlePurchase(courseId: number) {
         try {
             await api.post(`/courses/${courseId}/purchase`);
-            await refreshStudentData();
+            await Promise.all([loadCourses(), loadCatalog(), loadWishlist(), loadNotifications()]);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to complete the beta purchase.');
         }
@@ -114,7 +116,7 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                 await api.post('/wishlist', { course_id: course.id });
             }
 
-            await Promise.all([loadCatalog(), loadWishlist()]);
+            void Promise.all([loadCatalog(), loadWishlist()]);
         } catch {
             setError('Unable to update the wishlist right now.');
         }
@@ -129,7 +131,7 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
 
         try {
             await api.post('/enroll', { enrollment_code: course.enrollment_code });
-            await refreshStudentData();
+            await Promise.all([loadCourses(), loadCatalog(), loadWishlist(), loadNotifications()]);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Enrollment failed.');
         }

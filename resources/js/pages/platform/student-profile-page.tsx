@@ -1,5 +1,5 @@
 import { ArrowLeft, BookOpen, Mail, Star, UserCircle2 } from 'lucide-react';
-import { useEffect, useEffectEvent, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { EmptyState } from '@/components/platform/empty-state';
 import api from '@/lib/api';
@@ -12,25 +12,25 @@ export default function StudentProfilePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const loadStudent = useEffectEvent(async () => {
-        if (!studentId) {
-            return;
-        }
-
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await api.get<StudentProfileView>(`/students/${studentId}/profile`);
-            setData(response.data);
-        } catch {
-            setError('Unable to load this student profile right now.');
-        } finally {
-            setLoading(false);
-        }
-    });
-
     useEffect(() => {
+        const loadStudent = async () => {
+            if (!studentId) {
+                return;
+            }
+
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await api.get<StudentProfileView>(`/students/${studentId}/profile`);
+                setData(response.data);
+            } catch {
+                setError('Unable to load this student profile right now.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         void loadStudent();
     }, [studentId]);
 

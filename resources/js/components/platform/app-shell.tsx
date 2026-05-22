@@ -1,6 +1,7 @@
+import { Bell, BookOpen, GraduationCap, LogOut, ShieldCheck, UserCircle2  } from 'lucide-react';
+import type {LucideIcon} from 'lucide-react';
 import type { PropsWithChildren } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Bell, BookOpen, GraduationCap, LogOut, ShieldCheck, UserCircle2, type LucideIcon } from 'lucide-react';
 import AppLogoIcon from '@/components/app-logo-icon';
 import { Button } from '@/components/ui/button';
 import { assetUrl } from '@/lib/utils';
