@@ -1,10 +1,11 @@
-import { type FormEvent, useEffect, useEffectEvent, useState } from 'react';
-import { Check, X, UserCheck, UserX, Clock, MessageSquare } from 'lucide-react';
-import api from '@/lib/api';
+import { Check, Clock, MessageSquare, UserCheck, UserX, X } from 'lucide-react';
+import {  useEffect, useState } from 'react';
+import type {FormEvent} from 'react';
 import { EmptyState } from '@/components/platform/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import api from '@/lib/api';
 
 type TeacherRequestItem = {
     id: number;
@@ -21,32 +22,34 @@ type TeacherRequestItem = {
 export default function AdminTeacherRequests() {
     const [requests, setRequests] = useState<TeacherRequestItem[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [actionError, setActionError] = useState<string | null>(null);
+
     const [search, setSearch] = useState('');
     const [actionLoading, setActionLoading] = useState<number | null>(null);
     const [notesModal, setNotesModal] = useState<{ id: number; action: 'approve' | 'reject'; name: string } | null>(null);
     const [notes, setNotes] = useState('');
 
-    const loadRequests = useEffectEvent(async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await api.get<{ teacher_requests: TeacherRequestItem[] }>('/teacher-requests');
-            setRequests(response.data.teacher_requests);
-        } catch {
-            setError('Unable to load teacher requests.');
-        } finally {
-            setLoading(false);
-        }
-    });
-
     useEffect(() => {
+        const loadRequests = async () => {
+            setLoading(true);
+            setActionError(null);
+
+            try {
+                const response = await api.get<{ teacher_requests: TeacherRequestItem[] }>('/teacher-requests');
+                setRequests(response.data.teacher_requests);
+            } catch {
+                setActionError('Unable to load teacher requests.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         void loadRequests();
     }, []);
 
     const filtered = requests.filter((r) => {
         const haystack = `${r.name} ${r.email} ${r.status}`.toLowerCase();
+
         return haystack.includes(search.toLowerCase());
     });
 
@@ -58,14 +61,17 @@ export default function AdminTeacherRequests() {
         if (notesModal) {
             setNotesModal(null);
         }
+
         setActionLoading(id);
         setActionError(null);
+
         try {
             await api.post(`/teacher-requests/${id}/${action}`, {
                 admin_notes: notes || undefined,
             });
             setNotes('');
-            await loadRequests();
+            const response = await api.get<{ teacher_requests: TeacherRequestItem[] }>('/teacher-requests');
+            setRequests(response.data.teacher_requests);
         } catch (submitError: any) {
             setActionError(submitError?.response?.data?.message ?? `Unable to ${action} this request.`);
         } finally {
@@ -81,18 +87,19 @@ export default function AdminTeacherRequests() {
 
     function handleNotesSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
+
         if (notesModal) {
             void handleAction(notesModal.id, notesModal.action);
         }
     }
 
-    const statusIcon = (status: string) => {
+    function statusIcon(status: string) {
         switch (status) {
             case 'approved': return <UserCheck className="size-4 text-green-600" />;
             case 'rejected': return <UserX className="size-4 text-red-500" />;
             default: return <Clock className="size-4 text-amber-500" />;
         }
-    };
+    }
 
     const statusLabel = (status: string) => {
         switch (status) {
@@ -310,7 +317,9 @@ export default function AdminTeacherRequests() {
                                     type="button"
                                     variant="outline"
                                     className="rounded-xl"
-                                    onClick={() => { setNotesModal(null); setActionError(null); }}
+                                    onClick={() => {
+ setNotesModal(null); setActionError(null); 
+}}
                                 >
                                     Cancel
                                 </Button>

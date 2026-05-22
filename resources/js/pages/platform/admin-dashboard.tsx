@@ -1,10 +1,11 @@
-import { type FormEvent, useCallback, useDeferredValue, useEffect, useState } from 'react';
 import { Pencil, Plus, Trash2, Users } from 'lucide-react';
-import api from '@/lib/api';
+import {  useDeferredValue, useEffect, useState } from 'react';
+import type {FormEvent} from 'react';
 import { EmptyState } from '@/components/platform/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import api from '@/lib/api';
 import type { PlatformUser, Role } from '@/types/platform';
 
 type AdminDashboardProps = {
@@ -35,26 +36,27 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const loadUsers = useCallback(async () => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await api.get<{ users: PlatformUser[] }>('/users');
-            setUsers(response.data.users);
-        } catch {
-            setError('Unable to load users right now.');
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
     useEffect(() => {
+        const loadUsers = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await api.get<{ users: PlatformUser[] }>('/users');
+                setUsers(response.data.users);
+            } catch {
+                setError('Unable to load users right now.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         void loadUsers();
-    }, [loadUsers]);
+    }, []);
 
     const filteredUsers = users.filter((user) => {
         const haystack = `${user.name} ${user.email} ${user.role}`.toLowerCase();
+
         return haystack.includes(deferredSearch.toLowerCase());
     });
 
@@ -80,7 +82,8 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
 
             setForm(initialForm);
             setEditingUser(null);
-            await loadUsers();
+            const response = await api.get<{ users: PlatformUser[] }>('/users');
+            setUsers(response.data.users);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to save this user.');
         } finally {
@@ -95,7 +98,8 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
 
         try {
             await api.delete(`/users/${user.id}`);
-            await loadUsers();
+            const response = await api.get<{ users: PlatformUser[] }>('/users');
+            setUsers(response.data.users);
         } catch (deleteError: any) {
             setError(deleteError?.response?.data?.message ?? 'Unable to delete this user.');
         }

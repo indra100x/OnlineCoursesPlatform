@@ -1,11 +1,12 @@
-import { type FormEvent, startTransition, useEffect, useEffectEvent, useState } from 'react';
-import { BookOpen, DollarSign, FileText, Plus, Star, Trash2, Users, Video, Link as LinkIcon } from 'lucide-react';
+import { BookOpen, FileText, Plus, Star, Trash2, Users, Video, Link as LinkIcon } from 'lucide-react';
+import {  startTransition, useEffect, useState } from 'react';
+import type {FormEvent} from 'react';
 import { Link } from 'react-router-dom';
-import api from '@/lib/api';
 import { EmptyState } from '@/components/platform/empty-state';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import api from '@/lib/api';
 import type { Course, PlatformUser } from '@/types/platform';
 
 type ChapterType = 'pdf' | 'video' | 'link';
@@ -27,52 +28,50 @@ export default function TeacherDashboard() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const loadCourses = useEffectEvent(async () => {
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await api.get<{ courses: Course[] }>('/courses');
-            setCourses(response.data.courses);
-
-            startTransition(() => {
-                setSelectedCourse((current) => {
-                    if (!response.data.courses.length) {
-                        return null;
-                    }
-
-                    if (!current) {
-                        return response.data.courses[0];
-                    }
-
-                    return response.data.courses.find((course) => course.id === current.id) ?? response.data.courses[0];
-                });
-            });
-        } catch {
-            setError('Unable to load courses right now.');
-        } finally {
-            setLoading(false);
-        }
-    });
-
-    const loadStudents = useEffectEvent(async (courseId: number) => {
-        try {
-            const response = await api.get<{ students: PlatformUser[] }>(`/courses/${courseId}/students`);
-            setStudents(response.data.students);
-        } catch {
-            setStudents([]);
-        }
-    });
-
     useEffect(() => {
+        const loadCourses = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await api.get<{ courses: Course[] }>('/courses');
+                setCourses(response.data.courses);
+
+                startTransition(() => {
+                    setSelectedCourse((current) => {
+                        if (!response.data.courses.length) {
+                            return null;
+                        }
+
+                        if (!current) {
+                            return response.data.courses[0];
+                        }
+
+                        return response.data.courses.find((course) => course.id === current.id) ?? response.data.courses[0];
+                    });
+                });
+            } catch {
+                setError('Unable to load courses right now.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         void loadCourses();
     }, []);
 
     useEffect(() => {
+        const loadStudents = async (courseId: number) => {
+            try {
+                const response = await api.get<{ students: PlatformUser[] }>(`/courses/${courseId}/students`);
+                setStudents(response.data.students);
+            } catch {
+                // Error fetching students, leave empty
+            }
+        };
+
         if (selectedCourse) {
             void loadStudents(selectedCourse.id);
-        } else {
-            setStudents([]);
         }
     }, [selectedCourse]);
 
@@ -86,7 +85,8 @@ export default function TeacherDashboard() {
                 price: Number(courseForm.price),
             });
             setCourseForm({ title: '', description: '', price: '49.00' });
-            await loadCourses();
+            const response = await api.get<{ courses: Course[] }>('/courses');
+            setCourses(response.data.courses);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to create the course.');
         }
@@ -99,7 +99,8 @@ export default function TeacherDashboard() {
 
         try {
             await api.delete(`/courses/${courseId}`);
-            await loadCourses();
+            const response = await api.get<{ courses: Course[] }>('/courses');
+            setCourses(response.data.courses);
         } catch {
             setError('Unable to delete the course.');
         }
@@ -155,8 +156,10 @@ export default function TeacherDashboard() {
             }
 
             setChapterForm(initialChapterForm);
-            await loadCourses();
-            await loadStudents(selectedCourse.id);
+            const coursesResponse = await api.get<{ courses: Course[] }>('/courses');
+            setCourses(coursesResponse.data.courses);
+            const studentsResponse = await api.get<{ students: PlatformUser[] }>(`/courses/${selectedCourse.id}/students`);
+            setStudents(studentsResponse.data.students);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to add the chapter.');
         }

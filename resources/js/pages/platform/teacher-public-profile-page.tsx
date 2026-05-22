@@ -1,8 +1,8 @@
 import { ArrowLeft, BookOpen, Mail, ShoppingBag, UserCircle2 } from 'lucide-react';
-import { useEffect, useEffectEvent, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/platform/empty-state';
+import { Button } from '@/components/ui/button';
 import api from '@/lib/api';
 import { assetUrl } from '@/lib/utils';
 import type { Course, TeacherProfileView } from '@/types/platform';
@@ -13,32 +13,36 @@ export default function TeacherPublicProfilePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const loadTeacher = useEffectEvent(async () => {
-        if (!teacherId) {
-            return;
-        }
-
-        setLoading(true);
-        setError(null);
-
-        try {
-            const response = await api.get<TeacherProfileView>(`/teachers/${teacherId}/profile`);
-            setData(response.data);
-        } catch {
-            setError('Unable to load this teacher profile right now.');
-        } finally {
-            setLoading(false);
-        }
-    });
-
     useEffect(() => {
+        const loadTeacher = async () => {
+            if (!teacherId) {
+                return;
+            }
+
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await api.get<TeacherProfileView>(`/teachers/${teacherId}/profile`);
+                setData(response.data);
+            } catch {
+                setError('Unable to load this teacher profile right now.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         void loadTeacher();
     }, [teacherId]);
 
     async function handlePurchase(courseId: number) {
         try {
             await api.post(`/courses/${courseId}/purchase`);
-            await loadTeacher();
+
+            if (teacherId) {
+                const response = await api.get<TeacherProfileView>(`/teachers/${teacherId}/profile`);
+                setData(response.data);
+            }
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to complete the beta purchase.');
         }
@@ -52,7 +56,10 @@ export default function TeacherPublicProfilePage() {
                 await api.post('/wishlist', { course_id: course.id });
             }
 
-            await loadTeacher();
+            if (teacherId) {
+                const response = await api.get<TeacherProfileView>(`/teachers/${teacherId}/profile`);
+                setData(response.data);
+            }
         } catch {
             setError('Unable to update the wishlist right now.');
         }

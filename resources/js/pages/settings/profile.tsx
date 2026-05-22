@@ -9,7 +9,9 @@ import { Label } from '@/components/ui/label';
 import { edit } from '@/routes/profile';
 
 export default function Profile({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     mustVerifyEmail: _mustVerifyEmail,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     status: _status,
 }: {
     mustVerifyEmail: boolean;
