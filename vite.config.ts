@@ -13,6 +13,12 @@ export default defineConfig({
         },
     },
     build: {
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true,
+            },
+        },
         rollupOptions: {
             onwarn(warning) {
                 // Suppress unresolved import warnings
@@ -20,6 +26,12 @@ export default defineConfig({
                     return;
                 }
             },
+            output: {
+                manualChunks: {
+                    'vendor': ['react', 'react-dom', '@inertiajs/react'],
+                    'ui': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-slot'],
+                }
+            }
         },
     },
     plugins: [
