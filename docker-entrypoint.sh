@@ -95,8 +95,7 @@ fi
 
 php artisan storage:link --force 2>/dev/null || true
 
-# Skip auto-migrations on startup - run manually via: docker exec web-project-app php artisan migrate:fresh --seed
-# php artisan migrate --force 2>/dev/null || true
-# php artisan db:seed --force 2>/dev/null || true
+php artisan migrate --force 2>/dev/null || true
+php artisan db:seed --force 2>/dev/null || true
 
 exec "$@"
