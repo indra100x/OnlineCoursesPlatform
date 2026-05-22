@@ -318,7 +318,7 @@ export default function AdminTeacherRequests() {
                                     variant="outline"
                                     className="rounded-xl"
                                     onClick={() => {
- setNotesModal(null); setActionError(null); 
+ setNotesModal(null); setActionError(null);
 }}
                                 >
                                     Cancel
