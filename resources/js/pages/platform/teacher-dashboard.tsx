@@ -34,20 +34,21 @@ export default function TeacherDashboard() {
             setError(null);
 
             try {
-                const response = await api.get<{ courses: Course[] }>('/courses');
-                setCourses(response.data.courses);
+                const response = await api.get<{ data: Course[] }>('/courses');
+                const coursesList = response.data.data ?? response.data;
+                setCourses(coursesList);
 
                 startTransition(() => {
                     setSelectedCourse((current) => {
-                        if (!response.data.courses.length) {
+                        if (!coursesList.length) {
                             return null;
                         }
 
                         if (!current) {
-                            return response.data.courses[0];
+                            return coursesList[0];
                         }
 
-                        return response.data.courses.find((course) => course.id === current.id) ?? response.data.courses[0];
+                        return coursesList.find((course) => course.id === current.id) ?? coursesList[0];
                     });
                 });
             } catch {
@@ -63,7 +64,7 @@ export default function TeacherDashboard() {
     useEffect(() => {
         const loadStudents = async (courseId: number) => {
             try {
-                const response = await api.get<{ students: PlatformUser[] }>(`/courses/${courseId}/students`);
+                const response = await api.get<{ course: any; students: PlatformUser[] }>(`/courses/${courseId}/students`);
                 setStudents(response.data.students);
             } catch {
                 // Error fetching students, leave empty
@@ -85,8 +86,8 @@ export default function TeacherDashboard() {
                 price: Number(courseForm.price),
             });
             setCourseForm({ title: '', description: '', price: '49.00' });
-            const response = await api.get<{ courses: Course[] }>('/courses');
-            setCourses(response.data.courses);
+            const response = await api.get<{ data: Course[] }>('/courses');
+            setCourses(response.data.data ?? response.data);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to create the course.');
         }
@@ -99,8 +100,8 @@ export default function TeacherDashboard() {
 
         try {
             await api.delete(`/courses/${courseId}`);
-            const response = await api.get<{ courses: Course[] }>('/courses');
-            setCourses(response.data.courses);
+            const response = await api.get<{ data: Course[] }>('/courses');
+            setCourses(response.data.data ?? response.data);
         } catch {
             setError('Unable to delete the course.');
         }
@@ -156,9 +157,9 @@ export default function TeacherDashboard() {
             }
 
             setChapterForm(initialChapterForm);
-            const coursesResponse = await api.get<{ courses: Course[] }>('/courses');
-            setCourses(coursesResponse.data.courses);
-            const studentsResponse = await api.get<{ students: PlatformUser[] }>(`/courses/${selectedCourse.id}/students`);
+            const coursesResponse = await api.get<{ data: Course[] }>('/courses');
+            setCourses(coursesResponse.data.data ?? coursesResponse.data);
+            const studentsResponse = await api.get<{ course: any; students: PlatformUser[] }>(`/courses/${selectedCourse.id}/students`);
             setStudents(studentsResponse.data.students);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to add the chapter.');

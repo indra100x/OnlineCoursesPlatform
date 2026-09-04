@@ -4,15 +4,12 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
 
 class PasswordResetTest extends TestCase
 {
-    use RefreshDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -37,7 +34,7 @@ class PasswordResetTest extends TestCase
 
         // Just verify the user was found and the email was accepted
         // Actual notification sending is tested by Fortify's own tests
-        $this->assertTrue(true);
+        $response->assertOk();
     }
 
     public function test_reset_password_screen_can_be_rendered()
@@ -58,7 +55,7 @@ class PasswordResetTest extends TestCase
 
         // In a real scenario, the token would come from the password reset URL
         // For testing, we just verify the flow works
-        $this->assertTrue(true);
+        $this->assertModelExists($user);
     }
 
     public function test_password_cannot_be_reset_with_invalid_token(): void

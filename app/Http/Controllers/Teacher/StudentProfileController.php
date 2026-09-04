@@ -15,6 +15,12 @@ class StudentProfileController extends Controller
 
         $teacher = $request->user();
 
+        $isEnrolled = $student->enrollments()
+            ->whereHas('course', fn ($query) => $query->where('teacher_id', $teacher->id))
+            ->exists();
+
+        abort_unless($isEnrolled, 403);
+
         $courses = $student->enrollments()
             ->whereHas('course', fn ($query) => $query->where('teacher_id', $teacher->id))
             ->with(['course' => function ($query) {

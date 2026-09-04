@@ -3,64 +3,45 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UserStoreRequest;
+use App\Http\Requests\Admin\UserUpdateRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserManagementController extends Controller
 {
-    public function index(): JsonResponse
+    public function __construct(
+        protected UserService $userService,
+    ) {}
+
+    public function index(): AnonymousResourceCollection
     {
-        return response()->json([
-            'users' => User::query()
-                ->select(['id', 'name', 'email', 'role', 'created_at', 'updated_at'])
-                ->latest()
-                ->get(),
-        ]);
+        $users = $this->userService->getUsers();
+
+        return UserResource::collection($users);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(UserStoreRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8'],
-            'role' => ['required', Rule::in([User::ROLE_TEACHER, User::ROLE_STUDENT])],
-        ]);
-
-        $user = User::create([
-            ...$validated,
-            'password' => Hash::make($validated['password']),
-        ]);
+        $user = $this->userService->createUser($request->validated());
 
         return response()->json([
             'message' => 'User created successfully.',
-            'user' => $user->only(['id', 'name', 'email', 'role', 'created_at', 'updated_at']),
+            'user' => new UserResource($user),
         ], 201);
     }
 
-    public function update(Request $request, User $user): JsonResponse
+    public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
-        $validated = $request->validate([
-            'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'email' => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['sometimes', 'required', Rule::in([User::ROLE_TEACHER, User::ROLE_STUDENT])],
-        ]);
-
-        if (array_key_exists('password', $validated) && $validated['password']) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
-            unset($validated['password']);
-        }
-
-        $user->update($validated);
+        $user = $this->userService->updateUser($user, $request->validated());
 
         return response()->json([
             'message' => 'User updated successfully.',
-            'user' => $user->fresh()->only(['id', 'name', 'email', 'role', 'created_at', 'updated_at']),
+            'user' => new UserResource($user),
         ]);
     }
 
@@ -72,7 +53,7 @@ class UserManagementController extends Controller
             ], 422);
         }
 
-        $user->delete();
+        $this->userService->deleteUser($user);
 
         return response()->json([
             'message' => 'User deleted successfully.',

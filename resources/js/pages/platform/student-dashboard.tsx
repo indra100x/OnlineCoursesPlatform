@@ -33,8 +33,8 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
 
     const loadCourses = async () => {
         try {
-            const response = await api.get<{ courses: StudentCourse[] }>('/my-courses');
-            setCourses(response.data.courses);
+            const response = await api.get<StudentCourse[]>('/my-courses');
+            setCourses(response.data.data ?? response.data);
         } catch {
             setError('Unable to load your courses right now.');
         }
@@ -60,22 +60,36 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
 
     const loadNotifications = async () => {
         try {
-            const response = await api.get<{ notifications: PlatformNotification[] }>('/notifications');
-            setNotifications(response.data.notifications);
-            onUnreadCountChange(response.data.notifications.filter((item) => !item.is_read).length);
+            const response = await api.get<PlatformNotification[]>('/notifications');
+            const items = response.data.data ?? response.data;
+            setNotifications(items);
+            onUnreadCountChange(items.filter((item: PlatformNotification) => !item.is_read).length);
         } catch {
             setError('Unable to load notifications right now.');
         }
     };
 
     useEffect(() => {
-        const refreshStudentData = async () => {
-            await Promise.all([loadCourses(), loadCatalog(), loadWishlist(), loadNotifications()]);
+        const loadDataForTab = async () => {
+            switch (activeTab) {
+                case 'courses':
+                    await loadCourses();
+                    break;
+                case 'catalog':
+                    await loadCatalog();
+                    break;
+                case 'wishlist':
+                    await loadWishlist();
+                    break;
+                case 'notifications':
+                    await loadNotifications();
+                    break;
+            }
         };
 
-        void refreshStudentData();
+        void loadDataForTab();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [onUnreadCountChange]);
+    }, [activeTab, onUnreadCountChange]);
 
     async function handleEnroll(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -84,7 +98,8 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
         try {
             await api.post('/enroll', { enrollment_code: enrollmentCode });
             setEnrollmentCode('');
-            await Promise.all([loadCourses(), loadCatalog(), loadWishlist(), loadNotifications()]);
+            if (activeTab === 'courses') await loadCourses();
+            if (activeTab === 'catalog') await loadCatalog();
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Enrollment failed.');
         }
@@ -102,7 +117,9 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
     async function handlePurchase(courseId: number) {
         try {
             await api.post(`/courses/${courseId}/purchase`);
-            await Promise.all([loadCourses(), loadCatalog(), loadWishlist(), loadNotifications()]);
+            if (activeTab === 'catalog') await loadCatalog();
+            if (activeTab === 'wishlist') await loadWishlist();
+            if (activeTab === 'courses') await loadCourses();
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to complete the beta purchase.');
         }
@@ -116,7 +133,8 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                 await api.post('/wishlist', { course_id: course.id });
             }
 
-            void Promise.all([loadCatalog(), loadWishlist()]);
+            if (activeTab === 'catalog') await loadCatalog();
+            if (activeTab === 'wishlist') await loadWishlist();
         } catch {
             setError('Unable to update the wishlist right now.');
         }
@@ -131,7 +149,8 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
 
         try {
             await api.post('/enroll', { enrollment_code: course.enrollment_code });
-            await Promise.all([loadCourses(), loadCatalog(), loadWishlist(), loadNotifications()]);
+            if (activeTab === 'courses') await loadCourses();
+            if (activeTab === 'catalog') await loadCatalog();
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Enrollment failed.');
         }

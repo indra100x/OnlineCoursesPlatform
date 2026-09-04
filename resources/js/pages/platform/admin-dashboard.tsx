@@ -42,8 +42,8 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
             setError(null);
 
             try {
-                const response = await api.get<{ users: PlatformUser[] }>('/users');
-                setUsers(response.data.users);
+                const response = await api.get<PlatformUser[]>('/users');
+                setUsers(response.data.data ?? response.data);
             } catch {
                 setError('Unable to load users right now.');
             } finally {
@@ -82,8 +82,8 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
 
             setForm(initialForm);
             setEditingUser(null);
-            const response = await api.get<{ users: PlatformUser[] }>('/users');
-            setUsers(response.data.users);
+            const response = await api.get<PlatformUser[]>('/users');
+            setUsers(response.data.data ?? response.data);
         } catch (submitError: any) {
             setError(submitError?.response?.data?.message ?? 'Unable to save this user.');
         } finally {
@@ -98,8 +98,8 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
 
         try {
             await api.delete(`/users/${user.id}`);
-            const response = await api.get<{ users: PlatformUser[] }>('/users');
-            setUsers(response.data.users);
+            const response = await api.get<PlatformUser[]>('/users');
+            setUsers(response.data.data ?? response.data);
         } catch (deleteError: any) {
             setError(deleteError?.response?.data?.message ?? 'Unable to delete this user.');
         }

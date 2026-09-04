@@ -2,32 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\NotificationResource;
 use App\Models\Notification;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class NotificationController extends Controller
 {
-    public function index(Request $request): JsonResponse
+    public function __construct(
+        protected NotificationService $notificationService,
+    ) {}
+
+    public function index(Request $request): AnonymousResourceCollection
     {
-        return response()->json([
-            'notifications' => Notification::query()
-                ->where('user_id', $request->user()->id)
-                ->with(['course:id,title', 'chapter:id,title'])
-                ->latest()
-                ->get(),
-        ]);
+        $notifications = $this->notificationService->getNotifications($request->user());
+
+        return NotificationResource::collection($notifications);
     }
 
     public function markAsRead(Request $request, Notification $notification): JsonResponse
     {
-        abort_unless($notification->user_id === $request->user()->id, 403);
-
-        $notification->update(['is_read' => true]);
+        $this->notificationService->markAsRead($notification, $request->user());
 
         return response()->json([
             'message' => 'Notification marked as read.',
-            'notification' => $notification->fresh(),
+            'notification' => new NotificationResource($notification->fresh()),
         ]);
     }
 }

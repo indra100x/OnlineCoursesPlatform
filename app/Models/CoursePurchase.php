@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['student_id', 'course_id', 'amount', 'status', 'reference', 'purchased_at'])]
 class CoursePurchase extends Model
 {
+    use Auditable;
     public const STATUS_BETA_PAID = 'beta_paid';
 
     protected function casts(): array

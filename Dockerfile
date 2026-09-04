@@ -111,7 +111,6 @@ RUN rm -f bootstrap/cache/config.php \
     mkdir -p storage/logs && \
     mkdir -p bootstrap/cache && \
     cp .env.example .env && \
-    php artisan key:generate --force && \
     php artisan wayfinder:generate --with-form
 
 RUN rm -f /app/public/hot \
@@ -129,4 +128,4 @@ COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD sh -c 'php -S 0.0.0.0:${PORT:-8000} -t public'
+CMD ["php-fpm"]

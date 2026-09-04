@@ -35,8 +35,8 @@ export default function AdminTeacherRequests() {
             setActionError(null);
 
             try {
-                const response = await api.get<{ teacher_requests: TeacherRequestItem[] }>('/teacher-requests');
-                setRequests(response.data.teacher_requests);
+                const response = await api.get<{ data: TeacherRequestItem[] }>('/teacher-requests');
+                setRequests(response.data.data ?? response.data);
             } catch {
                 setActionError('Unable to load teacher requests.');
             } finally {
@@ -70,8 +70,8 @@ export default function AdminTeacherRequests() {
                 admin_notes: notes || undefined,
             });
             setNotes('');
-            const response = await api.get<{ teacher_requests: TeacherRequestItem[] }>('/teacher-requests');
-            setRequests(response.data.teacher_requests);
+            const response = await api.get<{ data: TeacherRequestItem[] }>('/teacher-requests');
+            setRequests(response.data.data ?? response.data);
         } catch (submitError: any) {
             setActionError(submitError?.response?.data?.message ?? `Unable to ${action} this request.`);
         } finally {

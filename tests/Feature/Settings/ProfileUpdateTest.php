@@ -3,13 +3,10 @@
 namespace Tests\Feature\Settings;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ProfileUpdateTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_profile_page_is_displayed()
     {
         $user = User::factory()->create();
@@ -37,8 +34,11 @@ class ProfileUpdateTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect(route('profile.edit'));
 
-        // Verify the response was successful
-        $this->assertTrue(true);
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
     }
 
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged()
@@ -56,8 +56,10 @@ class ProfileUpdateTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertRedirect(route('profile.edit'));
 
-        // Verify the response was successful
-        $this->assertTrue(true);
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'name' => 'Test User',
+        ]);
     }
 
     public function test_user_can_delete_their_account()
@@ -93,7 +95,9 @@ class ProfileUpdateTest extends TestCase
             ->assertSessionHasErrors('password')
             ->assertRedirect(route('profile.edit'));
 
-        // Verify error was raised for wrong password
-        $this->assertTrue(true);
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'password' => $user->password,
+        ]);
     }
 }

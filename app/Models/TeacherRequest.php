@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
 class TeacherRequest extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'name',
         'email',
@@ -16,10 +19,7 @@ class TeacherRequest extends Model
         'admin_notes',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
+    protected $hidden = [
+        'password',
+    ];
 }

@@ -3,15 +3,12 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_login_screen_can_be_rendered()
     {
         $response = $this->get(route('login'));
@@ -51,7 +48,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         // Should not throw an error - Fortify handles two-factor logic
-        $this->assertTrue(true);
+        $response->assertStatus(200);
     }
 
     public function test_users_can_not_authenticate_with_invalid_password()

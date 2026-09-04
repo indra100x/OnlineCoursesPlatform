@@ -2,61 +2,55 @@
 
 namespace App\Http\Controllers\Teacher;
 
+use App\Events\CourseCreated;
+use App\Events\CourseUpdated;
+use App\Events\CourseDeleted;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Teacher\CourseStoreRequest;
+use App\Http\Requests\Teacher\CourseUpdateRequest;
+use App\Http\Resources\CourseResource;
 use App\Models\Course;
+use App\Services\CourseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CourseController extends Controller
 {
-    public function index(Request $request): JsonResponse
-    {
-        $courses = Course::query()
-            ->where('teacher_id', $request->user()->id)
-            ->withCount(['chapters', 'enrollments', 'ratings'])
-            ->withAvg('ratings', 'rating')
-            ->latest()
-            ->get();
+    public function __construct(
+        protected CourseService $courseService,
+    ) {}
 
-        return response()->json([
-            'courses' => $courses,
-        ]);
+    public function index(Request $request): AnonymousResourceCollection
+    {
+        $courses = $this->courseService->getTeacherCourses($request->user());
+
+        return CourseResource::collection($courses);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(CourseStoreRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
-            'price' => ['required', 'numeric', 'min:0'],
-        ]);
+        $course = $this->courseService->createCourse($request->user(), $request->validated());
 
-        $course = Course::create([
-            ...$validated,
-            'teacher_id' => $request->user()->id,
-        ]);
+        CourseCreated::dispatch($course);
 
         return response()->json([
             'message' => 'Course created successfully.',
-            'course' => $course->loadCount(['chapters', 'enrollments', 'ratings'])->loadAvg('ratings', 'rating'),
+            'course' => new CourseResource($course->loadCount(['chapters', 'enrollments', 'ratings'])->loadAvg('ratings', 'rating')),
         ], 201);
     }
 
-    public function update(Request $request, Course $course): JsonResponse
+    public function update(CourseUpdateRequest $request, Course $course): JsonResponse
     {
         abort_unless($course->teacher_id === $request->user()->id, 403);
 
-        $validated = $request->validate([
-            'title' => ['sometimes', 'required', 'string', 'max:255'],
-            'description' => ['sometimes', 'required', 'string'],
-            'price' => ['sometimes', 'required', 'numeric', 'min:0'],
-        ]);
+        $course = $this->courseService->updateCourse($course, $request->validated());
 
-        $course->update($validated);
+        CourseUpdated::dispatch($course);
 
         return response()->json([
             'message' => 'Course updated successfully.',
-            'course' => $course->fresh()->loadCount(['chapters', 'enrollments', 'ratings'])->loadAvg('ratings', 'rating'),
+            'course' => new CourseResource($course->loadCount(['chapters', 'enrollments', 'ratings'])->loadAvg('ratings', 'rating')),
         ]);
     }
 
@@ -64,7 +58,10 @@ class CourseController extends Controller
     {
         abort_unless($course->teacher_id === $request->user()->id, 403);
 
-        $course->delete();
+        $courseId = $course->id;
+        $this->courseService->deleteCourse($course);
+
+        CourseDeleted::dispatch($courseId);
 
         return response()->json([
             'message' => 'Course deleted successfully.',
