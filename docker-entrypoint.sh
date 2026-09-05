@@ -1,6 +1,12 @@
 #!/bin/sh
 set -e
 
+# Allow direct CLI usage (for example: `docker run ... php -v` or `composer ...`)
+# without forcing the full Laravel runtime bootstrap checks.
+if [ "$#" -gt 0 ] && { [ "$1" = "php" ] || [ "$1" = "php-fpm" ] || [ "$1" = "artisan" ] || [ "$1" = "composer" ] || [ "$1" = "bash" ] || [ "$1" = "sh" ]; }; then
+    exec "$@"
+fi
+
 if [ -z "$APP_KEY" ] || [ "$APP_KEY" = "base64:..." ] || ! php -r '
     $key = getenv("APP_KEY");
     if (! is_string($key) || $key === "") {
