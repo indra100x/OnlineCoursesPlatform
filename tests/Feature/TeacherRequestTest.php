@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\TeacherRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Tests\TestCase;
 
 class TeacherRequestTest extends TestCase
@@ -108,6 +109,8 @@ class TeacherRequestTest extends TestCase
 
     public function test_weak_password_is_rejected(): void
     {
+        $this->withoutMiddleware(ThrottleRequests::class);
+
         $response = $this->postJson('/teacher-requests', [
             'name' => 'Weak',
             'email' => 'weak@example.com',
