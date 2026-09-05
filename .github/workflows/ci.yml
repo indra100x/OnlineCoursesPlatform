@@ -13,6 +13,8 @@ jobs:
   frontend:
     name: Frontend Checks
     runs-on: ubuntu-latest
+    env:
+      APP_KEY: base64:MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
 
     steps:
       - uses: actions/checkout@v5
@@ -38,8 +40,6 @@ jobs:
 
       - name: Generate Wayfinder types
         run: php artisan wayfinder:generate --with-form
-        env:
-          APP_KEY: base64:MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
 
       - name: Lint
         run: npm run lint:check
