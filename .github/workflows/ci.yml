@@ -10,9 +10,38 @@ on:
     branches: [main]
 
 jobs:
+  frontend:
+    name: Frontend Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint:check
+
+      - name: Format Check
+        run: npm run format:check
+
+      - name: Type Check
+        run: npm run types:check
+
+      - name: Build frontend assets
+        run: npm run build
+
   php-tests:
     name: PHP Tests
     runs-on: ubuntu-latest
+    needs: [frontend]
 
     services:
       postgres:
@@ -69,9 +98,6 @@ jobs:
       - name: Install Dependencies
         run: composer install --no-progress --prefer-dist --no-interaction
 
-      - name: Install Node dependencies
-        run: npm ci
-
       - name: Prepare Environment
         run: |
           cp .env.example .env
@@ -87,9 +113,6 @@ jobs:
           CACHE_STORE: redis
           SESSION_DRIVER: redis
           QUEUE_CONNECTION: redis
-
-      - name: Build frontend assets
-        run: npm run build
 
       - name: Run Lint
         run: vendor/bin/pint --parallel --test
@@ -111,35 +134,10 @@ jobs:
           SESSION_DRIVER: redis
           QUEUE_CONNECTION: redis
 
-  frontend:
-    name: Frontend Checks
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v5
-        with:
-          node-version: '22'
-          cache: 'npm'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint:check
-
-      - name: Format Check
-        run: npm run format:check
-
-      - name: Type Check
-        run: npm run types:check
-
   docker:
     name: Docker Build
     runs-on: ubuntu-latest
-    needs: [php-tests, frontend]
+    needs: [frontend, php-tests]
 
     steps:
       - uses: actions/checkout@v5
