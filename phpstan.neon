@@ -5,8 +5,6 @@ parameters:
     paths:
         - app
     level: 5
-    ignoreErrors:
-        - '#Unsafe call to static method .* on trait#'
     excludePaths:
         - vendor/*
         - node_modules/*

@@ -133,7 +133,7 @@ jobs:
         run: vendor/bin/pint --parallel --test
 
       - name: Run PHPStan
-        run: vendor/bin/phpstan analyse --no-progress --memory-limit=512M || true
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=512M
 
       - name: Run Tests
         run: php artisan test
