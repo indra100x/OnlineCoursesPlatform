@@ -43,7 +43,12 @@ export default function Profile({
                         {({ processing, errors }) => (
                             <>
                                 <div className="grid gap-1.5">
-                                    <Label htmlFor="name" className="text-xs font-semibold">Name</Label>
+                                    <Label
+                                        htmlFor="name"
+                                        className="text-xs font-semibold"
+                                    >
+                                        Name
+                                    </Label>
                                     <Input
                                         id="name"
                                         className="mt-1 block w-full"
@@ -53,11 +58,19 @@ export default function Profile({
                                         autoComplete="name"
                                         placeholder="Full name"
                                     />
-                                    <InputError className="mt-2" message={errors.name} />
+                                    <InputError
+                                        className="mt-2"
+                                        message={errors.name}
+                                    />
                                 </div>
 
                                 <div className="grid gap-1.5">
-                                    <Label htmlFor="email" className="text-xs font-semibold">Email address</Label>
+                                    <Label
+                                        htmlFor="email"
+                                        className="text-xs font-semibold"
+                                    >
+                                        Email address
+                                    </Label>
                                     <Input
                                         id="email"
                                         type="email"
@@ -68,7 +81,10 @@ export default function Profile({
                                         autoComplete="username"
                                         placeholder="Email address"
                                     />
-                                    <InputError className="mt-2" message={errors.email} />
+                                    <InputError
+                                        className="mt-2"
+                                        message={errors.email}
+                                    />
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <Button

@@ -24,7 +24,9 @@ const TABS = [
     { key: 'notifications', label: 'Notifications' },
 ] as const;
 
-export default function StudentDashboard({ onUnreadCountChange }: StudentDashboardProps) {
+export default function StudentDashboard({
+    onUnreadCountChange,
+}: StudentDashboardProps) {
     const [enrollmentCode, setEnrollmentCode] = useState('');
     const [searchParams] = useSearchParams();
     const activeTab = searchParams.get('tab') ?? 'courses';
@@ -33,7 +35,6 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
         courses,
         catalog,
         catalogMeta,
-        catalogPage,
         wishlist,
         notifications,
         error,
@@ -44,13 +45,18 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
         markAsRead,
         loadNotifications,
         goToCatalogPage,
-    } = useStudentData(activeTab as 'courses' | 'catalog' | 'wishlist' | 'notifications', {
-        onUnreadCountChange,
-    });
+    } = useStudentData(
+        activeTab as 'courses' | 'catalog' | 'wishlist' | 'notifications',
+        {
+            onUnreadCountChange,
+        },
+    );
 
     const handleUnreadCount = useCallback(async () => {
         const items = await loadNotifications();
-        onUnreadCountChange(items.filter((item: { is_read: boolean }) => !item.is_read).length);
+        onUnreadCountChange(
+            items.filter((item: { is_read: boolean }) => !item.is_read).length,
+        );
     }, [loadNotifications, onUnreadCountChange]);
 
     useEffect(() => {
@@ -67,15 +73,35 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
     }
 
     const unreadCount = notifications.filter((item) => !item.is_read).length;
-    const purchasedCount = catalog.filter((course) => course.is_purchased).length;
+    const purchasedCount = catalog.filter(
+        (course) => course.is_purchased,
+    ).length;
 
     return (
         <div className="space-y-5">
             <section className="grid gap-4 sm:grid-cols-4">
-                <StatsCard label="My Courses" value={courses.length} hint="Enrolled and learning" />
-                <StatsCard label="Purchases" value={purchasedCount} hint="Beta buy completions" />
-                <StatsCard label="Wishlist" value={wishlist.length} hint="Saved for later" variant="blue" />
-                <StatsCard label="Unread" value={unreadCount} hint="Fresh notifications" variant="accent" />
+                <StatsCard
+                    label="My Courses"
+                    value={courses.length}
+                    hint="Enrolled and learning"
+                />
+                <StatsCard
+                    label="Purchases"
+                    value={purchasedCount}
+                    hint="Beta buy completions"
+                />
+                <StatsCard
+                    label="Wishlist"
+                    value={wishlist.length}
+                    hint="Saved for later"
+                    variant="blue"
+                />
+                <StatsCard
+                    label="Unread"
+                    value={unreadCount}
+                    hint="Fresh notifications"
+                    variant="accent"
+                />
             </section>
 
             <section className="grid gap-5 xl:grid-cols-[360px,1fr]">
@@ -86,24 +112,43 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                                 <GraduationCap className="size-4" />
                             </div>
                             <div>
-                                <h2 className="text-base font-semibold text-black">Join with code</h2>
-                                <p className="text-xs text-black/50">Use an enrollment code to activate a course.</p>
+                                <h2 className="text-base font-semibold text-black">
+                                    Join with code
+                                </h2>
+                                <p className="text-xs text-black/50">
+                                    Use an enrollment code to activate a course.
+                                </p>
                             </div>
                         </div>
 
-                        <form className="mt-4 space-y-3.5" onSubmit={handleEnroll}>
+                        <form
+                            className="mt-4 space-y-3.5"
+                            onSubmit={handleEnroll}
+                        >
                             <div className="space-y-1.5">
-                                <Label htmlFor="enrollment-code" className="text-xs font-semibold">Enrollment code</Label>
+                                <Label
+                                    htmlFor="enrollment-code"
+                                    className="text-xs font-semibold"
+                                >
+                                    Enrollment code
+                                </Label>
                                 <Input
                                     id="enrollment-code"
                                     value={enrollmentCode}
-                                    onChange={(event) => setEnrollmentCode(event.target.value.toUpperCase())}
+                                    onChange={(event) =>
+                                        setEnrollmentCode(
+                                            event.target.value.toUpperCase(),
+                                        )
+                                    }
                                     placeholder="Unlock code from a beta purchase"
                                     required
                                 />
                             </div>
                             {error ? <ErrorMessage message={error} /> : null}
-                            <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90">
+                            <Button
+                                type="submit"
+                                className="rounded-xl bg-black text-white hover:bg-black/90"
+                            >
                                 Enroll now
                             </Button>
                         </form>
@@ -129,7 +174,9 @@ export default function StudentDashboard({ onUnreadCountChange }: StudentDashboa
                 </div>
 
                 <div className="brand-surface p-5">
-                    {activeTab === 'courses' && <MyCoursesTab courses={courses} />}
+                    {activeTab === 'courses' && (
+                        <MyCoursesTab courses={courses} />
+                    )}
                     {activeTab === 'catalog' && (
                         <CatalogTab
                             catalog={catalog}

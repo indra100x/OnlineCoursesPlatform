@@ -1,6 +1,12 @@
 import { Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { BrowserRouter, MemoryRouter, Navigate, Route, Routes } from 'react-router-dom';
+import {
+    BrowserRouter,
+    MemoryRouter,
+    Navigate,
+    Route,
+    Routes,
+} from 'react-router-dom';
 import { AppShell } from '@/components/platform/app-shell';
 import AdminDashboard from '@/pages/platform/admin-dashboard';
 import AdminTeacherRequests from '@/pages/platform/admin-teacher-requests';
@@ -46,15 +52,28 @@ export default function Dashboard() {
     return (
         <>
             <Head title="Courses Platform" />
-            <Router {...(Router === MemoryRouter ? { initialEntries: [initialEntry] } : {})}>
-                <AppShell user={currentUser} unreadCount={unreadCount} csrfToken={csrf_token}>
+            <Router
+                {...(Router === MemoryRouter
+                    ? { initialEntries: [initialEntry] }
+                    : {})}
+            >
+                <AppShell
+                    user={currentUser}
+                    unreadCount={unreadCount}
+                    csrfToken={csrf_token}
+                >
                     <Routes>
-                        <Route path="/dashboard" element={<RoleRedirect role={currentUser.role} />} />
+                        <Route
+                            path="/dashboard"
+                            element={<RoleRedirect role={currentUser.role} />}
+                        />
                         <Route
                             path="/dashboard/admin"
                             element={
                                 currentUser.role === 'admin' ? (
-                                    <AdminDashboard currentUserId={currentUser.id} />
+                                    <AdminDashboard
+                                        currentUserId={currentUser.id}
+                                    />
                                 ) : (
                                     <RoleRedirect role={currentUser.role} />
                                 )
@@ -84,7 +103,9 @@ export default function Dashboard() {
                             path="/dashboard/student"
                             element={
                                 currentUser.role === 'student' ? (
-                                    <StudentDashboard onUnreadCountChange={setUnreadCount} />
+                                    <StudentDashboard
+                                        onUnreadCountChange={setUnreadCount}
+                                    />
                                 ) : (
                                     <RoleRedirect role={currentUser.role} />
                                 )
@@ -135,7 +156,10 @@ export default function Dashboard() {
                                 />
                             }
                         />
-                        <Route path="*" element={<RoleRedirect role={currentUser.role} />} />
+                        <Route
+                            path="*"
+                            element={<RoleRedirect role={currentUser.role} />}
+                        />
                     </Routes>
                 </AppShell>
             </Router>

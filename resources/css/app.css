@@ -145,9 +145,21 @@
     body {
         @apply bg-background text-foreground;
         background-image:
-            radial-gradient(circle at top left, rgba(255, 214, 10, 0.25), transparent 26rem),
-            radial-gradient(circle at top right, rgba(39, 109, 255, 0.18), transparent 28rem),
-            radial-gradient(circle at bottom center, rgba(232, 41, 41, 0.1), transparent 24rem);
+            radial-gradient(
+                circle at top left,
+                rgba(255, 214, 10, 0.25),
+                transparent 26rem
+            ),
+            radial-gradient(
+                circle at top right,
+                rgba(39, 109, 255, 0.18),
+                transparent 28rem
+            ),
+            radial-gradient(
+                circle at bottom center,
+                rgba(232, 41, 41, 0.1),
+                transparent 24rem
+            );
     }
 }
 
@@ -195,23 +207,23 @@
     }
 
     .brand-pill {
-        @apply inline-flex items-center rounded-full border border-black/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.22em];
+        @apply inline-flex items-center rounded-full border border-black/8 px-4 py-1.5 text-xs font-semibold tracking-[0.22em] uppercase;
     }
 
     .brand-tag-yellow {
-        @apply rounded-full bg-[var(--brand-yellow)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-black;
+        @apply rounded-full bg-[var(--brand-yellow)] px-3 py-1 text-xs font-semibold tracking-[0.16em] text-black uppercase;
     }
 
     .brand-tag-blue {
-        @apply rounded-full bg-[var(--brand-blue)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white;
+        @apply rounded-full bg-[var(--brand-blue)] px-3 py-1 text-xs font-semibold tracking-[0.16em] text-white uppercase;
     }
 
     .brand-tag-red {
-        @apply rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white;
+        @apply rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-semibold tracking-[0.16em] text-white uppercase;
     }
 
     .brand-tag-ghost {
-        @apply rounded-full border border-black/10 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-black/70;
+        @apply rounded-full border border-black/10 bg-white/80 px-3 py-1 text-xs font-semibold tracking-[0.16em] text-black/70 uppercase;
     }
 
     .auth-on-dark [data-slot='label'] {
@@ -227,11 +239,11 @@
     }
 
     .brand-kicker {
-        @apply text-xs font-semibold uppercase tracking-[0.22em] text-black/45;
+        @apply text-xs font-semibold tracking-[0.22em] text-black/45 uppercase;
     }
 
     .brand-input {
-        @apply w-full rounded-xl border border-black/12 bg-white px-4 py-2.5 text-sm text-black placeholder:text-black/30 outline-none transition-all duration-200 focus:border-[var(--brand-blue)] focus:ring-2 focus:ring-[var(--brand-blue)]/10;
+        @apply w-full rounded-xl border border-black/12 bg-white px-4 py-2.5 text-sm text-black transition-all duration-200 outline-none placeholder:text-black/30 focus:border-[var(--brand-blue)] focus:ring-2 focus:ring-[var(--brand-blue)]/10;
     }
 
     .brand-card-hover {
@@ -239,6 +251,11 @@
     }
 
     .brand-gradient-overlay {
-        background: linear-gradient(135deg, rgba(255,216,77,0.15), rgba(37,99,235,0.08), rgba(239,68,68,0.06));
+        background: linear-gradient(
+            135deg,
+            rgba(255, 216, 77, 0.15),
+            rgba(37, 99, 235, 0.08),
+            rgba(239, 68, 68, 0.06)
+        );
     }
 }

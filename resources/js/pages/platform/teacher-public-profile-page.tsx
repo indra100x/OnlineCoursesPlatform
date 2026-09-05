@@ -1,4 +1,10 @@
-import { ArrowLeft, BookOpen, Mail, ShoppingBag, UserCircle2 } from 'lucide-react';
+import {
+    ArrowLeft,
+    BookOpen,
+    Mail,
+    ShoppingBag,
+    UserCircle2,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { EmptyState } from '@/components/platform/empty-state';
@@ -23,7 +29,9 @@ export default function TeacherPublicProfilePage() {
             setError(null);
 
             try {
-                const response = await api.get<TeacherProfileView>(`/teachers/${teacherId}/profile`);
+                const response = await api.get<TeacherProfileView>(
+                    `/teachers/${teacherId}/profile`,
+                );
                 setData(response.data);
             } catch {
                 setError('Unable to load this teacher profile right now.');
@@ -40,13 +48,20 @@ export default function TeacherPublicProfilePage() {
             await api.post(`/courses/${courseId}/purchase`);
 
             if (teacherId) {
-                const response = await api.get<TeacherProfileView>(`/teachers/${teacherId}/profile`);
+                const response = await api.get<TeacherProfileView>(
+                    `/teachers/${teacherId}/profile`,
+                );
                 setData(response.data);
             }
         } catch (submitError: unknown) {
-            const message = submitError instanceof Error
-                ? (submitError as { response?: { data?: { message?: string } } }).response?.data?.message
-                : undefined;
+            const message =
+                submitError instanceof Error
+                    ? (
+                          submitError as {
+                              response?: { data?: { message?: string } };
+                          }
+                      ).response?.data?.message
+                    : undefined;
             setError(message ?? 'Unable to complete the beta purchase.');
         }
     }
@@ -60,7 +75,9 @@ export default function TeacherPublicProfilePage() {
             }
 
             if (teacherId) {
-                const response = await api.get<TeacherProfileView>(`/teachers/${teacherId}/profile`);
+                const response = await api.get<TeacherProfileView>(
+                    `/teachers/${teacherId}/profile`,
+                );
                 setData(response.data);
             }
         } catch {
@@ -70,24 +87,37 @@ export default function TeacherPublicProfilePage() {
 
     return (
         <div className="space-y-5">
-            <Link to="/dashboard/student?tab=catalog" className="inline-flex items-center gap-1.5 text-xs font-semibold text-black/50 transition-colors hover:text-black">
+            <Link
+                to="/dashboard/student?tab=catalog"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-black/50 transition-colors hover:text-black"
+            >
                 <ArrowLeft className="size-3.5" />
                 Back to catalog
             </Link>
 
             {loading ? (
-                <p className="text-sm text-black/45">Loading teacher profile...</p>
+                <p className="text-sm text-black/45">
+                    Loading teacher profile...
+                </p>
             ) : error ? (
-                <div className="rounded-[1.25rem] border border-red-200 bg-red-50 p-5 text-xs text-red-600">{error}</div>
+                <div className="rounded-[1.25rem] border border-red-200 bg-red-50 p-5 text-xs text-red-600">
+                    {error}
+                </div>
             ) : !data ? (
-                <EmptyState title="Teacher not found" description="This teacher profile is unavailable right now." />
+                <EmptyState
+                    title="Teacher not found"
+                    description="This teacher profile is unavailable right now."
+                />
             ) : (
                 <section className="grid gap-5 xl:grid-cols-[0.78fr,1.22fr]">
                     <div className="brand-surface-dark p-6 text-white">
                         <div className="flex flex-col items-center text-center">
                             {assetUrl(data.teacher.avatar_path) ? (
                                 <img
-                                    src={assetUrl(data.teacher.avatar_path) ?? undefined}
+                                    src={
+                                        assetUrl(data.teacher.avatar_path) ??
+                                        undefined
+                                    }
                                     alt={data.teacher.name}
                                     className="size-24 rounded-[1.5rem] object-cover shadow-lg ring-2 ring-white/20"
                                 />
@@ -96,63 +126,104 @@ export default function TeacherPublicProfilePage() {
                                     <UserCircle2 className="size-12" />
                                 </div>
                             )}
-                            <h1 className="mt-4 text-2xl font-black">{data.teacher.name}</h1>
+                            <h1 className="mt-4 text-2xl font-black">
+                                {data.teacher.name}
+                            </h1>
                             <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-1.5 text-xs text-white/70">
                                 <Mail className="size-3" />
                                 {data.teacher.email}
                             </div>
                             <p className="mt-4 text-sm leading-relaxed text-white/65">
-                                {data.teacher.bio || 'This teacher has not added a bio yet.'}
+                                {data.teacher.bio ||
+                                    'This teacher has not added a bio yet.'}
                             </p>
                         </div>
                     </div>
 
                     <div className="brand-surface p-6">
                         <p className="brand-kicker">Teacher catalog</p>
-                        <h2 className="mt-2 brand-section-title text-2xl">Courses by {data.teacher.name}</h2>
+                        <h2 className="brand-section-title mt-2 text-2xl">
+                            Courses by {data.teacher.name}
+                        </h2>
                         <p className="mt-1.5 text-sm text-black/55">
-                            Browse this teacher's courses, review pricing and ratings, and decide what you want to unlock next.
+                            Browse this teacher's courses, review pricing and
+                            ratings, and decide what you want to unlock next.
                         </p>
 
                         {data.courses.length === 0 ? (
                             <div className="mt-5">
-                                <EmptyState title="No courses yet" description="This teacher has not published any courses yet." />
+                                <EmptyState
+                                    title="No courses yet"
+                                    description="This teacher has not published any courses yet."
+                                />
                             </div>
                         ) : (
                             <div className="mt-5 grid gap-3 md:grid-cols-2">
                                 {data.courses.map((course) => (
-                                    <article key={course.id} className="brand-surface-soft p-4">
+                                    <article
+                                        key={course.id}
+                                        className="brand-surface-soft p-4"
+                                    >
                                         <div className="flex items-start justify-between gap-3">
                                             <div className="min-w-0">
-                                                <p className="text-base font-black text-black">{course.title}</p>
-                                                <p className="mt-1.5 text-xs leading-relaxed text-black/55 line-clamp-2">{course.description}</p>
+                                                <p className="text-base font-black text-black">
+                                                    {course.title}
+                                                </p>
+                                                <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-black/55">
+                                                    {course.description}
+                                                </p>
                                             </div>
                                             <BookOpen className="size-4 shrink-0 text-[#2563eb]" />
                                         </div>
 
                                         <div className="mt-3 flex flex-wrap gap-1.5">
-                                            <span className="brand-tag-yellow">${Number(course.price).toFixed(2)}</span>
-                                            <span className="brand-tag-blue">{course.chapters_count ?? 0} chapters</span>
+                                            <span className="brand-tag-yellow">
+                                                $
+                                                {Number(course.price).toFixed(
+                                                    2,
+                                                )}
+                                            </span>
+                                            <span className="brand-tag-blue">
+                                                {course.chapters_count ?? 0}{' '}
+                                                chapters
+                                            </span>
                                             <span className="brand-tag-red">
-                                                {course.ratings_avg_rating ? `${Number(course.ratings_avg_rating).toFixed(1)} stars` : 'No rating'}
+                                                {course.ratings_avg_rating
+                                                    ? `${Number(course.ratings_avg_rating).toFixed(1)} stars`
+                                                    : 'No rating'}
                                             </span>
                                         </div>
 
                                         <div className="mt-3 flex flex-wrap gap-2">
-                                            <Button type="button" variant="outline" size="sm" className="rounded-[0.8rem] text-[11px]" onClick={() => void toggleWishlist(course)}>
-                                                {course.is_wishlisted ? 'Remove' : 'Add wishlist'}
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                size="sm"
+                                                className="rounded-[0.8rem] text-[11px]"
+                                                onClick={() =>
+                                                    void toggleWishlist(course)
+                                                }
+                                            >
+                                                {course.is_wishlisted
+                                                    ? 'Remove'
+                                                    : 'Add wishlist'}
                                             </Button>
 
                                             {course.is_purchased ? (
                                                 <div className="rounded-[0.8rem] bg-[#edf4ff] px-3 py-1.5 text-[11px] font-medium text-[#2563eb]">
-                                                    Code: {course.enrollment_code}
+                                                    Code:{' '}
+                                                    {course.enrollment_code}
                                                 </div>
                                             ) : (
                                                 <Button
                                                     type="button"
                                                     size="sm"
-                                                    className="rounded-[0.8rem] bg-[#ffd84d] text-black hover:bg-[#facc15] text-[11px]"
-                                                    onClick={() => void handlePurchase(course.id)}
+                                                    className="rounded-[0.8rem] bg-[#ffd84d] text-[11px] text-black hover:bg-[#facc15]"
+                                                    onClick={() =>
+                                                        void handlePurchase(
+                                                            course.id,
+                                                        )
+                                                    }
                                                 >
                                                     <ShoppingBag className="size-3" />
                                                     Beta buy

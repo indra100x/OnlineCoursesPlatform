@@ -11,12 +11,20 @@ export function MyCoursesTab({ courses }: MyCoursesTabProps) {
     return (
         <>
             <div>
-                <h2 className="text-base font-semibold text-black">My learning space</h2>
-                <p className="text-xs text-black/50">Open any enrolled course to review chapters and leave a rating.</p>
+                <h2 className="text-base font-semibold text-black">
+                    My learning space
+                </h2>
+                <p className="text-xs text-black/50">
+                    Open any enrolled course to review chapters and leave a
+                    rating.
+                </p>
             </div>
             <div className="mt-4 space-y-3">
                 {courses.length === 0 ? (
-                    <EmptyState title="No enrolled courses" description="Buy a course in beta, unlock the code, then enroll here." />
+                    <EmptyState
+                        title="No enrolled courses"
+                        description="Buy a course in beta, unlock the code, then enroll here."
+                    />
                 ) : (
                     courses.map((course) => (
                         <Link
@@ -26,9 +34,13 @@ export function MyCoursesTab({ courses }: MyCoursesTabProps) {
                         >
                             <div className="flex items-start justify-between gap-3">
                                 <div className="min-w-0">
-                                    <p className="text-sm font-semibold text-black">{course.title}</p>
-                                    <p className="mt-0.5 text-xs text-black/50 line-clamp-2">{course.description}</p>
-                                    <p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#2563eb]">
+                                    <p className="text-sm font-semibold text-black">
+                                        {course.title}
+                                    </p>
+                                    <p className="mt-0.5 line-clamp-2 text-xs text-black/50">
+                                        {course.description}
+                                    </p>
+                                    <p className="mt-2 text-[10px] font-semibold tracking-[0.18em] text-[#2563eb] uppercase">
                                         Teacher {course.teacher.name}
                                     </p>
                                 </div>

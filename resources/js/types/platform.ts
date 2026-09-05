@@ -11,8 +11,14 @@ export type PlatformUser = {
     updated_at?: string;
 };
 
-export type Teacher = Pick<PlatformUser, 'id' | 'name' | 'email' | 'avatar_path' | 'bio'>;
-export type PublicStudent = Pick<PlatformUser, 'id' | 'name' | 'email' | 'avatar_path' | 'bio' | 'created_at'>;
+export type Teacher = Pick<
+    PlatformUser,
+    'id' | 'name' | 'email' | 'avatar_path' | 'bio'
+>;
+export type PublicStudent = Pick<
+    PlatformUser,
+    'id' | 'name' | 'email' | 'avatar_path' | 'bio' | 'created_at'
+>;
 
 export type Chapter = {
     id: number;

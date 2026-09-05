@@ -31,7 +31,12 @@ const hintClasses: Record<StatsCardVariant, string> = {
     accent: 'mt-1 text-sm text-black/55',
 };
 
-export function StatsCard({ label, value, hint, variant = 'default' }: StatsCardProps) {
+export function StatsCard({
+    label,
+    value,
+    hint,
+    variant = 'default',
+}: StatsCardProps) {
     return (
         <div className={`${variantClasses[variant]} p-5`}>
             <p className={labelClasses[variant]}>{label}</p>

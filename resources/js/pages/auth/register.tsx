@@ -12,7 +12,12 @@ export default function Register() {
         <>
             <Head title="Register" />
 
-            <Form action="/register" method="post" resetOnSuccess={['password', 'password_confirmation']} className="flex flex-col gap-5">
+            <Form
+                action="/register"
+                method="post"
+                resetOnSuccess={['password', 'password_confirmation']}
+                className="flex flex-col gap-5"
+            >
                 {({ processing, errors }) => (
                     <>
                         <div className="grid gap-5">
@@ -56,7 +61,9 @@ export default function Register() {
                             </div>
 
                             <div className="grid gap-1.5">
-                                <Label htmlFor="password_confirmation">Confirm password</Label>
+                                <Label htmlFor="password_confirmation">
+                                    Confirm password
+                                </Label>
                                 <PasswordInput
                                     id="password_confirmation"
                                     name="password_confirmation"
@@ -64,14 +71,24 @@ export default function Register() {
                                     autoComplete="new-password"
                                     placeholder="Confirm password"
                                 />
-                                <InputError message={errors.password_confirmation} />
+                                <InputError
+                                    message={errors.password_confirmation}
+                                />
                             </div>
 
                             <div className="rounded-xl bg-[#fff6d0] px-4 py-3 text-sm text-black/70">
-                                New registrations are created as <span className="font-semibold text-black">student</span> accounts.
+                                New registrations are created as{' '}
+                                <span className="font-semibold text-black">
+                                    student
+                                </span>{' '}
+                                accounts.
                             </div>
 
-                            <Button type="submit" className="h-11 w-full rounded-xl bg-black text-white hover:bg-black/90" disabled={processing}>
+                            <Button
+                                type="submit"
+                                className="h-11 w-full rounded-xl bg-black text-white hover:bg-black/90"
+                                disabled={processing}
+                            >
                                 {processing && <Spinner />}
                                 Register
                             </Button>
@@ -81,9 +98,12 @@ export default function Register() {
             </Form>
 
             <p className="mt-4 text-center text-sm text-black/55">
-                Already have an account? <TextLink href="/login">Log in</TextLink>
+                Already have an account?{' '}
+                <TextLink href="/login">Log in</TextLink>
                 {' · '}
-                <TextLink href="/teacher-register">Teacher registration</TextLink>
+                <TextLink href="/teacher-register">
+                    Teacher registration
+                </TextLink>
             </p>
         </>
     );
@@ -91,5 +111,6 @@ export default function Register() {
 
 Register.layout = {
     title: 'Register',
-    description: 'Register as a student to browse the catalog, buy courses, and enroll with your unlocked code.',
+    description:
+        'Register as a student to browse the catalog, buy courses, and enroll with your unlocked code.',
 };

@@ -71,7 +71,9 @@ export default function TwoFactorChallenge() {
                                         autoFocus={showRecoveryInput}
                                         required
                                     />
-                                    <InputError message={errors.recovery_code} />
+                                    <InputError
+                                        message={errors.recovery_code}
+                                    />
                                 </div>
                             ) : (
                                 <div className="flex flex-col items-center justify-center space-y-3 text-center">

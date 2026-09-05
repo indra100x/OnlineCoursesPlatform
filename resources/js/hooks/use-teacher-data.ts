@@ -12,7 +12,11 @@ export function useTeacherData() {
     const [courses, setCourses] = useState<Course[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
     const [students, setStudents] = useState<PlatformUser[]>([]);
-    const [courseForm, setCourseForm] = useState({ title: '', description: '', price: '49.00' });
+    const [courseForm, setCourseForm] = useState({
+        title: '',
+        description: '',
+        price: '49.00',
+    });
     const [chapterForm, setChapterForm] = useState(initialChapterForm);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -36,7 +40,11 @@ export function useTeacherData() {
                         return coursesList[0];
                     }
 
-                    return coursesList.find((course) => course.id === current.id) ?? coursesList[0];
+                    return (
+                        coursesList.find(
+                            (course) => course.id === current.id,
+                        ) ?? coursesList[0]
+                    );
                 });
             });
         } catch {
@@ -48,7 +56,9 @@ export function useTeacherData() {
 
     const loadStudents = useCallback(async (courseId: number) => {
         try {
-            const response = await api.get<{ students: PlatformUser[] }>(`/courses/${courseId}/students`);
+            const response = await api.get<{ students: PlatformUser[] }>(
+                `/courses/${courseId}/students`,
+            );
             setStudents(response.data.students);
         } catch {
             // Error fetching students, leave empty
@@ -73,25 +83,33 @@ export function useTeacherData() {
         void load();
     }, [selectedCourse, loadStudents]);
 
-    const handleCreateCourse = useCallback(async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setError(null);
+    const handleCreateCourse = useCallback(
+        async (event: FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            setError(null);
 
-        try {
-            await api.post('/courses', {
-                ...courseForm,
-                price: Number(courseForm.price),
-            });
-            setCourseForm({ title: '', description: '', price: '49.00' });
-            const response = await api.get<Course[]>('/courses');
-            setCourses(response.data);
-        } catch (submitError: unknown) {
-            const message = submitError instanceof Error
-                ? (submitError as { response?: { data?: { message?: string } } }).response?.data?.message
-                : undefined;
-            setError(message ?? 'Unable to create the course.');
-        }
-    }, [courseForm]);
+            try {
+                await api.post('/courses', {
+                    ...courseForm,
+                    price: Number(courseForm.price),
+                });
+                setCourseForm({ title: '', description: '', price: '49.00' });
+                const response = await api.get<Course[]>('/courses');
+                setCourses(response.data);
+            } catch (submitError: unknown) {
+                const message =
+                    submitError instanceof Error
+                        ? (
+                              submitError as {
+                                  response?: { data?: { message?: string } };
+                              }
+                          ).response?.data?.message
+                        : undefined;
+                setError(message ?? 'Unable to create the course.');
+            }
+        },
+        [courseForm],
+    );
 
     const handleDeleteCourse = useCallback(async (courseId: number) => {
         if (!window.confirm('Delete this course and all of its chapters?')) {
@@ -107,39 +125,51 @@ export function useTeacherData() {
         }
     }, []);
 
-    const handleAddChapter = useCallback(async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const handleAddChapter = useCallback(
+        async (event: FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
 
-        if (!selectedCourse) {
-            return;
-        }
+            if (!selectedCourse) {
+                return;
+            }
 
-        if (!chapterForm.file) {
-            return;
-        }
+            if (!chapterForm.file) {
+                return;
+            }
 
-        try {
-            const payload = new FormData();
-            payload.append('title', chapterForm.title);
-            payload.append('file', chapterForm.file);
+            try {
+                const payload = new FormData();
+                payload.append('title', chapterForm.title);
+                payload.append('file', chapterForm.file);
 
-            await api.post(`/courses/${selectedCourse.id}/chapters`, payload, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+                await api.post(
+                    `/courses/${selectedCourse.id}/chapters`,
+                    payload,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                );
 
-            setChapterForm(initialChapterForm);
-            const coursesResponse = await api.get<Course[]>('/courses');
-            setCourses(coursesResponse.data);
-            await loadStudents(selectedCourse.id);
-        } catch (submitError: unknown) {
-            const message = submitError instanceof Error
-                ? (submitError as { response?: { data?: { message?: string } } }).response?.data?.message
-                : undefined;
-            setError(message ?? 'Unable to add the chapter.');
-        }
-    }, [selectedCourse, chapterForm, loadStudents]);
+                setChapterForm(initialChapterForm);
+                const coursesResponse = await api.get<Course[]>('/courses');
+                setCourses(coursesResponse.data);
+                await loadStudents(selectedCourse.id);
+            } catch (submitError: unknown) {
+                const message =
+                    submitError instanceof Error
+                        ? (
+                              submitError as {
+                                  response?: { data?: { message?: string } };
+                              }
+                          ).response?.data?.message
+                        : undefined;
+                setError(message ?? 'Unable to add the chapter.');
+            }
+        },
+        [selectedCourse, chapterForm, loadStudents],
+    );
 
     return {
         courses,

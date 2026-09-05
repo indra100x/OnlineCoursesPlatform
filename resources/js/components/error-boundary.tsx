@@ -11,7 +11,10 @@ type ErrorBoundaryState = {
     error: Error | null;
 };
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<
+    ErrorBoundaryProps,
+    ErrorBoundaryState
+> {
     constructor(props: ErrorBoundaryProps) {
         super(props);
         this.state = { hasError: false, error: null };
@@ -34,13 +37,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             return (
                 <div className="flex min-h-[400px] items-center justify-center p-8">
                     <div className="text-center">
-                        <h2 className="text-lg font-semibold text-black">Something went wrong</h2>
+                        <h2 className="text-lg font-semibold text-black">
+                            Something went wrong
+                        </h2>
                         <p className="mt-2 text-sm text-black/60">
-                            {this.state.error?.message || 'An unexpected error occurred.'}
+                            {this.state.error?.message ||
+                                'An unexpected error occurred.'}
                         </p>
                         <button
                             type="button"
-                            onClick={() => this.setState({ hasError: false, error: null })}
+                            onClick={() =>
+                                this.setState({ hasError: false, error: null })
+                            }
                             className="mt-4 rounded-xl bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/90"
                         >
                             Try again

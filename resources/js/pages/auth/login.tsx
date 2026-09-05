@@ -77,7 +77,9 @@ export default function Login({
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember" className="text-sm">Remember me</Label>
+                                <Label htmlFor="remember" className="text-sm">
+                                    Remember me
+                                </Label>
                             </div>
 
                             <Button
@@ -97,7 +99,8 @@ export default function Login({
 
             {canRegister ? (
                 <p className="mt-4 text-center text-sm text-black/55">
-                    New student? <TextLink href="/register">Create an account</TextLink>
+                    New student?{' '}
+                    <TextLink href="/register">Create an account</TextLink>
                 </p>
             ) : null}
 
@@ -112,5 +115,6 @@ export default function Login({
 
 Login.layout = {
     title: 'Log in to your account',
-    description: 'Log in with your existing account, or register as a student to start exploring courses.',
+    description:
+        'Log in with your existing account, or register as a student to start exploring courses.',
 };

@@ -30,7 +30,11 @@ export default function TeacherDashboard() {
     return (
         <div className="space-y-5">
             <section className="grid gap-4 sm:grid-cols-4">
-                <StatsCard label="Courses" value={courses.length} hint="Published courses" />
+                <StatsCard
+                    label="Courses"
+                    value={courses.length}
+                    hint="Published courses"
+                />
                 <StatsCard
                     label="Catalog value"
                     value={`$${courses.reduce((total, course) => total + Number(course.price || 0), 0).toFixed(0)}`}
@@ -38,13 +42,20 @@ export default function TeacherDashboard() {
                 />
                 <StatsCard
                     label="Students"
-                    value={courses.reduce((total, course) => total + (course.enrollments_count ?? 0), 0)}
+                    value={courses.reduce(
+                        (total, course) =>
+                            total + (course.enrollments_count ?? 0),
+                        0,
+                    )}
                     hint="Current enrollments"
                     variant="blue"
                 />
                 <StatsCard
                     label="Ratings"
-                    value={courses.reduce((total, course) => total + (course.ratings_count ?? 0), 0)}
+                    value={courses.reduce(
+                        (total, course) => total + (course.ratings_count ?? 0),
+                        0,
+                    )}
                     hint="Feedback entries"
                     variant="accent"
                 />
@@ -53,42 +64,83 @@ export default function TeacherDashboard() {
             <section className="grid gap-5 xl:grid-cols-[380px,1fr]">
                 <div className="space-y-5">
                     <div className="brand-surface p-5">
-                        <h2 className="text-base font-semibold text-black">Launch a course</h2>
-                        <p className="mt-0.5 text-xs text-black/50">Add a price, shape the offer, and prepare it for student purchases.</p>
+                        <h2 className="text-base font-semibold text-black">
+                            Launch a course
+                        </h2>
+                        <p className="mt-0.5 text-xs text-black/50">
+                            Add a price, shape the offer, and prepare it for
+                            student purchases.
+                        </p>
 
-                        <form className="mt-4 space-y-3.5" onSubmit={handleCreateCourse}>
+                        <form
+                            className="mt-4 space-y-3.5"
+                            onSubmit={handleCreateCourse}
+                        >
                             <div className="space-y-1.5">
-                                <Label htmlFor="course-title" className="text-xs font-semibold">Title</Label>
+                                <Label
+                                    htmlFor="course-title"
+                                    className="text-xs font-semibold"
+                                >
+                                    Title
+                                </Label>
                                 <Input
                                     id="course-title"
                                     value={courseForm.title}
-                                    onChange={(event) => setCourseForm((current) => ({ ...current, title: event.target.value }))}
+                                    onChange={(event) =>
+                                        setCourseForm((current) => ({
+                                            ...current,
+                                            title: event.target.value,
+                                        }))
+                                    }
                                     required
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <Label htmlFor="course-price" className="text-xs font-semibold">Price</Label>
+                                <Label
+                                    htmlFor="course-price"
+                                    className="text-xs font-semibold"
+                                >
+                                    Price
+                                </Label>
                                 <Input
                                     id="course-price"
                                     type="number"
                                     min="0"
                                     step="0.01"
                                     value={courseForm.price}
-                                    onChange={(event) => setCourseForm((current) => ({ ...current, price: event.target.value }))}
+                                    onChange={(event) =>
+                                        setCourseForm((current) => ({
+                                            ...current,
+                                            price: event.target.value,
+                                        }))
+                                    }
                                     required
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <Label htmlFor="course-description" className="text-xs font-semibold">Description</Label>
+                                <Label
+                                    htmlFor="course-description"
+                                    className="text-xs font-semibold"
+                                >
+                                    Description
+                                </Label>
                                 <textarea
                                     id="course-description"
-                                    className="min-h-28 w-full rounded-xl border border-black/12 bg-white px-3 py-2.5 text-sm text-black placeholder:text-black/30 outline-none transition-all focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/10"
+                                    className="min-h-28 w-full rounded-xl border border-black/12 bg-white px-3 py-2.5 text-sm text-black transition-all outline-none placeholder:text-black/30 focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/10"
                                     value={courseForm.description}
-                                    onChange={(event) => setCourseForm((current) => ({ ...current, description: event.target.value }))}
+                                    onChange={(event) =>
+                                        setCourseForm((current) => ({
+                                            ...current,
+                                            description: event.target.value,
+                                        }))
+                                    }
                                     required
                                 />
                             </div>
-                            <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90">
+                            <Button
+                                type="submit"
+                                className="rounded-xl bg-black text-white hover:bg-black/90"
+                            >
                                 <Plus className="size-4" />
                                 Create course
                             </Button>
@@ -106,24 +158,50 @@ export default function TeacherDashboard() {
                 <div className="space-y-5">
                     {selectedCourse ? (
                         <>
-                            <CourseHeader course={selectedCourse} onDelete={handleDeleteCourse} />
+                            <CourseHeader
+                                course={selectedCourse}
+                                onDelete={handleDeleteCourse}
+                            />
 
                             <div className="brand-surface p-5">
-                                <h3 className="text-base font-semibold text-black">Add PDF Chapter</h3>
-                                <p className="mt-0.5 text-xs text-black/50">Upload a PDF chapter and trigger student notifications.</p>
+                                <h3 className="text-base font-semibold text-black">
+                                    Add PDF Chapter
+                                </h3>
+                                <p className="mt-0.5 text-xs text-black/50">
+                                    Upload a PDF chapter and trigger student
+                                    notifications.
+                                </p>
 
-                                <form className="mt-4 space-y-3.5" onSubmit={handleAddChapter}>
+                                <form
+                                    className="mt-4 space-y-3.5"
+                                    onSubmit={handleAddChapter}
+                                >
                                     <div className="space-y-1.5">
-                                        <Label htmlFor="chapter-title" className="text-xs font-semibold">Chapter title</Label>
+                                        <Label
+                                            htmlFor="chapter-title"
+                                            className="text-xs font-semibold"
+                                        >
+                                            Chapter title
+                                        </Label>
                                         <Input
                                             id="chapter-title"
                                             value={chapterForm.title}
-                                            onChange={(event) => setChapterForm((current) => ({ ...current, title: event.target.value }))}
+                                            onChange={(event) =>
+                                                setChapterForm((current) => ({
+                                                    ...current,
+                                                    title: event.target.value,
+                                                }))
+                                            }
                                             required
                                         />
                                     </div>
                                     <div className="space-y-1.5">
-                                        <Label htmlFor="chapter-file" className="text-xs font-semibold">PDF file</Label>
+                                        <Label
+                                            htmlFor="chapter-file"
+                                            className="text-xs font-semibold"
+                                        >
+                                            PDF file
+                                        </Label>
                                         <Input
                                             id="chapter-file"
                                             type="file"
@@ -131,16 +209,23 @@ export default function TeacherDashboard() {
                                             onChange={(event) =>
                                                 setChapterForm((current) => ({
                                                     ...current,
-                                                    file: event.target.files?.[0] ?? null,
+                                                    file:
+                                                        event.target
+                                                            .files?.[0] ?? null,
                                                 }))
                                             }
                                             required
                                         />
                                     </div>
 
-                                    {error ? <ErrorMessage message={error} /> : null}
+                                    {error ? (
+                                        <ErrorMessage message={error} />
+                                    ) : null}
 
-                                    <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90">
+                                    <Button
+                                        type="submit"
+                                        className="rounded-xl bg-black text-white hover:bg-black/90"
+                                    >
                                         <Plus className="size-4" />
                                         Create chapter
                                     </Button>
@@ -150,7 +235,10 @@ export default function TeacherDashboard() {
                             <EnrolledStudents students={students} />
                         </>
                     ) : (
-                        <EmptyState title="Pick a course" description="Select a course from the left to manage pricing, PDF chapters, and enrolled students." />
+                        <EmptyState
+                            title="Pick a course"
+                            description="Select a course from the left to manage pricing, PDF chapters, and enrolled students."
+                        />
                     )}
                 </div>
             </section>

@@ -8,7 +8,10 @@ type NotificationsTabProps = {
     onMarkAsRead: (id: number) => void;
 };
 
-export function NotificationsTab({ notifications, onMarkAsRead }: NotificationsTabProps) {
+export function NotificationsTab({
+    notifications,
+    onMarkAsRead,
+}: NotificationsTabProps) {
     return (
         <>
             <div className="flex items-center gap-3">
@@ -16,33 +19,49 @@ export function NotificationsTab({ notifications, onMarkAsRead }: NotificationsT
                     <Bell className="size-4" />
                 </div>
                 <div>
-                    <h2 className="text-base font-semibold text-black">Notifications</h2>
-                    <p className="text-xs text-black/50">Stay on top of fresh chapter releases and activity.</p>
+                    <h2 className="text-base font-semibold text-black">
+                        Notifications
+                    </h2>
+                    <p className="text-xs text-black/50">
+                        Stay on top of fresh chapter releases and activity.
+                    </p>
                 </div>
             </div>
             <div className="mt-4 space-y-3">
                 {notifications.length === 0 ? (
-                    <EmptyState title="No notifications yet" description="You'll see new chapter alerts here as teachers publish them." />
+                    <EmptyState
+                        title="No notifications yet"
+                        description="You'll see new chapter alerts here as teachers publish them."
+                    />
                 ) : (
                     notifications.map((notification) => (
                         <div
                             key={notification.id}
                             className={`rounded-[1.25rem] border p-4 ${
-                                notification.is_read ? 'border-black/8 bg-[#fffdf7]' : 'border-[#2563eb]/20 bg-[#edf4ff]'
+                                notification.is_read
+                                    ? 'border-black/8 bg-[#fffdf7]'
+                                    : 'border-[#2563eb]/20 bg-[#edf4ff]'
                             }`}
                         >
                             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
-                                    <p className="text-sm font-semibold text-black">{notification.message}</p>
-                                    <p className="mt-0.5 text-xs text-black/50">{notification.course?.title ?? 'Course update'}</p>
+                                    <p className="text-sm font-semibold text-black">
+                                        {notification.message}
+                                    </p>
+                                    <p className="mt-0.5 text-xs text-black/50">
+                                        {notification.course?.title ??
+                                            'Course update'}
+                                    </p>
                                 </div>
                                 {!notification.is_read ? (
                                     <Button
                                         type="button"
                                         variant="outline"
                                         size="sm"
-                                        className="rounded-[0.8rem] shrink-0 text-[11px]"
-                                        onClick={() => void onMarkAsRead(notification.id)}
+                                        className="shrink-0 rounded-[0.8rem] text-[11px]"
+                                        onClick={() =>
+                                            void onMarkAsRead(notification.id)
+                                        }
                                     >
                                         Mark as read
                                     </Button>
