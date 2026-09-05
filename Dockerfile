@@ -8,6 +8,7 @@ RUN apk add --no-cache \
     oniguruma-dev \
     libpq-dev \
     libpng-dev \
+    php84-curl \
     && docker-php-ext-install \
     pdo_mysql \
     pdo_pgsql \
@@ -63,6 +64,7 @@ RUN apk add --no-cache \
     php84 \
     php84-cli \
     php84-common \
+    php84-curl \
     php84-mbstring \
     php84-pdo \
     php84-pdo_mysql \
