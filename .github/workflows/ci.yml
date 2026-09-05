@@ -2,7 +2,6 @@ name: CI
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
 on:
   push:
@@ -73,9 +72,6 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
-      - name: Build frontend assets
-        run: npm run build
-
       - name: Prepare Environment
         run: |
           cp .env.example .env
@@ -91,6 +87,9 @@ jobs:
           CACHE_STORE: redis
           SESSION_DRIVER: redis
           QUEUE_CONNECTION: redis
+
+      - name: Build frontend assets
+        run: npm run build
 
       - name: Run Lint
         run: vendor/bin/pint --parallel --test
