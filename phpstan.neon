@@ -7,7 +7,8 @@ parameters:
     level: 5
     ignoreErrors:
         # JsonResource proxies attributes dynamically from its wrapped Eloquent model.
-        - identifier: property.notFound
+        - message: '#Access to an undefined property App\\Http\\Resources\\#'
+          path: app/Http/Resources
     excludePaths:
         - vendor/*
         - node_modules/*

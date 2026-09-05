@@ -33,7 +33,7 @@ class MediaStorage
             'public_id' => $publicId,
             'resource_type' => $resourceType,
             'timestamp' => $timestamp,
-        ], fn (mixed $value): bool => $value !== null && $value !== '');
+        ], fn (mixed $value): bool => $value !== '');
 
         $response = Http::asMultipart()
             ->attach(

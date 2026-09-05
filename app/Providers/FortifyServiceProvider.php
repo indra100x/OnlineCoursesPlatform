@@ -97,31 +97,31 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('purchase', function (Request $request) {
-            return Limit::perMinute(10)->by($request->user()?->id ?? $request->ip());
+            return Limit::perMinute(10)->by($request->user()->id);
         });
 
         RateLimiter::for('enrollment', function (Request $request) {
-            return Limit::perMinute(5)->by($request->user()?->id ?? $request->ip());
+            return Limit::perMinute(5)->by($request->user()->id);
         });
 
         RateLimiter::for('rating', function (Request $request) {
-            return Limit::perMinute(10)->by($request->user()?->id ?? $request->ip());
+            return Limit::perMinute(10)->by($request->user()->id);
         });
 
         RateLimiter::for('wishlist', function (Request $request) {
-            return Limit::perMinute(30)->by($request->user()?->id ?? $request->ip());
+            return Limit::perMinute(30)->by($request->user()->id);
         });
 
         RateLimiter::for('profile', function (Request $request) {
-            return Limit::perMinute(10)->by($request->user()?->id ?? $request->ip());
+            return Limit::perMinute(10)->by($request->user()->id);
         });
 
         RateLimiter::for('admin', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?? $request->ip());
+            return Limit::perMinute(60)->by($request->user()->id);
         });
 
         RateLimiter::for('teacher', function (Request $request) {
-            return Limit::perMinute(30)->by($request->user()?->id ?? $request->ip());
+            return Limit::perMinute(30)->by($request->user()->id);
         });
     }
 }
