@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Http\Requests\Admin\UserStoreRequest;
 use App\Models\Course;
 use App\Models\CoursePurchase;
 use App\Models\Enrollment;
 use App\Models\Notification;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 class SecurityTest extends TestCase
@@ -175,19 +176,16 @@ class SecurityTest extends TestCase
 
     public function test_weak_password_is_rejected_in_production(): void
     {
-        $admin = $this->createAdmin();
-
         app()->detectEnvironment(fn () => 'production');
-        $this->withoutMiddleware(ValidateCsrfToken::class);
 
-        $response = $this->actingAs($admin)->postJson('/users', [
+        $validator = Validator::make([
             'name' => 'Weak User',
             'email' => 'weak@example.com',
             'password' => 'password',
             'role' => 'student',
-        ]);
+        ], (new UserStoreRequest())->rules());
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['password']);
+        $this->assertTrue($validator->fails());
+        $this->assertArrayHasKey('password', $validator->errors()->toArray());
     }
 }

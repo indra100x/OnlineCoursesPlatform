@@ -20,7 +20,7 @@ class PasswordResetTest extends TestCase
     {
         $response = $this->get(route('password.request'));
 
-        $response->assertRedirect();
+        $response->assertOk();
     }
 
     public function test_reset_password_link_can_be_requested()
@@ -31,9 +31,8 @@ class PasswordResetTest extends TestCase
 
         $response = $this->post(route('password.email'), ['email' => $user->email]);
 
-        // Just verify the user was found and the email was accepted
-        // Actual notification sending is tested by Fortify's own tests
-        $response->assertOk();
+        // Fortify redirects back after successfully dispatching the reset link.
+        $response->assertRedirect();
     }
 
     public function test_reset_password_screen_can_be_rendered()

@@ -57,8 +57,8 @@ class ProfileTest extends TestCase
 
         $response = $this->actingAs($user)->postJson('/profile/password', [
             'current_password' => 'password',
-            'password' => 'NewSecurePassword123!',
-            'password_confirmation' => 'NewSecurePassword123!',
+            'password' => 'C0ntr@ct!Br@ve7yStr0ng',
+            'password_confirmation' => 'C0ntr@ct!Br@ve7yStr0ng',
         ]);
 
         $response->assertOk();

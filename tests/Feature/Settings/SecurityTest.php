@@ -100,13 +100,15 @@ class SecurityTest extends TestCase
     {
         $user = User::factory()->create();
 
+        $password = 'P@ssw0rd!Secure9xY';
+
         $response = $this
             ->actingAs($user)
             ->from(route('security.edit'))
             ->put(route('user-password.update'), [
                 'current_password' => 'password',
-                'password' => 'Q7!mV2#xL9@rK4$wZ8',
-                'password_confirmation' => 'Q7!mV2#xL9@rK4$wZ8',
+                'password' => $password,
+                'password_confirmation' => $password,
             ]);
 
         $response
@@ -114,7 +116,7 @@ class SecurityTest extends TestCase
             ->assertRedirect(route('security.edit'));
 
         $user->refresh();
-        $this->assertTrue(Hash::check('new-password', $user->password));
+        $this->assertTrue(Hash::check($password, $user->password));
     }
 
     public function test_correct_password_must_be_provided_to_update_password()
