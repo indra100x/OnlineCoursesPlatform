@@ -42,7 +42,7 @@ class CourseController extends Controller
 
     public function update(CourseUpdateRequest $request, Course $course): JsonResponse
     {
-        abort_unless($course->teacher_id === $request->user()->id, 403);
+        $this->authorize('update', $course);
 
         $course = $this->courseService->updateCourse($course, $request->validated());
 
@@ -56,7 +56,7 @@ class CourseController extends Controller
 
     public function destroy(Request $request, Course $course): JsonResponse
     {
-        abort_unless($course->teacher_id === $request->user()->id, 403);
+        $this->authorize('delete', $course);
 
         $courseId = $course->id;
         $this->courseService->deleteCourse($course);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TeacherRequestStoreRequest;
 use App\Http\Resources\TeacherRequestResource;
 use App\Models\TeacherRequest;
+use App\Services\AuditLogService;
 use App\Services\TeacherRequestService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,11 +27,20 @@ class TeacherRequestController extends Controller
         ], 201);
     }
 
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): JsonResponse
     {
-        $requests = $this->teacherRequestService->getRequests();
+        $perPage = min((int) $request->input('per_page', 20), 100);
+        $requests = $this->teacherRequestService->getRequests($perPage);
 
-        return TeacherRequestResource::collection($requests);
+        return response()->json([
+            'data' => TeacherRequestResource::collection($requests),
+            'meta' => [
+                'current_page' => $requests->currentPage(),
+                'last_page' => $requests->lastPage(),
+                'per_page' => $requests->perPage(),
+                'total' => $requests->total(),
+            ],
+        ]);
     }
 
     public function approve(Request $request, TeacherRequest $teacherRequest): JsonResponse
@@ -43,6 +53,8 @@ class TeacherRequestController extends Controller
             $teacherRequest,
             $validated['admin_notes'] ?? null
         );
+
+        AuditLogService::logTeacherRequestApproved($request->user()->id, $teacherRequest->id);
 
         return response()->json([
             'message' => 'Teacher request approved. Account created successfully.',
@@ -60,6 +72,8 @@ class TeacherRequestController extends Controller
             $teacherRequest,
             $validated['admin_notes'] ?? null
         );
+
+        AuditLogService::logTeacherRequestRejected($request->user()->id, $teacherRequest->id);
 
         return response()->json([
             'message' => 'Teacher request rejected.',

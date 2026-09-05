@@ -19,7 +19,7 @@ class CourseChapterController extends Controller
 
     public function store(ChapterStoreRequest $request, Course $course): JsonResponse
     {
-        abort_unless($course->teacher_id === $request->user()->id, 403);
+        $this->authorize('manageChapters', $course);
 
         $chapter = $this->chapterService->createChapter(
             $course,

@@ -44,7 +44,7 @@ rm -f public/hot
 echo "Waiting for database at $DB_HOST:$DB_PORT..."
 for i in $(seq 1 30); do
     if [ "$DB_CONNECTION" = "pgsql" ]; then
-        if php -r "new PDO('pgsql:host=$DB_HOST;port=$DB_PORT;dbname=$DB_DATABASE;sslmode=require', '$DB_USERNAME', '$DB_PASSWORD');" 2>/dev/null; then
+        if php -r "new PDO('pgsql:host=$DB_HOST;port=$DB_PORT;dbname=$DB_DATABASE', '$DB_USERNAME', '$DB_PASSWORD');" 2>/dev/null; then
             echo "Database is ready!"
             break
         fi
@@ -95,7 +95,31 @@ fi
 
 php artisan storage:link --force 2>/dev/null || true
 
-php artisan migrate --force 2>/dev/null || true
-php artisan db:seed --force 2>/dev/null || true
+# Run migrations only if this is the first app container to start
+# Uses a lock file in the shared storage volume to prevent race conditions
+MIGRATION_LOCK="storage/framework/migration-lock"
+if [ ! -f "$MIGRATION_LOCK" ] || [ ! -s "$MIGRATION_LOCK" ]; then
+    echo "Running migrations..."
+    php artisan migrate --force 2>/dev/null || true
+    date +%s > "$MIGRATION_LOCK"
+else
+    echo "Skipping migrations (another container handles it)..."
+    # Wait briefly to let the other container finish migrations
+    sleep 3
+fi
+
+# Seed if the database is empty (direct query instead of spawning Tinker)
+SEED_CHECK=$(php -r "
+    try {
+        \$pdo = new PDO('pgsql:host=$DB_HOST;port=$DB_PORT;dbname=$DB_DATABASE', '$DB_USERNAME', '$DB_PASSWORD');
+        echo \$pdo->query('SELECT COUNT(*) FROM users')->fetchColumn();
+    } catch (Throwable \$e) {
+        echo 'error';
+    }
+" 2>/dev/null || echo "error")
+if [ "$SEED_CHECK" = "0" ]; then
+    echo "Empty database detected — running seeders..."
+    php artisan db:seed --force 2>/dev/null || true
+fi
 
 exec "$@"

@@ -37,11 +37,11 @@ class SendChapterNotificationsJob implements ShouldQueue
             'course_id' => $this->course->id,
             'chapter_id' => $this->chapter->id,
             'type' => Notification::TYPE_CHAPTER_CREATED,
-            'data' => json_encode([
+            'data' => [
                 'course_title' => $this->course->title,
                 'chapter_title' => $this->chapter->title,
                 'chapter_position' => $this->chapter->position,
-            ]),
+            ],
             'message' => "New chapter \"{$this->chapter->title}\" was added to {$this->course->title}.",
             'created_at' => now(),
             'updated_at' => now(),

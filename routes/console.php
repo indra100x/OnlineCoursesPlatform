@@ -11,3 +11,5 @@ Artisan::command('inspire', function () {
 
 Schedule::job(new CleanupExpiredSessionsJob)->daily();
 Schedule::command('cache:prune-stale-tags')->hourly();
+Schedule::command('queue:prune-failed --hours=48')->daily();
+Schedule::command('session:prune --hours=48')->daily();

@@ -52,7 +52,7 @@ class CourseServiceTest extends TestCase
         $result = $this->courseService->deleteCourse($course);
 
         $this->assertTrue($result);
-        $this->assertDatabaseMissing('courses', ['id' => $course->id]);
+        $this->assertSoftDeleted('courses', ['id' => $course->id]);
     }
 
     public function test_get_teacher_courses(): void

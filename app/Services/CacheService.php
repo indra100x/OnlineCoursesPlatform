@@ -11,6 +11,7 @@ class CacheService
     const COURSE_DETAIL_TTL = 600; // 10 minutes
     const USER_STATS_TTL = 300; // 5 minutes
     const TEACHER_COURSES_TTL = 300; // 5 minutes
+    const TEACHER_COURSES_FOR_STUDENT_TTL = 300; // 5 minutes
     const ENROLLED_COURSES_TTL = 300; // 5 minutes
     const NOTIFICATION_COUNT_TTL = 60; // 1 minute
 
@@ -27,6 +28,11 @@ class CacheService
     public function getTeacherCoursesKey(int $teacherId): string
     {
         return "courses:teacher:{$teacherId}";
+    }
+
+    public function getTeacherCoursesForStudentKey(int $teacherId, int $studentId): string
+    {
+        return "courses:teacher:{$teacherId}:student:{$studentId}";
     }
 
     public function getEnrolledCoursesKey(int $studentId): string
@@ -88,8 +94,13 @@ class CacheService
     public function invalidateCourseCache(int $courseId): void
     {
         $this->forget($this->getCourseDetailKey($courseId));
-        $this->forgetPattern("courses:teacher:");
         $this->forgetPattern("catalog:student:");
+    }
+
+    public function invalidateTeacherCoursesCache(int $teacherId): void
+    {
+        $this->forget($this->getTeacherCoursesKey($teacherId));
+        $this->forgetPattern("courses:teacher:{$teacherId}:student:");
     }
 
     public function invalidateUserCache(int $userId): void
@@ -103,5 +114,10 @@ class CacheService
     {
         $this->forgetPattern("catalog:student:");
         $this->forget($this->getUserStatsKey());
+    }
+
+    public function invalidateAllCatalogCaches(): void
+    {
+        $this->forgetPattern("catalog:student:");
     }
 }

@@ -22,10 +22,12 @@ class TeacherRequestService
             throw new TeacherRequestException('This request has already been '.$teacherRequest->status.'.', 422);
         }
 
+        $hashedPassword = $teacherRequest->password;
+
         $user = User::create([
             'name' => $teacherRequest->name,
             'email' => $teacherRequest->email,
-            'password' => $teacherRequest->password,
+            'password' => $hashedPassword,
             'role' => User::ROLE_TEACHER,
             'bio' => $teacherRequest->bio,
         ]);
@@ -52,11 +54,10 @@ class TeacherRequestService
         ]);
     }
 
-    public function getRequests(int $limit = 50): \Illuminate\Database\Eloquent\Collection
+    public function getRequests(int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         return TeacherRequest::query()
             ->latest()
-            ->limit($limit)
-            ->get();
+            ->paginate($perPage);
     }
 }

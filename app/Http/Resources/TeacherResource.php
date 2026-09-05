@@ -12,7 +12,10 @@ class TeacherResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email,
+            'email' => $this->when(
+                $request->user()?->id === $this->id || $request->user()?->role === 'admin',
+                $this->email,
+            ),
             'avatar_path' => $this->avatar_path,
             'bio' => $this->bio,
         ];

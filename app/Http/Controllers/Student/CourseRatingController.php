@@ -21,9 +21,12 @@ class CourseRatingController extends Controller
     public function store(RatingStoreRequest $request, Course $course): JsonResponse
     {
         $student = $request->user();
-        $isEnrolled = $this->enrollmentService->isEnrolled($student, $course);
 
-        abort_unless($isEnrolled, 403, 'You must be enrolled before rating this course.');
+        abort_unless(
+            $this->enrollmentService->isEnrolled($student, $course),
+            403,
+            'You must be enrolled before rating this course.',
+        );
 
         $rating = CourseRating::updateOrCreate([
             'student_id' => $student->id,

@@ -95,6 +95,11 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.87 0 0);
+
+    --brand-yellow: #ffd84d;
+    --brand-blue: #2563eb;
+    --brand-red: #ef4444;
+    --brand-bg: #fffdf7;
 }
 
 .dark {
@@ -156,7 +161,7 @@
     }
 
     .brand-surface-soft {
-        @apply rounded-[1.75rem] border border-black/6 bg-[#fffdf7] shadow-[0_4px_20px_rgba(17,17,17,0.04)];
+        @apply rounded-[1.75rem] border border-black/6 bg-[var(--brand-bg)] shadow-[0_4px_20px_rgba(17,17,17,0.04)];
     }
 
     .brand-surface-glass {
@@ -164,15 +169,15 @@
     }
 
     .brand-surface-accent {
-        @apply rounded-[1.75rem] border border-[#ffd84d]/20 bg-[#ffd84d] text-black shadow-[0_8px_24px_rgba(255,216,77,0.2)];
+        @apply rounded-[1.75rem] border border-[var(--brand-yellow)]/20 bg-[var(--brand-yellow)] text-black shadow-[0_8px_24px_rgba(255,216,77,0.2)];
     }
 
     .brand-surface-blue {
-        @apply rounded-[1.75rem] border border-[#2563eb]/20 bg-[#2563eb] text-white shadow-[0_8px_24px_rgba(37,99,235,0.2)];
+        @apply rounded-[1.75rem] border border-[var(--brand-blue)]/20 bg-[var(--brand-blue)] text-white shadow-[0_8px_24px_rgba(37,99,235,0.2)];
     }
 
     .brand-surface-red {
-        @apply rounded-[1.75rem] border border-[#ef4444]/20 bg-[#ef4444] text-white shadow-[0_8px_24px_rgba(239,68,68,0.2)];
+        @apply rounded-[1.75rem] border border-[var(--brand-red)]/20 bg-[var(--brand-red)] text-white shadow-[0_8px_24px_rgba(239,68,68,0.2)];
     }
 
     .brand-grid {
@@ -194,15 +199,15 @@
     }
 
     .brand-tag-yellow {
-        @apply rounded-full bg-[#ffd84d] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-black;
+        @apply rounded-full bg-[var(--brand-yellow)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-black;
     }
 
     .brand-tag-blue {
-        @apply rounded-full bg-[#2563eb] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white;
+        @apply rounded-full bg-[var(--brand-blue)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white;
     }
 
     .brand-tag-red {
-        @apply rounded-full bg-[#ef4444] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white;
+        @apply rounded-full bg-[var(--brand-red)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white;
     }
 
     .brand-tag-ghost {
@@ -226,7 +231,7 @@
     }
 
     .brand-input {
-        @apply w-full rounded-xl border border-black/12 bg-white px-4 py-2.5 text-sm text-black placeholder:text-black/30 outline-none transition-all duration-200 focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/10;
+        @apply w-full rounded-xl border border-black/12 bg-white px-4 py-2.5 text-sm text-black placeholder:text-black/30 outline-none transition-all duration-200 focus:border-[var(--brand-blue)] focus:ring-2 focus:ring-[var(--brand-blue)]/10;
     }
 
     .brand-card-hover {

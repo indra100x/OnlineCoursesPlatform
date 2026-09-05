@@ -15,10 +15,17 @@ class CourseCatalogController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $courses = $this->courseService->getCatalogForStudent($request->user());
+        $perPage = min((int) $request->input('per_page', 20), 100);
+        $courses = $this->courseService->getCatalogForStudent($request->user(), $perPage);
 
         return response()->json([
-            'courses' => $courses,
+            'data' => $courses->items(),
+            'meta' => [
+                'current_page' => $courses->currentPage(),
+                'last_page' => $courses->lastPage(),
+                'per_page' => $courses->perPage(),
+                'total' => $courses->total(),
+            ],
         ]);
     }
 }

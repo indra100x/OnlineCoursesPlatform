@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CourseResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -29,19 +30,7 @@ class StudentProfileController extends Controller
             }])
             ->latest('enrollments.created_at')
             ->get()
-            ->map(fn ($enrollment) => [
-                'id' => $enrollment->course->id,
-                'title' => $enrollment->course->title,
-                'description' => $enrollment->course->description,
-                'price' => $enrollment->course->price,
-                'enrollment_code' => $enrollment->course->enrollment_code,
-                'chapters_count' => $enrollment->course->chapters_count,
-                'enrollments_count' => $enrollment->course->enrollments_count,
-                'ratings_count' => $enrollment->course->ratings_count,
-                'ratings_avg_rating' => $enrollment->course->ratings_avg_rating,
-                'enrolled_at' => $enrollment->created_at,
-                'created_at' => $enrollment->course->created_at,
-            ])
+            ->map(fn ($enrollment) => $enrollment->course)
             ->values();
 
         abort_if($courses->isEmpty(), 403);
@@ -55,7 +44,7 @@ class StudentProfileController extends Controller
                 'avatar_path' => $student->avatar_path,
                 'created_at' => $student->created_at,
             ],
-            'courses' => $courses,
+            'courses' => CourseResource::collection($courses),
         ]);
     }
 }

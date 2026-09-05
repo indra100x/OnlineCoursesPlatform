@@ -68,8 +68,11 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                 bio: response.data.profile.bio ?? '',
             }));
             onProfileRefresh(response.data.profile);
-        } catch (submitError: any) {
-            setError(submitError?.response?.data?.message ?? 'Unable to update your profile.');
+        } catch (submitError: unknown) {
+            const message = submitError instanceof Error
+                ? (submitError as { response?: { data?: { message?: string } } }).response?.data?.message
+                : undefined;
+            setError(message ?? 'Unable to update your profile.');
         }
     }
 
@@ -86,8 +89,11 @@ export default function ProfilePage({ onProfileRefresh }: ProfilePageProps) {
                 password_confirmation: '',
             });
             setMessage(response.data.message);
-        } catch (submitError: any) {
-            setError(submitError?.response?.data?.message ?? 'Unable to update your password.');
+        } catch (submitError: unknown) {
+            const message = submitError instanceof Error
+                ? (submitError as { response?: { data?: { message?: string } } }).response?.data?.message
+                : undefined;
+            setError(message ?? 'Unable to update your password.');
         }
     }
 

@@ -1,8 +1,9 @@
 import { Check, Clock, MessageSquare, UserCheck, UserX, X } from 'lucide-react';
-import {  useEffect, useState } from 'react';
-import type {FormEvent} from 'react';
+import { useEffect, useState } from 'react';
+import type { FormEvent } from 'react';
 import { EmptyState } from '@/components/platform/empty-state';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import api from '@/lib/api';
@@ -35,8 +36,8 @@ export default function AdminTeacherRequests() {
             setActionError(null);
 
             try {
-                const response = await api.get<{ data: TeacherRequestItem[] }>('/teacher-requests');
-                setRequests(response.data.data ?? response.data);
+                const response = await api.get<TeacherRequestItem[]>('/teacher-requests');
+                setRequests(response.data);
             } catch {
                 setActionError('Unable to load teacher requests.');
             } finally {
@@ -70,10 +71,13 @@ export default function AdminTeacherRequests() {
                 admin_notes: notes || undefined,
             });
             setNotes('');
-            const response = await api.get<{ data: TeacherRequestItem[] }>('/teacher-requests');
-            setRequests(response.data.data ?? response.data);
-        } catch (submitError: any) {
-            setActionError(submitError?.response?.data?.message ?? `Unable to ${action} this request.`);
+            const response = await api.get<TeacherRequestItem[]>('/teacher-requests');
+            setRequests(response.data);
+        } catch (submitError: unknown) {
+            const message = submitError instanceof Error
+                ? (submitError as { response?: { data?: { message?: string } } }).response?.data?.message
+                : undefined;
+            setActionError(message ?? `Unable to ${action} this request.`);
         } finally {
             setActionLoading(null);
         }
@@ -277,57 +281,61 @@ export default function AdminTeacherRequests() {
                 </div>
             </section>
 
-            {notesModal ? (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-                    <div className="w-full max-w-md rounded-[1.5rem] bg-white p-6 shadow-xl">
-                        <h3 className="text-base font-semibold text-black">
-                            {notesModal.action === 'approve' ? 'Approve' : 'Reject'} {notesModal.name}
-                        </h3>
-                        <p className="mt-1 text-xs text-black/50">
-                            {notesModal.action === 'approve'
+            <Dialog open={notesModal !== null} onOpenChange={(open) => {
+ if (!open) {
+ setNotesModal(null); 
+} 
+}}>
+                <DialogContent className="rounded-[1.5rem]">
+                    <DialogHeader>
+                        <DialogTitle>
+                            {notesModal?.action === 'approve' ? 'Approve' : 'Reject'} {notesModal?.name}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {notesModal?.action === 'approve'
                                 ? 'A teacher account will be created for this user.'
                                 : 'This request will be marked as rejected.'}
-                        </p>
-                        <form className="mt-4 space-y-3.5" onSubmit={handleNotesSubmit}>
-                            <div className="space-y-1.5">
-                                <Label htmlFor="admin-notes" className="text-xs font-semibold">
-                                    Admin notes <span className="text-black/40">(optional)</span>
-                                </Label>
-                                <textarea
-                                    id="admin-notes"
-                                    className="min-h-20 w-full rounded-xl border border-black/12 bg-white px-3 py-2.5 text-sm text-black placeholder:text-black/30 outline-none transition-all focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/10"
-                                    value={notes}
-                                    onChange={(event) => setNotes(event.target.value)}
-                                    placeholder="Add a note about this decision..."
-                                />
-                            </div>
-                            <div className="flex gap-2">
-                                <Button
-                                    type="submit"
-                                    className={`rounded-xl ${notesModal.action === 'approve' ? 'bg-green-700 text-white hover:bg-green-800' : 'bg-red-600 text-white hover:bg-red-700'}`}
-                                    disabled={actionLoading === notesModal.id}
-                                >
-                                    {actionLoading === notesModal.id
-                                        ? 'Processing...'
-                                        : notesModal.action === 'approve'
-                                            ? 'Confirm approval'
-                                            : 'Confirm rejection'}
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    className="rounded-xl"
-                                    onClick={() => {
- setNotesModal(null); setActionError(null);
+                        </DialogDescription>
+                    </DialogHeader>
+                    <form className="space-y-3.5" onSubmit={handleNotesSubmit}>
+                        <div className="space-y-1.5">
+                            <Label htmlFor="admin-notes" className="text-xs font-semibold">
+                                Admin notes <span className="text-black/40">(optional)</span>
+                            </Label>
+                            <textarea
+                                id="admin-notes"
+                                className="min-h-20 w-full rounded-xl border border-black/12 bg-white px-3 py-2.5 text-sm text-black placeholder:text-black/30 outline-none transition-all focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/10"
+                                value={notes}
+                                onChange={(event) => setNotes(event.target.value)}
+                                placeholder="Add a note about this decision..."
+                            />
+                        </div>
+                        <DialogFooter>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="rounded-xl"
+                                onClick={() => {
+ setNotesModal(null); setActionError(null); 
 }}
-                                >
-                                    Cancel
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            ) : null}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                className={`rounded-xl ${notesModal?.action === 'approve' ? 'bg-green-700 text-white hover:bg-green-800' : 'bg-red-600 text-white hover:bg-red-700'}`}
+                                disabled={actionLoading === notesModal?.id}
+                            >
+                                {actionLoading === notesModal?.id
+                                    ? 'Processing...'
+                                    : notesModal?.action === 'approve'
+                                        ? 'Confirm approval'
+                                        : 'Confirm rejection'}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

@@ -36,8 +36,11 @@ export default function TeacherRegister() {
             });
             setSuccess(response.data.message);
             setForm({ name: '', email: '', password: '', password_confirmation: '', bio: '', proof_link: '' });
-        } catch (submitError: any) {
-            setError(submitError?.response?.data?.message ?? 'Unable to submit your request.');
+        } catch (submitError: unknown) {
+            const message = submitError instanceof Error
+                ? (submitError as { response?: { data?: { message?: string } } }).response?.data?.message
+                : undefined;
+            setError(message ?? 'Unable to submit your request.');
         } finally {
             setSubmitting(false);
         }

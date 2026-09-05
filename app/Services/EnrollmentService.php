@@ -7,13 +7,18 @@ use App\Models\Course;
 use App\Models\CoursePurchase;
 use App\Models\Enrollment;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class EnrollmentService
 {
+    public function __construct(
+        private readonly CacheService $cache,
+    ) {}
+
     public function purchaseCourse(User $student, Course $course): CoursePurchase
     {
-        return CoursePurchase::firstOrCreate([
+        $purchase = CoursePurchase::firstOrCreate([
             'student_id' => $student->id,
             'course_id' => $course->id,
         ], [
@@ -22,29 +27,41 @@ class EnrollmentService
             'reference' => 'BETA-'.Str::upper(Str::random(12)),
             'purchased_at' => now(),
         ]);
+
+        $this->cache->invalidateCourseCache($course->id);
+        $this->cache->invalidateUserCache($student->id);
+
+        return $purchase;
     }
 
     public function enrollWithCode(User $student, string $code): Enrollment
     {
-        $course = Course::query()
-            ->where('enrollment_code', $code)
-            ->firstOrFail();
+        return DB::transaction(function () use ($student, $code) {
+            $course = Course::query()
+                ->where('enrollment_code', $code)
+                ->firstOrFail();
 
-        $hasPurchased = CoursePurchase::query()
-            ->where('student_id', $student->id)
-            ->where('course_id', $course->id)
-            ->exists();
+            $hasPurchased = CoursePurchase::query()
+                ->where('student_id', $student->id)
+                ->where('course_id', $course->id)
+                ->exists();
 
-        if (! $hasPurchased) {
-            throw new EnrollmentException('You must complete the beta purchase before using this enrollment code.', 403);
-        }
+            if (! $hasPurchased) {
+                throw new EnrollmentException('You must complete the beta purchase before using this enrollment code.', 403);
+            }
 
-        return Enrollment::firstOrCreate([
-            'student_id' => $student->id,
-            'course_id' => $course->id,
-        ], [
-            'enrolled_at' => now(),
-        ]);
+            $enrollment = Enrollment::firstOrCreate([
+                'student_id' => $student->id,
+                'course_id' => $course->id,
+            ], [
+                'enrolled_at' => now(),
+            ]);
+
+            $this->cache->invalidateCourseCache($course->id);
+            $this->cache->invalidateUserCache($student->id);
+
+            return $enrollment;
+        });
     }
 
     public function hasPurchased(User $student, Course $course): bool

@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\CourseCreated;
 use App\Events\CourseUpdated;
 use App\Events\CourseDeleted;
-use App\Jobs\UpdateCourseStatsJob;
+use App\Jobs\RefreshCourseCacheJob;
 
 class UpdateCourseStats
 {
@@ -17,6 +17,6 @@ class UpdateCourseStats
             $event instanceof CourseDeleted => $event->courseId,
         };
 
-        UpdateCourseStatsJob::dispatch($courseId)->onQueue('default');
+        RefreshCourseCacheJob::dispatch($courseId);
     }
 }

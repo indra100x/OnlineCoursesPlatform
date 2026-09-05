@@ -11,7 +11,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CoursePurchase extends Model
 {
     use Auditable;
-    public const STATUS_BETA_PAID = 'beta_paid';
+
+    const STATUS_BETA_PAID = 'beta_paid';
+
+    const VALID_STATUSES = [self::STATUS_BETA_PAID];
 
     protected function casts(): array
     {
@@ -19,6 +22,11 @@ class CoursePurchase extends Model
             'amount' => 'decimal:2',
             'purchased_at' => 'datetime',
         ];
+    }
+
+    public function validateStatus(string $status): bool
+    {
+        return in_array($status, self::VALID_STATUSES, true);
     }
 
     public function student(): BelongsTo

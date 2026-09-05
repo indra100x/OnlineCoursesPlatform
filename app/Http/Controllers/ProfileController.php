@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateApiRequest;
 use App\Http\Requests\PasswordUpdateApiRequest;
 use App\Http\Resources\ProfileResource;
+use App\Services\AuditLogService;
 use App\Support\MediaStorage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -40,6 +41,8 @@ class ProfileController extends Controller
 
         $user->update($payload);
 
+        AuditLogService::logProfileUpdated($user->id, array_keys($payload));
+
         return response()->json([
             'message' => 'Profile updated successfully.',
             'profile' => new ProfileResource($user->fresh()),
@@ -52,8 +55,25 @@ class ProfileController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        AuditLogService::logPasswordChanged($request->user()->id);
+
         return response()->json([
             'message' => 'Password updated successfully.',
+        ]);
+    }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        auth()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        $user->delete();
+
+        return response()->json([
+            'message' => 'Account deleted successfully.',
         ]);
     }
 }

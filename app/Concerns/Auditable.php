@@ -6,9 +6,9 @@ use App\Models\AuditLog;
 
 trait Auditable
 {
-    public function logAudit(string $action, array $oldValues = [], array $newValues = []): AuditLog
+    public function logAudit(string $action, array $oldValues = [], array $newValues = []): void
     {
-        return AuditLog::create([
+        dispatch(fn () => AuditLog::create([
             'user_id' => auth()->id(),
             'action' => $action,
             'auditable_type' => static::class,
@@ -17,6 +17,6 @@ trait Auditable
             'new_values' => $newValues,
             'ip_address' => request()->ip(),
             'user_agent' => request()->userAgent(),
-        ]);
+        ]));
     }
 }

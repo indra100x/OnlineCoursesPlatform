@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class UpdateCourseStatsJob implements ShouldQueue
+class RefreshCourseCacheJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,11 +30,12 @@ class UpdateCourseStatsJob implements ShouldQueue
 
         if ($course) {
             $cache->invalidateCourseCache($this->courseId);
+            $cache->invalidateTeacherCoursesCache($course->teacher_id);
         }
     }
 
     public function failed(\Throwable $exception): void
     {
-        \Log::error("Failed to update course stats for course {$this->courseId}: {$exception->getMessage()}");
+        \Log::error("Failed to refresh course cache for course {$this->courseId}: {$exception->getMessage()}");
     }
 }

@@ -6,21 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\WishlistStoreRequest;
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
-use App\Models\Wishlist;
+use App\Services\WishlistService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class WishlistController extends Controller
 {
+    public function __construct(
+        protected WishlistService $wishlistService,
+    ) {}
+
     public function index(Request $request): JsonResponse
     {
-        $courses = Course::query()
-            ->whereHas('wishlistItems', fn ($query) => $query->where('student_id', $request->user()->id))
-            ->with(['teacher:id,name,email,avatar_path,bio'])
-            ->withCount(['chapters', 'ratings'])
-            ->withAvg('ratings', 'rating')
-            ->latest()
-            ->get();
+        $courses = $this->wishlistService->getWishlistForStudent($request->user());
 
         return response()->json([
             'courses' => CourseResource::collection($courses),
@@ -29,10 +27,7 @@ class WishlistController extends Controller
 
     public function store(WishlistStoreRequest $request): JsonResponse
     {
-        Wishlist::firstOrCreate([
-            'student_id' => $request->user()->id,
-            'course_id' => $request->validated('course_id'),
-        ]);
+        $this->wishlistService->addToWishlist($request->user(), $request->validated('course_id'));
 
         return response()->json([
             'message' => 'Course added to wishlist.',
@@ -41,12 +36,9 @@ class WishlistController extends Controller
 
     public function destroy(Request $request, Course $course): JsonResponse
     {
-        $deleted = Wishlist::query()
-            ->where('student_id', $request->user()->id)
-            ->where('course_id', $course->id)
-            ->delete();
+        $deleted = $this->wishlistService->removeFromWishlist($request->user(), $course);
 
-        if ($deleted === 0) {
+        if (! $deleted) {
             return response()->json([
                 'message' => 'Wishlist item not found.',
             ], 404);

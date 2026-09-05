@@ -63,7 +63,7 @@ class UserManagementTest extends TestCase
         $response = $this->actingAs($admin)->deleteJson("/users/{$user->id}");
 
         $response->assertOk();
-        $this->assertDatabaseMissing('users', ['id' => $user->id]);
+        $this->assertSoftDeleted('users', ['id' => $user->id]);
     }
 
     public function test_admin_cannot_delete_own_account(): void

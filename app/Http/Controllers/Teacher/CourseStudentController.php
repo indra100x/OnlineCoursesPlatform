@@ -18,7 +18,7 @@ class CourseStudentController extends Controller
 
     public function index(Request $request, Course $course): JsonResponse
     {
-        abort_unless($course->teacher_id === $request->user()->id, 403);
+        $this->authorize('viewStudents', $course);
 
         return response()->json([
             'course' => new CourseResource($course->load('chapters', 'ratings', 'enrollments')),

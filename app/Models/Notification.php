@@ -13,7 +13,10 @@ class Notification extends Model
 {
     /** @use HasFactory<NotificationFactory> */
     use HasFactory;
+
     public const TYPE_CHAPTER_CREATED = 'chapter_created';
+
+    const VALID_TYPES = [self::TYPE_CHAPTER_CREATED];
 
     protected function casts(): array
     {

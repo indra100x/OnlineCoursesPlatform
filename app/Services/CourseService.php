@@ -14,14 +14,16 @@ class CourseService
 
     public function createCourse(User $teacher, array $data): Course
     {
-        $course = Course::create([
+        $course = new Course([
             'title' => $data['title'],
             'description' => $data['description'],
             'price' => $data['price'],
-            'teacher_id' => $teacher->id,
         ]);
+        $course->teacher_id = $teacher->id;
+        $course->save();
 
         $this->cache->invalidateAllUserCaches();
+        $this->cache->invalidateTeacherCoursesCache($teacher->id);
 
         return $course;
     }
@@ -30,14 +32,17 @@ class CourseService
     {
         $course->update($data);
         $this->cache->invalidateCourseCache($course->id);
+        $this->cache->invalidateTeacherCoursesCache($course->teacher_id);
 
         return $course->fresh();
     }
 
     public function deleteCourse(Course $course): bool
     {
+        $teacherId = $course->teacher_id;
         $result = $course->delete();
         $this->cache->invalidateCourseCache($course->id);
+        $this->cache->invalidateTeacherCoursesCache($teacherId);
 
         return $result;
     }
@@ -56,13 +61,15 @@ class CourseService
         );
     }
 
-    public function getCatalogForStudent(User $student): \Illuminate\Support\Collection
+    public function getCatalogForStudent(User $student, int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
+        $pageKey = "catalog:student:{$student->id}:page:".request()->input('page', 1).':per_page:'.$perPage;
+
         return $this->cache->remember(
-            $this->cache->getCatalogKey($student->id),
+            $pageKey,
             CacheService::CATALOG_TTL,
             fn () => Course::query()
-                ->with(['teacher:id,name,email,avatar_path,bio'])
+                ->with(['teacher:id,name,avatar_path,bio'])
                 ->withCount(['chapters', 'ratings'])
                 ->withAvg('ratings', 'rating')
                 ->withExists([
@@ -71,23 +78,7 @@ class CourseService
                     'enrollments as is_enrolled' => fn ($query) => $query->where('student_id', $student->id),
                 ])
                 ->latest()
-                ->get()
-                ->map(fn (Course $course) => [
-                    'id' => $course->id,
-                    'title' => $course->title,
-                    'description' => $course->description,
-                    'price' => $course->price,
-                    'teacher' => $course->teacher,
-                    'chapters_count' => $course->chapters_count,
-                    'ratings_count' => $course->ratings_count,
-                    'ratings_avg_rating' => $course->ratings_avg_rating,
-                    'is_purchased' => $course->is_purchased,
-                    'is_wishlisted' => $course->is_wishlisted,
-                    'is_enrolled' => $course->is_enrolled,
-                    'enrollment_code' => $course->is_purchased ? $course->enrollment_code : null,
-                    'created_at' => $course->created_at,
-                ])
-                ->values()
+                ->paginate($perPage)
         );
     }
 
@@ -123,35 +114,22 @@ class CourseService
         );
     }
 
-    public function getTeacherCoursesForStudent(User $teacher, User $student): \Illuminate\Support\Collection
+    public function getTeacherCoursesForStudent(User $teacher, User $student): \Illuminate\Database\Eloquent\Collection
     {
-        return Course::query()
-            ->where('teacher_id', $teacher->id)
-            ->withCount(['chapters', 'ratings', 'enrollments'])
-            ->withAvg('ratings', 'rating')
-            ->withExists([
-                'purchases as is_purchased' => fn ($query) => $query->where('student_id', $student->id),
-                'wishlistItems as is_wishlisted' => fn ($query) => $query->where('student_id', $student->id),
-                'enrollments as is_enrolled' => fn ($query) => $query->where('student_id', $student->id),
-            ])
-            ->latest()
-            ->get()
-            ->map(fn (Course $course) => [
-                'id' => $course->id,
-                'title' => $course->title,
-                'description' => $course->description,
-                'price' => $course->price,
-                'teacher_id' => $course->teacher_id,
-                'chapters_count' => $course->chapters_count,
-                'enrollments_count' => $course->enrollments_count,
-                'ratings_count' => $course->ratings_count,
-                'ratings_avg_rating' => $course->ratings_avg_rating,
-                'is_purchased' => $course->is_purchased,
-                'is_wishlisted' => $course->is_wishlisted,
-                'is_enrolled' => $course->is_enrolled,
-                'enrollment_code' => $course->is_purchased ? $course->enrollment_code : null,
-                'created_at' => $course->created_at,
-            ])
-            ->values();
+        return $this->cache->remember(
+            $this->cache->getTeacherCoursesForStudentKey($teacher->id, $student->id),
+            CacheService::TEACHER_COURSES_FOR_STUDENT_TTL,
+            fn () => Course::query()
+                ->where('teacher_id', $teacher->id)
+                ->withCount(['chapters', 'ratings', 'enrollments'])
+                ->withAvg('ratings', 'rating')
+                ->withExists([
+                    'purchases as is_purchased' => fn ($query) => $query->where('student_id', $student->id),
+                    'wishlistItems as is_wishlisted' => fn ($query) => $query->where('student_id', $student->id),
+                    'enrollments as is_enrolled' => fn ($query) => $query->where('student_id', $student->id),
+                ])
+                ->latest()
+                ->get()
+        );
     }
 }

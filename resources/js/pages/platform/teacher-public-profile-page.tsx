@@ -43,8 +43,11 @@ export default function TeacherPublicProfilePage() {
                 const response = await api.get<TeacherProfileView>(`/teachers/${teacherId}/profile`);
                 setData(response.data);
             }
-        } catch (submitError: any) {
-            setError(submitError?.response?.data?.message ?? 'Unable to complete the beta purchase.');
+        } catch (submitError: unknown) {
+            const message = submitError instanceof Error
+                ? (submitError as { response?: { data?: { message?: string } } }).response?.data?.message
+                : undefined;
+            setError(message ?? 'Unable to complete the beta purchase.');
         }
     }
 

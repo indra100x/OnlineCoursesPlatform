@@ -20,6 +20,7 @@ class TeacherRequestStoreRequest extends FormRequest
             'password' => ['required', 'string', 'min:12', Password::defaults()],
             'bio' => ['nullable', 'string', 'max:1000'],
             'proof_link' => ['nullable', 'url', 'max:2048'],
+            'honeypot' => ['sometimes', 'string', 'max:0'],
         ];
     }
 }

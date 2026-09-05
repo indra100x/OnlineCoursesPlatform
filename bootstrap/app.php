@@ -7,7 +7,6 @@ use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SecurityHeaders;
-use App\Http\Middleware\CacheStaticAssets;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -26,7 +25,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [
-            CacheStaticAssets::class,
             SecurityHeaders::class,
             HandleAppearance::class,
             HandleInertiaRequests::class,
@@ -44,5 +42,11 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->renderable(function (TeacherRequestException $e) {
             return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 422);
+        });
+
+        $exceptions->reportable(function (\Throwable $e) {
+            if (function_exists('sentry')) {
+                sentry()->captureException($e);
+            }
         });
     })->create();

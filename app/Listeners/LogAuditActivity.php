@@ -9,7 +9,7 @@ use App\Events\ChapterCreated;
 use App\Events\CoursePurchased;
 use App\Events\CourseEnrolled;
 use App\Events\RatingSubmitted;
-use App\Models\AuditLog;
+use App\Services\AuditLogService;
 
 class LogAuditActivity
 {
@@ -30,15 +30,11 @@ class LogAuditActivity
             default => $event->course ?? $event->chapter ?? $event->purchase ?? $event->enrollment ?? $event->rating,
         };
 
-        AuditLog::create([
-            'user_id' => auth()->id(),
-            'action' => $action,
-            'auditable_type' => $auditable ? get_class($auditable) : null,
-            'auditable_id' => $auditable?->getKey(),
-            'old_values' => null,
-            'new_values' => $auditable?->toArray(),
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-        ]);
+        AuditLogService::log(
+            action: $action,
+            auditableType: $auditable ? get_class($auditable) : null,
+            auditableId: $auditable?->getKey(),
+            newValues: $auditable?->toArray() ?? [],
+        );
     }
 }

@@ -1,0 +1,17 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+    level: 5
+    ignoreErrors:
+        - '#Unsafe call to static method .* on trait#'
+    excludePaths:
+        - vendor/*
+        - node_modules/*
+        - database/migrations/*
+        - resources/*
+        - config/*
+        - bootstrap/*
+        - public/*

@@ -2,6 +2,8 @@ import { Pencil, Plus, Trash2, Users } from 'lucide-react';
 import {  useDeferredValue, useEffect, useState } from 'react';
 import type {FormEvent} from 'react';
 import { EmptyState } from '@/components/platform/empty-state';
+import { ErrorMessage } from '@/components/platform/error-message';
+import { StatsCard } from '@/components/platform/stats-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -43,7 +45,7 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
 
             try {
                 const response = await api.get<PlatformUser[]>('/users');
-                setUsers(response.data.data ?? response.data);
+                setUsers(response.data);
             } catch {
                 setError('Unable to load users right now.');
             } finally {
@@ -83,9 +85,12 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
             setForm(initialForm);
             setEditingUser(null);
             const response = await api.get<PlatformUser[]>('/users');
-            setUsers(response.data.data ?? response.data);
-        } catch (submitError: any) {
-            setError(submitError?.response?.data?.message ?? 'Unable to save this user.');
+            setUsers(response.data);
+        } catch (submitError: unknown) {
+            const message = submitError instanceof Error
+                ? (submitError as { response?: { data?: { message?: string } } }).response?.data?.message
+                : undefined;
+            setError(message ?? 'Unable to save this user.');
         } finally {
             setSubmitting(false);
         }
@@ -99,9 +104,12 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
         try {
             await api.delete(`/users/${user.id}`);
             const response = await api.get<PlatformUser[]>('/users');
-            setUsers(response.data.data ?? response.data);
-        } catch (deleteError: any) {
-            setError(deleteError?.response?.data?.message ?? 'Unable to delete this user.');
+            setUsers(response.data);
+        } catch (deleteError: unknown) {
+            const message = deleteError instanceof Error
+                ? (deleteError as { response?: { data?: { message?: string } } }).response?.data?.message
+                : undefined;
+            setError(message ?? 'Unable to delete this user.');
         }
     }
 
@@ -118,21 +126,9 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
     return (
         <div className="space-y-5">
             <section className="grid gap-4 sm:grid-cols-3">
-                <div className="brand-surface p-5">
-                    <p className="brand-kicker">Total users</p>
-                    <p className="mt-2 text-3xl font-black text-black">{users.length}</p>
-                    <p className="mt-1 text-sm text-black/50">All accounts on the platform</p>
-                </div>
-                <div className="brand-surface-blue p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Teachers</p>
-                    <p className="mt-2 text-3xl font-black text-white">{teachersCount}</p>
-                    <p className="mt-1 text-sm text-white/65">Course creators and publishers</p>
-                </div>
-                <div className="brand-surface-accent p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-black/55">Students</p>
-                    <p className="mt-2 text-3xl font-black text-black">{studentsCount}</p>
-                    <p className="mt-1 text-sm text-black/55">Enrolled learners</p>
-                </div>
+                <StatsCard label="Total users" value={users.length} hint="All accounts on the platform" />
+                <StatsCard label="Teachers" value={teachersCount} hint="Course creators and publishers" variant="blue" />
+                <StatsCard label="Students" value={studentsCount} hint="Enrolled learners" variant="accent" />
             </section>
 
             <section className="grid gap-5 xl:grid-cols-[380px,1fr]">
@@ -200,7 +196,7 @@ export default function AdminDashboard({ currentUserId }: AdminDashboardProps) {
                             </select>
                         </div>
 
-                        {error ? <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p> : null}
+                        {error ? <ErrorMessage message={error} /> : null}
 
                         <div className="flex gap-2">
                             <Button type="submit" className="rounded-xl bg-black text-white hover:bg-black/90" disabled={submitting}>
