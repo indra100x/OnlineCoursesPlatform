@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine AS base
+FROM php:8.4-fpm-alpine AS base
 
 RUN apk add --no-cache \
     curl \
@@ -60,26 +60,26 @@ FROM node:22-alpine AS node-build
 RUN apk add --no-cache \
     build-base \
     python3 \
-    php83 \
-    php83-cli \
-    php83-common \
-    php83-mbstring \
-    php83-pdo \
-    php83-pdo_mysql \
-    php83-pgsql \
-    php83-tokenizer \
-    php83-xml \
-    php83-xmlwriter \
-    php83-simplexml \
-    php83-fileinfo \
-    php83-openssl \
-    php83-phar \
-    php83-dom \
-    php83-json \
-    php83-ctype \
-    php83-session \
-    php83-iconv \
-    && ln -s /usr/bin/php83 /usr/bin/php
+    php84 \
+    php84-cli \
+    php84-common \
+    php84-mbstring \
+    php84-pdo \
+    php84-pdo_mysql \
+    php84-pgsql \
+    php84-tokenizer \
+    php84-xml \
+    php84-xmlwriter \
+    php84-simplexml \
+    php84-fileinfo \
+    php84-openssl \
+    php84-phar \
+    php84-dom \
+    php84-json \
+    php84-ctype \
+    php84-session \
+    php84-iconv \
+    && ln -s /usr/bin/php84 /usr/bin/php
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
