@@ -124,6 +124,7 @@ jobs:
           DB_DATABASE: courseatlas_test
           DB_USERNAME: postgres
           DB_PASSWORD: password
+          DB_SSLMODE: disable
           REDIS_HOST: 127.0.0.1
           CACHE_STORE: redis
           SESSION_DRIVER: redis
@@ -144,6 +145,7 @@ jobs:
           DB_DATABASE: courseatlas_test
           DB_USERNAME: postgres
           DB_PASSWORD: password
+          DB_SSLMODE: disable
           REDIS_HOST: 127.0.0.1
           CACHE_STORE: redis
           SESSION_DRIVER: redis
