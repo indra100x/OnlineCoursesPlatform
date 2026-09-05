@@ -70,6 +70,12 @@ jobs:
       - name: Install Dependencies
         run: composer install --no-progress --prefer-dist --no-interaction
 
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build frontend assets
+        run: npm run build
+
       - name: Prepare Environment
         run: |
           cp .env.example .env
