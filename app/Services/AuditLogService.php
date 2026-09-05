@@ -19,7 +19,7 @@ class AuditLogService
         ?string $userAgent = null,
         ?array $oldValues = null,
     ): void {
-        dispatch(fn () => AuditLog::create([
+        AuditLog::create([
             'user_id' => $userId ?? auth()->id(),
             'action' => $action,
             'auditable_type' => $auditableType,
@@ -28,7 +28,7 @@ class AuditLogService
             'new_values' => $newValues,
             'ip_address' => $ip ?? request()->ip(),
             'user_agent' => $userAgent ?? request()->userAgent(),
-        ]));
+        ]);
     }
 
     public static function logLogin(int $userId): void

@@ -27,10 +27,7 @@ class ProfileController extends Controller
     public function update(ProfileUpdateApiRequest $request): JsonResponse
     {
         $user = $request->user();
-        $payload = [
-            'name' => $request->name,
-            'bio' => $request->bio ?? null,
-        ];
+        $payload = $request->only(['name', 'bio']);
 
         if ($request->file('avatar')) {
             $payload['avatar_path'] = $this->mediaStorage->storeImage(

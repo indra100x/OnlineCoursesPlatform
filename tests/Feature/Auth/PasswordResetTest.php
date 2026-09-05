@@ -29,7 +29,7 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post(route('password.email'), ['email' => $user->email]);
+        $response = $this->post(route('password.email'), ['email' => $user->email]);
 
         // Just verify the user was found and the email was accepted
         // Actual notification sending is tested by Fortify's own tests

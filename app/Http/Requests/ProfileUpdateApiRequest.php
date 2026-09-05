@@ -17,7 +17,7 @@ class ProfileUpdateApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:2000'],
             'avatar' => ['nullable', 'image', 'max:4096'],
         ];

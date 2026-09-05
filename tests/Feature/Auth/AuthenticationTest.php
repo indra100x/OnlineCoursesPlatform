@@ -47,8 +47,7 @@ class AuthenticationTest extends TestCase
             'password' => 'password',
         ]);
 
-        // Should not throw an error - Fortify handles two-factor logic
-        $response->assertStatus(200);
+        $response->assertRedirect(route('two-factor.login'));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password()

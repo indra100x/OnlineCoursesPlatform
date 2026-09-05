@@ -66,7 +66,7 @@ class CourseManagementTest extends TestCase
         $response = $this->actingAs($teacher)->deleteJson("/courses/{$course->id}");
 
         $response->assertOk();
-        $this->assertDatabaseMissing('courses', ['id' => $course->id]);
+        $this->assertSoftDeleted('courses', ['id' => $course->id]);
     }
 
     public function test_student_cannot_create_course(): void

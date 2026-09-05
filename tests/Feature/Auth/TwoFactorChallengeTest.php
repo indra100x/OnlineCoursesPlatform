@@ -43,7 +43,6 @@ class TwoFactorChallengeTest extends TestCase
             'password' => 'password',
         ]);
 
-        // Fortify should process the request successfully
-        $response->assertStatus(200);
+        $response->assertRedirect(route('two-factor.login'));
     }
 }
