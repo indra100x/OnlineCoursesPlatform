@@ -44,7 +44,7 @@ export default function TeacherRegister() {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('teacher-requests.store'));
+        post('/teacher-requests');
     };
 
     if (wasSuccessful) {
@@ -67,7 +67,7 @@ export default function TeacherRegister() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <Link href={route('home')}>
+                            <Link href="/">
                                 <Button variant="outline">
                                     <ArrowLeft className="mr-2 h-4 w-4" />
                                     Back to Home
@@ -238,7 +238,7 @@ export default function TeacherRegister() {
                         <div className="mt-4 text-center text-sm text-muted-foreground">
                             Already have an account?{' '}
                             <Link
-                                href={route('login')}
+                                href="/login"
                                 className="text-primary hover:underline"
                             >
                                 Sign in
