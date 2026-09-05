@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import AppLogo from '@/components/app-logo';
+// ESLint import-order fix: routes before types.
 import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 

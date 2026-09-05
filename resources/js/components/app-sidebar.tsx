@@ -13,6 +13,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+// ESLint import-order fix: routes before types.
 import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
