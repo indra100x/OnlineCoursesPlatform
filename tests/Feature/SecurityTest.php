@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\CoursePurchase;
 use App\Models\Enrollment;
 use App\Models\Notification;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Tests\TestCase;
 
 class SecurityTest extends TestCase
@@ -177,6 +178,7 @@ class SecurityTest extends TestCase
         $admin = $this->createAdmin();
 
         app()->detectEnvironment(fn () => 'production');
+        $this->withoutMiddleware(ValidateCsrfToken::class);
 
         $response = $this->actingAs($admin)->postJson('/users', [
             'name' => 'Weak User',

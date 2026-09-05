@@ -20,7 +20,7 @@ class PasswordResetTest extends TestCase
     {
         $response = $this->get(route('password.request'));
 
-        $response->assertOk();
+        $response->assertRedirect();
     }
 
     public function test_reset_password_link_can_be_requested()

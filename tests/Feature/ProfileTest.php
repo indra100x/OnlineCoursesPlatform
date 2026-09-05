@@ -105,6 +105,6 @@ class ProfileTest extends TestCase
     {
         $response = $this->getJson('/profile');
 
-        $response->assertRedirect();
+        $response->assertUnauthorized();
     }
 }

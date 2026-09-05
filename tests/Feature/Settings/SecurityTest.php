@@ -105,8 +105,8 @@ class SecurityTest extends TestCase
             ->from(route('security.edit'))
             ->put(route('user-password.update'), [
                 'current_password' => 'password',
-                'password' => 'NewPassword123!',
-                'password_confirmation' => 'NewPassword123!',
+                'password' => 'Q7!mV2#xL9@rK4$wZ8',
+                'password_confirmation' => 'Q7!mV2#xL9@rK4$wZ8',
             ]);
 
         $response

@@ -18,7 +18,7 @@ class CourseCatalogTest extends TestCase
         $response = $this->actingAs($student)->getJson('/catalog');
 
         $response->assertOk();
-        $this->assertCount(3, $response->json('courses'));
+        $this->assertCount(3, $response->json('data'));
     }
 
     public function test_student_can_purchase_course(): void
