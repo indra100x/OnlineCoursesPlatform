@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
-#[Fillable(['course_id', 'title', 'position', 'file_path', 'file_name', 'file_size'])]
 /**
  * @property int $id
  * @property int $course_id
@@ -20,6 +19,7 @@ use Illuminate\Support\Carbon;
  * @property int $file_size
  * @property Carbon $created_at
  */
+#[Fillable(['course_id', 'title', 'position', 'file_path', 'file_name', 'file_size'])]
 class Chapter extends Model
 {
     use Auditable;

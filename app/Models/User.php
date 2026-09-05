@@ -14,8 +14,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
-#[Fillable(['name', 'email', 'password', 'role', 'avatar_path', 'bio'])]
-#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 /**
  * @property int $id
  * @property string $name
@@ -24,6 +22,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string|null $bio
  * @property string|null $avatar_path
  */
+#[Fillable(['name', 'email', 'password', 'role', 'avatar_path', 'bio'])]
+#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */

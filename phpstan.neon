@@ -5,6 +5,9 @@ parameters:
     paths:
         - app
     level: 5
+    ignoreErrors:
+        # JsonResource proxies attributes dynamically from its wrapped Eloquent model.
+        - identifier: property.notFound
     excludePaths:
         - vendor/*
         - node_modules/*

@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
-#[Fillable(['title', 'description', 'price'])]
 /**
  * @property int $id
  * @property int $teacher_id
@@ -24,6 +23,7 @@ use Illuminate\Support\Str;
  * @property string $enrollment_code
  * @property Carbon $created_at
  */
+#[Fillable(['title', 'description', 'price'])]
 class Course extends Model
 {
     /** @use HasFactory<CourseFactory> */

@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
-#[Fillable(['user_id', 'course_id', 'chapter_id', 'type', 'data', 'message', 'is_read'])]
 /**
  * @property int $id
  * @property int $user_id
@@ -21,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property bool $is_read
  * @property Carbon $created_at
  */
+#[Fillable(['user_id', 'course_id', 'chapter_id', 'type', 'data', 'message', 'is_read'])]
 class Notification extends Model
 {
     /** @use HasFactory<NotificationFactory> */

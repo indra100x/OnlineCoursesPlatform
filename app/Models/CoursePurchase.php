@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
-#[Fillable(['student_id', 'course_id', 'amount', 'status', 'reference', 'purchased_at'])]
 /**
  * @property int $id
  * @property int $student_id
@@ -17,6 +16,7 @@ use Illuminate\Support\Carbon;
  * @property string $status
  * @property Carbon $created_at
  */
+#[Fillable(['student_id', 'course_id', 'amount', 'status', 'reference', 'purchased_at'])]
 class CoursePurchase extends Model
 {
     use Auditable;
