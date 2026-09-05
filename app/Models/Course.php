@@ -11,9 +11,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 #[Fillable(['title', 'description', 'price'])]
+/**
+ * @property int $id
+ * @property int $teacher_id
+ * @property string $title
+ * @property string|null $description
+ * @property string $price
+ * @property string $enrollment_code
+ * @property Carbon $created_at
+ */
 class Course extends Model
 {
     /** @use HasFactory<CourseFactory> */

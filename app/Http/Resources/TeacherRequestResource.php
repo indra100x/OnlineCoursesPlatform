@@ -6,7 +6,7 @@ use App\Models\TeacherRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @extends JsonResource<TeacherRequest> */
+/**  TeacherRequest */
 class TeacherRequestResource extends JsonResource
 {
     public function toArray(Request $request): array

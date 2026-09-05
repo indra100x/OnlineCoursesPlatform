@@ -6,7 +6,7 @@ use App\Models\Chapter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @extends JsonResource<Chapter> */
+/**  Chapter */
 class ChapterResource extends JsonResource
 {
     public function toArray(Request $request): array

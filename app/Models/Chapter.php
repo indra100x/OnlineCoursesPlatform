@@ -7,8 +7,19 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 #[Fillable(['course_id', 'title', 'position', 'file_path', 'file_name', 'file_size'])]
+/**
+ * @property int $id
+ * @property int $course_id
+ * @property string $title
+ * @property int $position
+ * @property string $file_path
+ * @property string $file_name
+ * @property int $file_size
+ * @property Carbon $created_at
+ */
 class Chapter extends Model
 {
     use Auditable;
