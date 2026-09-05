@@ -113,6 +113,7 @@ RUN rm -f bootstrap/cache/config.php \
     mkdir -p storage/logs && \
     mkdir -p bootstrap/cache && \
     cp .env.example .env && \
+    php artisan key:generate >/dev/null 2>&1 && \
     php artisan wayfinder:generate --with-form
 
 RUN rm -f /app/public/hot \
