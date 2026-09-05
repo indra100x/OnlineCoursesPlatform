@@ -1,5 +1,4 @@
 import { Form, Head, usePage } from '@inertiajs/react';
-// ESLint import-order fix: action imports before component imports.
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';

@@ -1,6 +1,5 @@
 import { Form } from '@inertiajs/react';
 import { useRef } from 'react';
-// ESLint import-order fix: action imports before component imports.
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
