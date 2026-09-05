@@ -1,11 +1,13 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/bootstrap/app.php';
+use Illuminate\Container\Container;
 
-$app = require __DIR__ . '/bootstrap/app.php';
+require __DIR__.'/vendor/autoload.php';
+require __DIR__.'/bootstrap/app.php';
 
-$container = $app->make(\Illuminate\Container\Container::class);
+$app = require __DIR__.'/bootstrap/app.php';
+
+$container = $app->make(Container::class);
 $db = $container->make('db');
 
 try {
@@ -65,6 +67,6 @@ try {
 
     echo "\nAll tables created successfully!\n";
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage() . "\n";
+    echo 'Error: '.$e->getMessage()."\n";
     exit(1);
 }

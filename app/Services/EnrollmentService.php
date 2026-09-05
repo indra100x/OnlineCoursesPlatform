@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\CoursePurchase;
 use App\Models\Enrollment;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -80,7 +81,7 @@ class EnrollmentService
             ->exists();
     }
 
-    public function getEnrolledStudents(Course $course): \Illuminate\Database\Eloquent\Collection
+    public function getEnrolledStudents(Course $course): Collection
     {
         return $course->students()
             ->select('users.id', 'users.name', 'users.email', 'users.created_at')

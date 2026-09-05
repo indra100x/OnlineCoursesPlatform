@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Course;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class CourseService
@@ -61,7 +62,7 @@ class CourseService
         );
     }
 
-    public function getCatalogForStudent(User $student, int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function getCatalogForStudent(User $student, int $perPage = 20): LengthAwarePaginator
     {
         $pageKey = "catalog:student:{$student->id}:page:".request()->input('page', 1).':per_page:'.$perPage;
 
@@ -114,7 +115,7 @@ class CourseService
         );
     }
 
-    public function getTeacherCoursesForStudent(User $teacher, User $student): \Illuminate\Database\Eloquent\Collection
+    public function getTeacherCoursesForStudent(User $teacher, User $student): Collection
     {
         return $this->cache->remember(
             $this->cache->getTeacherCoursesForStudentKey($teacher->id, $student->id),

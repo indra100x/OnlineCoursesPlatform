@@ -3,8 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\CourseCreated;
-use App\Events\CourseUpdated;
 use App\Events\CourseDeleted;
+use App\Events\CourseUpdated;
 use App\Jobs\RefreshCourseCacheJob;
 
 class UpdateCourseStats

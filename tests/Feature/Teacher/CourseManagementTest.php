@@ -3,7 +3,6 @@
 namespace Tests\Feature\Teacher;
 
 use App\Models\Course;
-use App\Models\User;
 use Tests\TestCase;
 
 class CourseManagementTest extends TestCase

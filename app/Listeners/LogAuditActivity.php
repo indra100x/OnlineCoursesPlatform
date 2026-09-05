@@ -2,12 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\CourseCreated;
-use App\Events\CourseUpdated;
-use App\Events\CourseDeleted;
 use App\Events\ChapterCreated;
-use App\Events\CoursePurchased;
+use App\Events\CourseCreated;
+use App\Events\CourseDeleted;
 use App\Events\CourseEnrolled;
+use App\Events\CoursePurchased;
+use App\Events\CourseUpdated;
 use App\Events\RatingSubmitted;
 use App\Services\AuditLogService;
 

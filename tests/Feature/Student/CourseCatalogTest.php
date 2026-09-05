@@ -3,7 +3,6 @@
 namespace Tests\Feature\Student;
 
 use App\Models\Course;
-use App\Models\User;
 use App\Models\CoursePurchase;
 use App\Models\Wishlist;
 use Tests\TestCase;

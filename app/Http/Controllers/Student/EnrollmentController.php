@@ -8,7 +8,6 @@ use App\Http\Requests\Student\EnrollmentRequest;
 use App\Http\Resources\CourseResource;
 use App\Services\EnrollmentService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class EnrollmentController extends Controller
 {

@@ -9,7 +9,6 @@ use App\Http\Resources\ChapterResource;
 use App\Models\Course;
 use App\Services\ChapterService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CourseChapterController extends Controller
 {

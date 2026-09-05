@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Wishlist;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

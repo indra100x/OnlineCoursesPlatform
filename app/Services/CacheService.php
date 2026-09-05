@@ -3,16 +3,21 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
 class CacheService
 {
     const CATALOG_TTL = 300; // 5 minutes
+
     const COURSE_DETAIL_TTL = 600; // 10 minutes
+
     const USER_STATS_TTL = 300; // 5 minutes
+
     const TEACHER_COURSES_TTL = 300; // 5 minutes
+
     const TEACHER_COURSES_FOR_STUDENT_TTL = 300; // 5 minutes
+
     const ENROLLED_COURSES_TTL = 300; // 5 minutes
+
     const NOTIFICATION_COUNT_TTL = 60; // 1 minute
 
     public function getCatalogKey(int $studentId): string
@@ -94,7 +99,7 @@ class CacheService
     public function invalidateCourseCache(int $courseId): void
     {
         $this->forget($this->getCourseDetailKey($courseId));
-        $this->forgetPattern("catalog:student:");
+        $this->forgetPattern('catalog:student:');
     }
 
     public function invalidateTeacherCoursesCache(int $teacherId): void
@@ -112,12 +117,12 @@ class CacheService
 
     public function invalidateAllUserCaches(): void
     {
-        $this->forgetPattern("catalog:student:");
+        $this->forgetPattern('catalog:student:');
         $this->forget($this->getUserStatsKey());
     }
 
     public function invalidateAllCatalogCaches(): void
     {
-        $this->forgetPattern("catalog:student:");
+        $this->forgetPattern('catalog:student:');
     }
 }

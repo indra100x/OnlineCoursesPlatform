@@ -5,13 +5,14 @@ namespace App\Services;
 use App\Models\AuditLog;
 use App\Models\TeacherRequest;
 use App\Models\User;
+use Illuminate\Support\Collection;
 
 class AuditLogService
 {
     public static function log(
         string $action,
         ?string $auditableType = null,
-        int|null $auditableId = null,
+        ?int $auditableId = null,
         array $newValues = [],
         ?int $userId = null,
         ?string $ip = null,
@@ -75,7 +76,7 @@ class AuditLogService
         static::log('teacher_request_rejected', TeacherRequest::class, $requestId, [], $adminId);
     }
 
-    public static function getRecent(int $days = 7, int $limit = 50): \Illuminate\Support\Collection
+    public static function getRecent(int $days = 7, int $limit = 50): Collection
     {
         return AuditLog::query()
             ->where('created_at', '>=', now()->subDays($days))

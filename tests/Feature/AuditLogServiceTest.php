@@ -85,7 +85,7 @@ class AuditLogServiceTest extends TestCase
         ]);
     }
 
-    public function test_getRecent_returns_recent_logs(): void
+    public function test_get_recent_returns_recent_logs(): void
     {
         AuditLog::factory()->count(5)->create(['created_at' => now()->subDays(1)]);
         AuditLog::factory()->count(3)->create(['created_at' => now()]);
@@ -95,7 +95,7 @@ class AuditLogServiceTest extends TestCase
         $this->assertCount(8, $recent);
     }
 
-    public function test_getRecent_empty_when_no_logs(): void
+    public function test_get_recent_empty_when_no_logs(): void
     {
         $recent = AuditLogService::getRecent(7, 10);
 

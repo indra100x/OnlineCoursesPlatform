@@ -16,7 +16,7 @@ class CourseServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->courseService = new CourseService(new CacheService());
+        $this->courseService = new CourseService(new CacheService);
     }
 
     public function test_create_course(): void

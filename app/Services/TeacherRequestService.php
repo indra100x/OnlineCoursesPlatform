@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\TeacherRequestException;
 use App\Models\TeacherRequest;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 
 class TeacherRequestService
@@ -54,7 +55,7 @@ class TeacherRequestService
         ]);
     }
 
-    public function getRequests(int $perPage = 20): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function getRequests(int $perPage = 20): LengthAwarePaginator
     {
         return TeacherRequest::query()
             ->latest()

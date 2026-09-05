@@ -16,7 +16,7 @@ class CacheServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->cache = new CacheService();
+        $this->cache = new CacheService;
     }
 
     public function test_remember_caches_value(): void
@@ -121,10 +121,12 @@ class CacheServiceTest extends TestCase
         $callCount = 0;
         $result1 = $this->cache->remember('hit-test', 60, function () use (&$callCount) {
             $callCount++;
+
             return 'value';
         });
         $result2 = $this->cache->remember('hit-test', 60, function () use (&$callCount) {
             $callCount++;
+
             return 'new-value';
         });
 

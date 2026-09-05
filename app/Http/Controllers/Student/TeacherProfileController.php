@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CourseResource;
 use App\Http\Resources\TeacherResource;
 use App\Models\User;
 use App\Services\CourseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class TeacherProfileController extends Controller
 {

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Chapter extends Model
 {
     use Auditable;
+
     protected function casts(): array
     {
         return [

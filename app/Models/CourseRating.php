@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CourseRating extends Model
 {
     use Auditable;
+
     protected function casts(): array
     {
         return [

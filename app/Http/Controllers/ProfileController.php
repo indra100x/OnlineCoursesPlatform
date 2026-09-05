@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateApiRequest;
 use App\Http\Requests\PasswordUpdateApiRequest;
+use App\Http\Requests\ProfileUpdateApiRequest;
 use App\Http\Resources\ProfileResource;
 use App\Services\AuditLogService;
 use App\Support\MediaStorage;

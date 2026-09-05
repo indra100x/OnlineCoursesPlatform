@@ -3,8 +3,8 @@
 use App\Exceptions\AuthorizationException;
 use App\Exceptions\EnrollmentException;
 use App\Exceptions\TeacherRequestException;
-use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\EnsureUserHasRole;
+use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
@@ -44,7 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 422);
         });
 
-        $exceptions->reportable(function (\Throwable $e) {
+        $exceptions->reportable(function (Throwable $e) {
             if (function_exists('sentry')) {
                 sentry()->captureException($e);
             }

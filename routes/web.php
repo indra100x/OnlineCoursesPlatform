@@ -15,8 +15,8 @@ use App\Http\Controllers\Teacher\CourseController;
 use App\Http\Controllers\Teacher\CourseStudentController;
 use App\Http\Controllers\Teacher\StudentProfileController;
 use App\Http\Controllers\TeacherRequestController;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('welcome');

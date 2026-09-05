@@ -1,5 +1,7 @@
 <?php
 
+use Sentry\Event;
+
 return [
 
     /*
@@ -83,7 +85,7 @@ return [
     |
     */
 
-    'before_send' => function (\Sentry\Event $event): ?\Sentry\Event {
+    'before_send' => function (Event $event): ?Event {
         // Scrub sensitive data before sending
         $request = request();
 

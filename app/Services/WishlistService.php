@@ -5,10 +5,11 @@ namespace App\Services;
 use App\Models\Course;
 use App\Models\User;
 use App\Models\Wishlist;
+use Illuminate\Database\Eloquent\Collection;
 
 class WishlistService
 {
-    public function getWishlistForStudent(User $student): \Illuminate\Database\Eloquent\Collection
+    public function getWishlistForStudent(User $student): Collection
     {
         return Course::query()
             ->whereHas('wishlistItems', fn ($query) => $query->where('student_id', $student->id))

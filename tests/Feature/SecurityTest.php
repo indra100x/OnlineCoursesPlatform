@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\Course;
 use App\Models\CoursePurchase;
 use App\Models\Enrollment;
-use App\Models\User;
+use App\Models\Notification;
 use Tests\TestCase;
 
 class SecurityTest extends TestCase
@@ -159,7 +159,7 @@ class SecurityTest extends TestCase
         $student2 = $this->createStudent();
         $course = Course::factory()->create(['teacher_id' => $this->createTeacher()->id]);
 
-        $notification = \App\Models\Notification::create([
+        $notification = Notification::create([
             'user_id' => $student1->id,
             'course_id' => $course->id,
             'type' => 'chapter_created',

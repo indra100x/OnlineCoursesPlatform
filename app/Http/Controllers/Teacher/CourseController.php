@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Events\CourseCreated;
-use App\Events\CourseUpdated;
 use App\Events\CourseDeleted;
+use App\Events\CourseUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Teacher\CourseStoreRequest;
 use App\Http\Requests\Teacher\CourseUpdateRequest;

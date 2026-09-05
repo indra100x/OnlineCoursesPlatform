@@ -10,7 +10,6 @@ use App\Models\Course;
 use App\Models\CourseRating;
 use App\Services\EnrollmentService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class CourseRatingController extends Controller
 {
