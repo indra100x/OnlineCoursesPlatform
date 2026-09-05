@@ -183,7 +183,7 @@ class SecurityTest extends TestCase
             'email' => 'weak@example.com',
             'password' => 'password',
             'role' => 'student',
-        ], (new UserStoreRequest())->rules());
+        ], (new UserStoreRequest)->rules());
 
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('password', $validator->errors()->toArray());
