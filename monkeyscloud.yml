@@ -1,0 +1,29 @@
+# MonkeysCloud deployment configuration
+# https://monkeys.cloud
+#
+# MonkeysCloud auto-detects Laravel from composer.json and configures
+# the build pipeline automatically. This file adds customizations.
+
+stack: laravel
+
+# Custom build steps beyond Laravel defaults
+build:
+  after:
+    - php artisan wayfinder:generate --with-form
+
+# Health check endpoint
+healthcheck:
+  path: /
+  interval: 30
+  timeout: 5
+
+# Default environment variables (override in dashboard)
+env:
+  APP_ENV: production
+  APP_DEBUG: "false"
+  LOG_LEVEL: error
+  DB_CONNECTION: pgsql
+  SESSION_DRIVER: database
+  CACHE_STORE: file
+  QUEUE_CONNECTION: sync
+  MAIL_MAILER: log

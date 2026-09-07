@@ -439,6 +439,40 @@ make build         # Build frontend
 make docker-up     # Start Docker
 ```
 
+### Option D — MonkeysCloud (free, no credit card)
+
+**Requirements:** GitHub account
+
+1. Push your code to a GitHub repository.
+
+2. Sign up at [monkeys.cloud](https://monkeys.cloud) (GitHub or Google, no credit card).
+
+3. Create a new project → select **Laravel** stack.
+
+4. Connect your GitHub repository.
+
+5. Set environment variables in the dashboard (see `.env.monkeyscloud`):
+
+| Variable | Value |
+|---|---|
+| `APP_KEY` | Generate with `php artisan key:generate --show` |
+| `APP_URL` | Your MonkeysCloud URL (e.g., `https://your-project.monkeys.cloud`) |
+| `DB_HOST`, `DB_PORT`, etc. | Auto-provided by MonkeysCloud PostgreSQL |
+| `SESSION_DRIVER` | `database` |
+| `CACHE_STORE` | `file` |
+| `QUEUE_CONNECTION` | `sync` |
+
+6. Deploy — MonkeysCloud builds and deploys automatically.
+
+**Free tier includes:**
+- 2 app servers (1GB RAM each)
+- PostgreSQL 16 (1GB RAM)
+- Redis 7 (1GB RAM)
+- Custom domain + SSL
+- Git push to deploy
+
+**Note:** Free instances sleep after 30 minutes of inactivity (wake in 3-5 seconds). Acceptable for demo/portfolio.
+
 ## Testing
 
 ```bash
