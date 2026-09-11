@@ -81,11 +81,12 @@ export type PlatformNotification = {
     user_id: number;
     course_id: number | null;
     chapter_id: number | null;
-    type: 'chapter_created';
+    type: 'chapter_created' | 'course_updated' | 'course_deleted' | 'course_enrolled' | 'course_purchased';
     data: {
         course_title?: string;
         chapter_title?: string;
         chapter_position?: number;
+        student_name?: string;
     } | null;
     message: string;
     is_read: boolean;

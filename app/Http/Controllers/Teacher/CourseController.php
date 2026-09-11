@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Events\CourseCreated;
 use App\Events\CourseDeleted;
+use App\Events\CourseDeleting;
 use App\Events\CourseUpdated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Teacher\CourseStoreRequest;
@@ -57,6 +58,8 @@ class CourseController extends Controller
     public function destroy(Request $request, Course $course): JsonResponse
     {
         $this->authorize('delete', $course);
+
+        CourseDeleting::dispatch($course);
 
         $courseId = $course->id;
         $this->courseService->deleteCourse($course);

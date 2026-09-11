@@ -9,6 +9,10 @@ RUN apk add --no-cache \
     libpq-dev \
     libpng-dev \
     php84-curl \
+    php84-dev \
+    autoconf \
+    g++ \
+    make \
     && docker-php-ext-install \
     pdo_mysql \
     pdo_pgsql \
@@ -16,7 +20,10 @@ RUN apk add --no-cache \
     zip \
     bcmath \
     gd \
-    && rm -rf /var/cache/apk/* \
+    && rm -f /etc/php84/conf.d/20_redis.ini /etc/php84/conf.d/10_igbinary.ini /etc/php84/conf.d/10_msgpack.ini \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && rm -rf /var/cache/apk/* /tmp/pear \
     && addgroup -g 1000 laravel \
     && adduser -D -u 1000 -G laravel laravel
 
@@ -81,6 +88,7 @@ RUN apk add --no-cache \
     php84-ctype \
     php84-session \
     php84-iconv \
+    php84-redis \
     && ln -s /usr/bin/php84 /usr/bin/php
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

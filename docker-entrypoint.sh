@@ -90,6 +90,7 @@ rm -f storage/framework/views/.write-test 2>/dev/null || true
 
 php artisan config:clear 2>/dev/null || true
 php artisan view:clear 2>/dev/null || true
+php artisan cache:clear 2>/dev/null || true
 
 if [ ! -f "vendor/autoload.php" ]; then
     composer_opts="--no-interaction --no-progress"

@@ -2,26 +2,27 @@
 
 namespace App\Jobs;
 
-use App\Models\Chapter;
 use App\Models\Course;
 use App\Models\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 
-class SendChapterNotificationsJob implements ShouldQueue
+class SendCourseChangeNotificationsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable;
 
     public int $tries = 3;
 
     public int $timeout = 60;
 
     public function __construct(
-        public Chapter $chapter,
         public Course $course,
+        public string $type,
+        public string $message,
+        public array $data = [],
     ) {}
 
     public function handle(): void
@@ -35,14 +36,10 @@ class SendChapterNotificationsJob implements ShouldQueue
         $notifications = $students->map(fn ($student) => [
             'user_id' => $student->id,
             'course_id' => $this->course->id,
-            'chapter_id' => $this->chapter->id,
-            'type' => Notification::TYPE_CHAPTER_CREATED,
-            'data' => json_encode([
-                'course_title' => $this->course->title,
-                'chapter_title' => $this->chapter->title,
-                'chapter_position' => $this->chapter->position,
-            ]),
-            'message' => "New chapter \"{$this->chapter->title}\" was added to {$this->course->title}.",
+            'chapter_id' => null,
+            'type' => $this->type,
+            'data' => json_encode($this->data),
+            'message' => $this->message,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -52,6 +49,6 @@ class SendChapterNotificationsJob implements ShouldQueue
 
     public function failed(\Throwable $exception): void
     {
-        \Log::error("Failed to send chapter notifications for chapter {$this->chapter->id}: {$exception->getMessage()}");
+        \Log::error("Failed to send course change notifications for course {$this->course->id}: {$exception->getMessage()}");
     }
 }

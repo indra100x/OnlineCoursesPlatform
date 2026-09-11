@@ -1,7 +1,7 @@
 import { startTransition, useCallback, useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import api from '@/lib/api';
-import type { Course, PlatformUser } from '@/types/platform';
+import type { Chapter, Course, PlatformUser } from '@/types/platform';
 
 const initialChapterForm = {
     title: '',
@@ -11,6 +11,7 @@ const initialChapterForm = {
 export function useTeacherData() {
     const [courses, setCourses] = useState<Course[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+    const [chapters, setChapters] = useState<Chapter[]>([]);
     const [students, setStudents] = useState<PlatformUser[]>([]);
     const [courseForm, setCourseForm] = useState({
         title: '',
@@ -65,6 +66,17 @@ export function useTeacherData() {
         }
     }, []);
 
+    const loadChapters = useCallback(async (courseId: number) => {
+        try {
+            const response = await api.get<Chapter[]>(
+                `/courses/${courseId}/manage-chapters`,
+            );
+            setChapters(response.data);
+        } catch {
+            setChapters([]);
+        }
+    }, []);
+
     useEffect(() => {
         const init = async () => {
             await loadCourses();
@@ -76,12 +88,18 @@ export function useTeacherData() {
     useEffect(() => {
         const load = async () => {
             if (selectedCourse) {
-                await loadStudents(selectedCourse.id);
+                await Promise.all([
+                    loadStudents(selectedCourse.id),
+                    loadChapters(selectedCourse.id),
+                ]);
+            } else {
+                setChapters([]);
+                setStudents([]);
             }
         };
 
         void load();
-    }, [selectedCourse, loadStudents]);
+    }, [selectedCourse, loadStudents, loadChapters]);
 
     const handleCreateCourse = useCallback(
         async (event: FormEvent<HTMLFormElement>) => {
@@ -156,6 +174,7 @@ export function useTeacherData() {
                 const coursesResponse = await api.get<Course[]>('/courses');
                 setCourses(coursesResponse.data);
                 await loadStudents(selectedCourse.id);
+                await loadChapters(selectedCourse.id);
             } catch (submitError: unknown) {
                 const message =
                     submitError instanceof Error
@@ -173,6 +192,7 @@ export function useTeacherData() {
 
     return {
         courses,
+        chapters,
         selectedCourse,
         setSelectedCourse,
         students,

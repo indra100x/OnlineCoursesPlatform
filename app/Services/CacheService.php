@@ -62,7 +62,19 @@ class CacheService
 
     public function remember(string $key, int $ttl, callable $callback)
     {
-        return Cache::remember($key, $ttl, $callback);
+        try {
+            $value = Cache::remember($key, $ttl, $callback);
+
+            if (get_debug_type($value) === '__PHP_Incomplete_Class') {
+                Cache::forget($key);
+                $value = Cache::remember($key, $ttl, $callback);
+            }
+
+            return $value;
+        } catch (\TypeError) {
+            Cache::forget($key);
+            return Cache::remember($key, $ttl, $callback);
+        }
     }
 
     public function forget(string $key): bool

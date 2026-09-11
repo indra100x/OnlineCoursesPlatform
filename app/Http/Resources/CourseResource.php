@@ -22,6 +22,7 @@ class CourseResource extends JsonResource
             'teacher_id' => $this->teacher_id,
             'enrollment_code' => $this->when($isOwner || $hasPurchased, $this->enrollment_code),
             'teacher' => new TeacherResource($this->whenLoaded('teacher')),
+            'chapters' => ChapterResource::collection($this->whenLoaded('chapters')),
             'chapters_count' => $this->whenCounted('chapters'),
             'enrollments_count' => $this->whenCounted('enrollments'),
             'ratings_count' => $this->whenCounted('ratings'),

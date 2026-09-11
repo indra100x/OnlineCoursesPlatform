@@ -19,11 +19,11 @@ class UserManagementController extends Controller
         protected UserService $userService,
     ) {}
 
-    public function index(): AnonymousResourceCollection
+    public function index(): JsonResponse
     {
         $users = $this->userService->getUsers();
 
-        return UserResource::collection($users);
+        return response()->json(UserResource::collection($users->getCollection()));
     }
 
     public function store(UserStoreRequest $request): JsonResponse

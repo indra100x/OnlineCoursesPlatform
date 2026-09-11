@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { FileText, Plus } from 'lucide-react';
 import { EmptyState } from '@/components/platform/empty-state';
 import { ErrorMessage } from '@/components/platform/error-message';
 import { StatsCard } from '@/components/platform/stats-card';
@@ -13,6 +13,7 @@ import { TeacherCourseList } from './components/teacher-course-list';
 export default function TeacherDashboard() {
     const {
         courses,
+        chapters,
         selectedCourse,
         setSelectedCourse,
         students,
@@ -165,10 +166,10 @@ export default function TeacherDashboard() {
 
                             <div className="brand-surface p-5">
                                 <h3 className="text-base font-semibold text-black">
-                                    Add PDF Chapter
+                                    Add Chapter
                                 </h3>
                                 <p className="mt-0.5 text-xs text-black/50">
-                                    Upload a PDF chapter and trigger student
+                                    Upload a file chapter and trigger student
                                     notifications.
                                 </p>
 
@@ -205,7 +206,6 @@ export default function TeacherDashboard() {
                                         <Input
                                             id="chapter-file"
                                             type="file"
-                                            accept="application/pdf"
                                             onChange={(event) =>
                                                 setChapterForm((current) => ({
                                                     ...current,
@@ -230,6 +230,53 @@ export default function TeacherDashboard() {
                                         Create chapter
                                     </Button>
                                 </form>
+                            </div>
+
+                            <div className="brand-surface p-5">
+                                <h3 className="text-base font-semibold text-black">
+                                    Chapters ({chapters.length})
+                                </h3>
+                                <p className="mt-0.5 text-xs text-black/50">
+                                    Files uploaded for this course.
+                                </p>
+
+                                <div className="mt-4">
+                                    {chapters.length === 0 ? (
+                                        <p className="text-sm text-black/45">
+                                            No chapters yet. Upload one above.
+                                        </p>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            {chapters.map((chapter) => (
+                                                <a
+                                                    key={chapter.id}
+                                                    href={`/courses/${selectedCourse.id}/chapters/${chapter.id}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-3 rounded-xl border border-black/8 bg-[#fffdf7] p-3 transition-all hover:border-black/20 hover:bg-white cursor-pointer"
+                                                >
+                                                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-black/5 text-black/60">
+                                                        <FileText className="size-4" />
+                                                    </div>
+                                                    <div className="min-w-0 flex-1">
+                                                        <p className="text-sm font-medium text-black truncate">
+                                                            {chapter.title}
+                                                        </p>
+                                                        <p className="text-xs text-black/45">
+                                                            {chapter.file_name}
+                                                            {chapter.file_size
+                                                                ? ` · ${(chapter.file_size / 1024).toFixed(0)} KB`
+                                                                : ''}
+                                                        </p>
+                                                    </div>
+                                                    <span className="text-xs text-black/30 tabular-nums">
+                                                        #{chapter.position}
+                                                    </span>
+                                                </a>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <EnrolledStudents students={students} />

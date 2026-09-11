@@ -31,15 +31,9 @@ class TeacherRequestController extends Controller
         $perPage = min((int) $request->input('per_page', 20), 100);
         $requests = $this->teacherRequestService->getRequests($perPage);
 
-        return response()->json([
-            'data' => TeacherRequestResource::collection($requests),
-            'meta' => [
-                'current_page' => $requests->currentPage(),
-                'last_page' => $requests->lastPage(),
-                'per_page' => $requests->perPage(),
-                'total' => $requests->total(),
-            ],
-        ]);
+        return response()->json(
+            TeacherRequestResource::collection($requests->getCollection())
+        );
     }
 
     public function approve(Request $request, TeacherRequest $teacherRequest): JsonResponse

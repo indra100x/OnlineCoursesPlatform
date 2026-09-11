@@ -39,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy']);
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->middleware('throttle:profile');
 
+    Route::get('/notifications', [NotificationController::class, 'index'])->middleware('throttle:catalog');
+    Route::put('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->middleware('throttle:catalog');
+
     Route::middleware('role:admin')->group(function () {
         Route::get('/users', [UserManagementController::class, 'index'])->middleware('throttle:admin');
         Route::post('/users', [UserManagementController::class, 'store'])->middleware('throttle:admin');
@@ -50,17 +53,19 @@ Route::middleware('auth')->group(function () {
         Route::post('/teacher-requests/{teacherRequest}/reject', [TeacherRequestController::class, 'reject'])->middleware('throttle:admin');
     });
 
-    Route::middleware(['role:teacher', 'verified'])->group(function () {
+    Route::middleware('role:teacher')->group(function () {
         Route::get('/courses', [CourseController::class, 'index'])->middleware('throttle:teacher');
         Route::post('/courses', [CourseController::class, 'store'])->middleware('throttle:teacher');
         Route::put('/courses/{course}', [CourseController::class, 'update'])->middleware('throttle:teacher');
         Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->middleware('throttle:teacher');
+        Route::get('/courses/{course}/manage-chapters', [CourseChapterController::class, 'index'])->middleware('throttle:teacher');
+        Route::get('/courses/{course}/chapters/{chapter}', [CourseChapterController::class, 'show'])->middleware('throttle:teacher');
         Route::post('/courses/{course}/chapters', [CourseChapterController::class, 'store'])->middleware('throttle:teacher');
         Route::get('/courses/{course}/students', [CourseStudentController::class, 'index'])->middleware('throttle:teacher');
         Route::get('/students/{student}/profile', [StudentProfileController::class, 'show'])->middleware('throttle:teacher');
     });
 
-    Route::middleware(['role:student', 'verified'])->group(function () {
+    Route::middleware('role:student')->group(function () {
         Route::get('/catalog', [CourseCatalogController::class, 'index'])->middleware('throttle:catalog');
         Route::get('/teachers/{teacher}/profile', [TeacherProfileController::class, 'show'])->middleware('throttle:teacher-profile');
         Route::get('/wishlist', [WishlistController::class, 'index'])->middleware('throttle:wishlist');
@@ -71,8 +76,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/enroll', [EnrollmentController::class, 'store'])->middleware('throttle:enrollment');
         Route::get('/my-courses', [StudentCourseController::class, 'index'])->middleware('throttle:catalog');
         Route::get('/courses/{course}/chapters', [StudentCourseController::class, 'chapters'])->middleware('throttle:catalog');
-        Route::get('/notifications', [NotificationController::class, 'index'])->middleware('throttle:catalog');
-        Route::put('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->middleware('throttle:catalog');
     });
 });
 

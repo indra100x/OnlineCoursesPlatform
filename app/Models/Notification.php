@@ -27,8 +27,18 @@ class Notification extends Model
     use HasFactory;
 
     public const TYPE_CHAPTER_CREATED = 'chapter_created';
+    public const TYPE_COURSE_UPDATED = 'course_updated';
+    public const TYPE_COURSE_DELETED = 'course_deleted';
+    public const TYPE_COURSE_ENROLLED = 'course_enrolled';
+    public const TYPE_COURSE_PURCHASED = 'course_purchased';
 
-    const VALID_TYPES = [self::TYPE_CHAPTER_CREATED];
+    const VALID_TYPES = [
+        self::TYPE_CHAPTER_CREATED,
+        self::TYPE_COURSE_UPDATED,
+        self::TYPE_COURSE_DELETED,
+        self::TYPE_COURSE_ENROLLED,
+        self::TYPE_COURSE_PURCHASED,
+    ];
 
     protected function casts(): array
     {

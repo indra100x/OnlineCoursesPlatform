@@ -15,7 +15,7 @@ class ChapterStoreRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'file' => ['required', 'file', 'mimes:pdf', 'max:20480'],
+            'file' => ['required', 'file', 'max:51200'],
         ];
     }
 }
